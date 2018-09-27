@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ProjectC.Database;
+using ProjectC.Database.Core;
 
 namespace ProjectC
 {
@@ -27,6 +28,9 @@ namespace ProjectC
             {
                 configuration.RootPath = "ClientApp/build";
             });
+            var databaseContext = new DatabaseContext(Configuration.GetConnectionString("DefaultConnection"));
+            services.Add(new ServiceDescriptor(typeof(DatabaseContext), databaseContext));
+            services.Add(new ServiceDescriptor(typeof(DaoManager), DaoManager.Get(databaseContext)));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
