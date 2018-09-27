@@ -1,6 +1,7 @@
 ﻿using DevOne.Security.Cryptography.BCrypt;
 using ProjectC.Database.Core.Annotations;
 using ProjectC.Database.Core.Interfaces;
+using ProjectC.Database.Daos;
 using ProjectC.Model;
 
 namespace ProjectC.Database.Entities
