@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using DevOne.Security.Cryptography.BCrypt;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -46,24 +45,8 @@ namespace ProjectC.Controllers
             daoManager?.UserDao.Save(user);
         }
 
-        [HttpPost(Name = "Login")]
-        public bool Login([FromBody] string value)
-        {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var userLogin = JsonConvert.DeserializeObject<UserLoginModel>(value);
-            var databaseUser = daoManager.UserDao.FindUserByUsername(userLogin.Username);
-
-            if (databaseUser == null)
-            {
-                return false;
-            }
-
-            var userLoginHashedPassword = BCryptHelper.HashPassword(userLogin.Password, databaseUser.PasswordSalt);
-            return userLoginHashedPassword.Equals(databaseUser.PasswordHash);
-        }
-
-        [HttpPost(Name = "Register")]
-        public void Register([FromBody] string value)
+        [HttpPost]
+        public void Register(string value)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             var userRegister = JsonConvert.DeserializeObject<UserRegisterModel>(value);

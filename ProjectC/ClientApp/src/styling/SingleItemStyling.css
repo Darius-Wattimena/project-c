@@ -1,0 +1,27 @@
+﻿.row div{
+    float: left;
+}
+
+.img-container {
+    height: 400px;
+    width: 400px;
+    margin: 30px;
+    border: 1px gray solid;
+}
+
+.img-container img{
+    height: 90%;
+    width: auto;
+    margin: auto;
+    margin-top: 5%;
+    display: block;
+}
+
+.product-container{
+    max-width: 300px;
+}
+
+.product-container button{
+    width: 175px;
+    margin: 1px;
+}
