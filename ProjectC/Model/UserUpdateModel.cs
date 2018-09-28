@@ -1,6 +1,6 @@
 ﻿namespace ProjectC.Model
 {
-    public class UserRegisterModel
+    public class UserUpdateModel
     {
         public string Username;
 

@@ -16,9 +16,12 @@ namespace ProjectC.Database.Entities
         public User(UserRegisterModel model)
         {
             var salt = BCryptHelper.GenerateSalt();
-            var hashedPassword = BCryptHelper.HashPassword(model.password, salt);
+            var hashedPassword = BCryptHelper.HashPassword(model.Password, salt);
+            Username = model.Username;
             PasswordSalt = salt;
             PasswordHash = hashedPassword;
+            Firstname = model.Firstname;
+            Lastname = model.Lastname;
         }
 
         [Field("UserId", Core.Type.Integer, Primary = true)]

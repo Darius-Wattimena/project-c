@@ -1,8 +1,12 @@
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
+=======
+﻿using DevOne.Security.Cryptography.BCrypt;
+>>>>>>> 8055590a6a5376db610bd92c023726db1a3bb2f6
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -12,11 +16,11 @@ using ProjectC.Model;
 
 namespace ProjectC.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserController : ControllerBase
     {
-        // GET: api/User
+        //Get all users
         [HttpGet]
         public string Get()
         {
@@ -25,9 +29,9 @@ namespace ProjectC.Controllers
             var json = JsonConvert.SerializeObject(users);
             return json;
         }
-
-        // GET: api/User/5
-        [HttpGet("{id}", Name = "Get")]
+        
+        //Get 1 user with the given id
+        [HttpGet("{id}")]
         public string Get(int id)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
@@ -36,8 +40,9 @@ namespace ProjectC.Controllers
             return json;
         }
 
-        // POST: api/User
+        //Login a user with the given credentials
         [HttpPost]
+<<<<<<< HEAD
         public void Post([FromBody] string value)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
@@ -47,24 +52,52 @@ namespace ProjectC.Controllers
 
         [HttpPost]
         public void Register(string value)
+=======
+        public bool Login([FromBody] UserLoginModel input)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var userRegister = JsonConvert.DeserializeObject<UserRegisterModel>(value);
-            var user = new User(userRegister);
-            daoManager?.UserDao.Save(user);
+            var databaseUser = daoManager.UserDao.FindUserByUsername(input.Username);
+
+            if (databaseUser == null)
+            {
+                return false;
+            }
+
+            var userLoginHashedPassword = BCryptHelper.HashPassword(input.Password, databaseUser.PasswordSalt);
+            return userLoginHashedPassword.Equals(databaseUser.PasswordHash);
         }
 
-        // PUT: api/User/5
+        //Register a user with the given register info
+        [HttpPost]
+        public void Register([FromBody] UserRegisterModel input)
+>>>>>>> 8055590a6a5376db610bd92c023726db1a3bb2f6
+        {
+            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+            var user = new User(input);
+            daoManager?.UserDao.Save(user);
+        }
+        
+        //Update the given user
         [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        public void Update(int id, [FromBody] UserUpdateModel input)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var user = JsonConvert.DeserializeObject<User>(value);
-            user.Id = id;
-            daoManager?.UserDao.Save(user);
+            var databaseUser = daoManager.UserDao.Find(id);
+
+            if (databaseUser == null)
+            {
+                return;
+            }
+
+            databaseUser.Username = input.Username;
+            databaseUser.Firstname = input.Firstname;
+            databaseUser.Lastname = input.Lastname;
+            databaseUser.MailAddress = input.MailAddress;
+
+            daoManager.UserDao.Save(databaseUser);
         }
 
-        // DELETE: api/ApiWithActions/5
+        //Delete the user with the given id
         [HttpDelete("{id}")]
         public void Delete(int id)
         {
