@@ -46,8 +46,8 @@ namespace ProjectC.Controllers
             daoManager?.UserDao.Save(user);
         }
 
-        [HttpPost]
-        public bool Login(string value)
+        [HttpPost(Name = "Login")]
+        public bool Login([FromBody] string value)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             var userLogin = JsonConvert.DeserializeObject<UserLoginModel>(value);
@@ -62,8 +62,8 @@ namespace ProjectC.Controllers
             return userLoginHashedPassword.Equals(databaseUser.PasswordHash);
         }
 
-        [HttpPost]
-        public void Register(string value)
+        [HttpPost(Name = "Register")]
+        public void Register([FromBody] string value)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             var userRegister = JsonConvert.DeserializeObject<UserRegisterModel>(value);
