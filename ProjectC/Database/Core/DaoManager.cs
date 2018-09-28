@@ -9,6 +9,7 @@ namespace ProjectC.Database.Core
         private static DatabaseContext _context;
         
         public UserDao UserDao;
+        public ProductDao ProductDao;
 
         public static DaoManager Get(DatabaseContext context)
         {
@@ -30,6 +31,7 @@ namespace ProjectC.Database.Core
         private void RegisterDaos()
         {
             UserDao = new UserDao(_context);
+            ProductDao = new ProductDao(_context);
         }
     }
 }
