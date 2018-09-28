@@ -112,14 +112,16 @@ namespace ProjectC.Database.Core
             return Execute(query);
         }
 
-        public List<T> Find(int id)
+        //TODO add exception if nothing is found
+        public T Find(int id)
         {
             var sqlBuilder = new SqlBuilder<T>(TableConfig)
             {
                 Id = id
             };
             var query = sqlBuilder.Build(QueryType.Select);
-            return Execute(query);
+            var result = Execute(query);
+            return result[0];
         }
 
         public List<T> Find(Dictionary<string, string> parameters)
