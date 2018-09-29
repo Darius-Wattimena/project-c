@@ -1,4 +1,5 @@
 <<<<<<< HEAD
+<<<<<<< HEAD
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,6 +8,9 @@ using Microsoft.AspNetCore.Http;
 =======
 ﻿using DevOne.Security.Cryptography.BCrypt;
 >>>>>>> 8055590a6a5376db610bd92c023726db1a3bb2f6
+=======
+﻿using DevOne.Security.Cryptography.BCrypt;
+>>>>>>> 000333b2f7e84255db73b50a9d73d2f5431b85a4
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
@@ -43,6 +47,7 @@ namespace ProjectC.Controllers
         //Login a user with the given credentials
         [HttpPost]
 <<<<<<< HEAD
+<<<<<<< HEAD
         public void Post([FromBody] string value)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
@@ -53,6 +58,8 @@ namespace ProjectC.Controllers
         [HttpPost]
         public void Register(string value)
 =======
+=======
+>>>>>>> 000333b2f7e84255db73b50a9d73d2f5431b85a4
         public bool Login([FromBody] UserLoginModel input)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
@@ -70,7 +77,10 @@ namespace ProjectC.Controllers
         //Register a user with the given register info
         [HttpPost]
         public void Register([FromBody] UserRegisterModel input)
+<<<<<<< HEAD
 >>>>>>> 8055590a6a5376db610bd92c023726db1a3bb2f6
+=======
+>>>>>>> 000333b2f7e84255db73b50a9d73d2f5431b85a4
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             var user = new User(input);

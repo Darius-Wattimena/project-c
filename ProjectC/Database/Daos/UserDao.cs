@@ -11,15 +11,10 @@ namespace ProjectC.Database.Daos
 
         }
 
-        public bool DoesUserExist(string username)
+        public User FindUserByUsername(string username)
         {
-            var sqlBuilder = new SqlBuilder<User>(TableConfig);
-            sqlBuilder.AddParameter("Username", username);
-
-            var query = sqlBuilder.Build(QueryType.SelectCount);
-            var totalUsers = ExecuteCount(query);
-            
-            return totalUsers > 0;
+            var users = Find("Username", username);
+            return users.Count > 0 ? users[0] : null;
         }
     }
 }
