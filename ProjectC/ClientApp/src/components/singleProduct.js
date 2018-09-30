@@ -5,23 +5,20 @@ import '../styling/SingleItemStyling.css';
 class singleProduct extends Component {
     constructor(props) {
         super(props);
-        this.state = { products: [], loading: true };
+        this.state = { product: [], loading: true };
 
-        fetch('api/Product')
-            .then(response => response.json())
-            .then(data => {
-                this.setState({ products: data, loading: false });
-            });
     }
 
     render() {
         var itemId = this.props.location.pathname.replace("/product/", "");
-        function getPhone(code) {
-            return this.state.products.filter(
-                function (phone) { return phone.id === code }
-            );
-        }
-        var phone = getPhone(itemId)[0];
+
+        fetch('api/Product/' + itemId)
+            .then(response => response.json())
+            .then(data => {
+                this.setState({ product: data, loading: false });
+            });
+
+        var phone = this.state.product[0]
         return (
             <div className="singleProduct">
                 <div class="row">

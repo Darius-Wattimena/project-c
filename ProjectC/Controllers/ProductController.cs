@@ -18,5 +18,13 @@ namespace ProjectC.Controllers
             var json = JsonConvert.SerializeObject(products);
             return json;
         }
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+            var product = daoManager?.ProductDao.Find(id);
+            return Ok(product);
+        }
     }
 }
