@@ -8,9 +8,7 @@ import Listproducts from '../features/productListing';
 export default class loginPage extends Component {
     constructor(props) {
         super(props);
-        this.state = { loading: true };
-
-       
+        this.state = { loading: false };
     }
 
     render() {
@@ -23,10 +21,10 @@ export default class loginPage extends Component {
                 <div className='loginPage'>
                     <form>
                         E-mail:<br></br>
-                            <input type="text" name="e-mail"></input><br></br>
-                                Password:<br></br>
-                                    <input type="text" name="password"></input>
-                                        </form>
+                        <input type="text" name="e-mail"></input><br></br>
+                        Password:<br></br>
+                        <input type="text" name="password"></input>
+                    </form>
                 </div>
             );
         }

@@ -2,7 +2,10 @@
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using ProjectC.Database.Core;
+using ProjectC.Database.Entities;
 using ProjectC.Model;
+using System.Net;
+using System.Net.Http;
 
 namespace ProjectC.Controllers
 {
@@ -19,12 +22,22 @@ namespace ProjectC.Controllers
             var json = JsonConvert.SerializeObject(products);
             return json;
         }
-
+        
+        // POST: api/Product
         [HttpPost]
-        public void Add([FromBody] ProductAddModel product)
+        public HttpResponseMessage Add([FromBody] ProductAddModel product)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            //daoManager?.ProductDao.Save(product);
+
+            Product p = new Product
+            {
+                Name = product.Name,
+                Price = product.Price
+            };
+
+            daoManager?.ProductDao.Save(p);
+
+            return new HttpResponseMessage(HttpStatusCode.OK);
         }
 
     }
