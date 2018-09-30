@@ -1,10 +1,8 @@
-<<<<<<< HEAD
-=======
-﻿using System;
+
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
->>>>>>> e73ae30df4c75b819bce0d33608a3b5a922b1681
 using DevOne.Security.Cryptography.BCrypt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
