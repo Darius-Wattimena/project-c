@@ -41,7 +41,7 @@ class RegisterPage extends React.Component {
         this.setState({ submitted: true });
         const { user } = this.state;
         const { dispatch } = this.props;
-        if (user.firstName && user.lastName && user.username && user.password && user.mailaddress) {
+        if (user.firstname && user.lastname && user.username && user.password && user.mailaddress) {
             dispatch(userActions.register(user));
         }
     }
@@ -52,7 +52,7 @@ class RegisterPage extends React.Component {
         return (
             <div className="col-md-6 col-md-offset-3">
                 <h2>Register</h2>
-                <form name="form" onSubmit={this.handleSubmit}>
+                <form id="form" onSubmit={this.handleSubmit}>
                     <div className={'form-group' + (submitted && !user.firstname ? ' has-error' : '')}>
                         <label htmlFor="firstname">First Name</label>
                         <input type="text" className="form-control" name="firstname" value={user.firstname} onChange={this.handleChange} />
@@ -88,13 +88,13 @@ class RegisterPage extends React.Component {
                             <div className="help-block">Email is required</div>
                         }
                     </div>
-                    <div className="form-group">
-                        <button className="btn btn-primary">Register</button>
-                        { registering &&
-                            <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-                        }
-                    </div>
                 </form>
+
+                <button type="submit" form="form" className="btn btn-primary">Register</button>
+                {registering &&
+                    <div>Creating a new account</div>
+                }
+                <a href="home" className="btn btn-danger">Back</a>
             </div>
         );
     }

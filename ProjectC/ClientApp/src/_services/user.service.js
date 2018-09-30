@@ -32,8 +32,8 @@ function register(user) {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(user)
     };
-
-    return fetch(config.apiUrl + '/user/register', requestOptions).then(handleResponse, handleError);
+    const url = config.apiUrl + '/user/Register';
+    return fetch(url, requestOptions).then(handleResponse, handleError);
 }
 
 function update(user) {
