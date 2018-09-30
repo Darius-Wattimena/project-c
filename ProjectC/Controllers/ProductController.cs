@@ -24,7 +24,7 @@ namespace ProjectC.Controllers
         public void Add([FromBody] ProductAddModel product)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            daoManager?.ProductDao.Save(product);
+            //daoManager?.ProductDao.Save(product);
         }
 
     }
