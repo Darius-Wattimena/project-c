@@ -31,11 +31,8 @@ namespace ProjectC.Controllers
             var json = JsonConvert.SerializeObject(user);
             return json;
         }
-
-        //Login a user with the given credentials
+        
         [HttpPost]
-<<<<<<< HEAD
-<<<<<<< HEAD
         public void Post([FromBody] string value)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
@@ -43,11 +40,6 @@ namespace ProjectC.Controllers
             daoManager?.UserDao.Save(user);
         }
 
-        [HttpPost]
-        public void Register(string value)
-=======
-=======
->>>>>>> 000333b2f7e84255db73b50a9d73d2f5431b85a4
         public bool Login([FromBody] UserLoginModel input)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
