@@ -8,12 +8,13 @@ using ProjectC.Model;
 
 namespace ProjectC.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/[controller]/[action]")]
     [ApiController]
     public class ProductController : ControllerBase
     {
         // GET: api/Product
         [HttpGet]
+        [Route("api/[controller]")]
         public string Get()
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
@@ -22,7 +23,7 @@ namespace ProjectC.Controllers
             return json;
         }
         
-        // POST: api/Product
+        // POST: api/Product/Add
         [HttpPost]
         public IActionResult Add([FromBody] ProductAddModel product)
         {
