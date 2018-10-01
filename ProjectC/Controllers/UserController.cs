@@ -1,4 +1,5 @@
-﻿using System;
+
+using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
@@ -34,7 +35,7 @@ namespace ProjectC.Controllers
             var users = daoManager?.UserDao.FindAll();
             return Ok(users);
         }
-        
+
         //Get 1 user with the given id
         [HttpGet("{id}")]
         public IActionResult Get(int id)
@@ -100,7 +101,7 @@ namespace ProjectC.Controllers
 
             return Ok();
         }
-        
+
         //Update the given user
         [HttpPut("{id}")]
         public IActionResult Update(int id, [FromBody] UserUpdateModel input)

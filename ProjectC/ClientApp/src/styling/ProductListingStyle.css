@@ -1,0 +1,18 @@
+﻿.product {
+    float: left;
+    width: 275px;
+    height: 400px;
+    padding: 20px;
+    margin: 5px;
+    background-color: white;
+    border: 0.5px gray solid;
+}
+
+.product img{
+    height: 60%;
+    width: auto;
+}
+
+.product h3{
+    float: right;
+}

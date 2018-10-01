@@ -1,9 +1,16 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using DevOne.Security.Cryptography.BCrypt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
 using Newtonsoft.Json;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
+using ProjectC.Helper;
 using ProjectC.Model;
 
 namespace ProjectC.Controllers
@@ -12,15 +19,19 @@ namespace ProjectC.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
+        private readonly AppSettings _appSettings;
+
+        public ProductController(IOptions<AppSettings> appSettings)
+        {
+            _appSettings = appSettings.Value;
+        }
         // GET: api/Product
         [HttpGet]
-        [Route("api/[controller]")]
-        public string Get()
+        public IActionResult Get()
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             var products = daoManager?.ProductDao.FindAll();
-            var json = JsonConvert.SerializeObject(products);
-            return json;
+            return Ok(products);
         }
         
         // POST: api/Product/Add
