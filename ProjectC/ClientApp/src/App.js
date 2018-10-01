@@ -15,7 +15,7 @@ export default class App extends Component {
                 <Route path="/product/" component={singleProduct} />
                 <Route path="/login" component={loginPage}/>
                 <Route exact path="/adminpanel" component={adminPanel} />
-                <Route path="/product/add" component={addProductPage} />
+                <Route path="/adminpanel/product/add" component={addProductPage} />
             </div>
         );
     }

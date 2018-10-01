@@ -14,7 +14,7 @@ namespace ProjectC.Database.Entities
         public string Name;
 
         [Field(Core.Type.Integer)]
-        public string Stock;
+        public int? Stock;
 
         [Field(Core.Type.Decimal)]
         public decimal Price;

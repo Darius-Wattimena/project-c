@@ -8,20 +8,14 @@ import React, { Component } from 'react';
 export default class adminPanel extends Component {
     constructor(props) {
         super(props);
-        this.state = { loading: false };
     }
 
     render() {
-        if (this.state.loading) {
-            return (
-                <p>Loading...</p>
-            );
-        } else {
-            return (
-                <div className='adminPanel'>
-                    <button class="btn btn-success">Add new product</button>
-                </div>
-            );
-        }
+        return (
+            <div className='adminPanel'>
+                <a href='/adminpanel/product/add' class='btn btn-danger'>Add new product</a>
+                <a class='btn btn-warning'>? product</a>
+            </div>
+        );
     }
 }
