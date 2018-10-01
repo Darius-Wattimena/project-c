@@ -2,9 +2,10 @@
     float: left;
     width: 275px;
     height: 400px;
-    border: 1px gray solid;
     padding: 20px;
     margin: 5px;
+    background-color: white;
+    border: 0.5px gray solid;
 }
 
 .product img{
