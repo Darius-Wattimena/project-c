@@ -22,6 +22,7 @@ namespace ProjectC.Database.Entities
             PasswordHash = hashedPassword;
             Firstname = model.Firstname;
             Lastname = model.Lastname;
+            MailAddress = model.MailAddress;
         }
 
         [Field("UserId", Core.Type.Integer, Primary = true)]

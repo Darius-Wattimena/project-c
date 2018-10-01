@@ -84,8 +84,19 @@ namespace ProjectC.Controllers
         public IActionResult Register([FromBody] UserRegisterModel input)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+
+            if (input.Password.Equals(input.ConfirmPassword))
+            {
+                return BadRequest("Passwords are not the same");
+            }
+
+            if (daoManager.UserDao.FindUserByUsername(input.Username) != null)
+            {
+                return BadRequest("Username already taken");
+            }
+
             var user = new User(input);
-            daoManager?.UserDao.Save(user);
+            daoManager.UserDao.Save(user);
 
             return Ok();
         }
