@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { Route } from 'react-router';
 
+// Page imports
 import productPage from './components/productPage';
 import addProductPage from './components/addProductPage';
 import singleProduct from './components/singleProduct';
