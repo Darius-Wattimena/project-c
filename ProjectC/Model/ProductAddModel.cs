@@ -8,6 +8,6 @@ namespace ProjectC.Model
     public class ProductAddModel
     {
         public string Name;
-        public decimal Price;
+        public double Price;
     }
 }

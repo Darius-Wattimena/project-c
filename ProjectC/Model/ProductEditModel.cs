@@ -9,6 +9,6 @@ namespace ProjectC.Model
     {
         public string Name;
         public int Stock;
-        public decimal Price;
+        public double Price;
     }
 }

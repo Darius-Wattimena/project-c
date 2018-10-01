@@ -14,10 +14,10 @@ namespace ProjectC.Database.Entities
         public string Name;
 
         [Field(Core.Type.Integer)]
-        public int? Stock;
+        public int Stock;
 
         [Field(Core.Type.Decimal)]
-        public decimal Price;
+        public double Price;
 
         public int GetId()
         {
