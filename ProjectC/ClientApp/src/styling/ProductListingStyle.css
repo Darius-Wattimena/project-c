@@ -1,0 +1,17 @@
+﻿.product {
+    float: left;
+    width: 275px;
+    height: 400px;
+    border: 1px gray solid;
+    padding: 20px;
+    margin: 5px;
+}
+
+.product img{
+    height: 60%;
+    width: auto;
+}
+
+.product h3{
+    float: right;
+}

@@ -3,10 +3,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { productActions } from '../_actions';
-import data from '../data/products.json';
 
-//component imports
-import Listproducts from '../features/productListing';
+import '../styling/ProductListingStyle.css';
 
 //base class
 class ProductPage extends React.Component {
@@ -18,8 +16,19 @@ class ProductPage extends React.Component {
         const { products } = this.props;
         console.log({ products });
         return (
-            <div className='productPage'>
-                <Listproducts data={data} />
+            <div>
+            {products.items &&
+                <div>
+                {products.items.map((product, index) => 
+                        <div class="product">
+                            <img></img>
+                            <h4>{product.name}</h4>
+                            <p>stock: {product.stock}</p>
+                            <h3>{product.price},-</h3>
+                        </div>
+                )}
+                </div>
+        }
             </div>
         );
     }

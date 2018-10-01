@@ -1,8 +1,7 @@
 ﻿import { authHeader, config } from '../_helpers';
 
 export const productService = {
-    getAll,
-    getById
+    getAll
 };
 
 function getAll() {
@@ -10,17 +9,7 @@ function getAll() {
         method: 'GET',
         headers: authHeader()
     };
-
     return fetch(config.apiUrl + '/product/get', requestOptions).then(handleResponse, handleError);
-}
-
-function getById(id) {
-    const requestOptions = {
-        method: 'GET',
-        headers: authHeader()
-    };
-
-    return fetch(config.apiUrl + '/product/get/' + id, requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {
