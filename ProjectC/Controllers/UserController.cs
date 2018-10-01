@@ -46,7 +46,6 @@ namespace ProjectC.Controllers
         }
         
         [HttpPost]
-<<<<<<< HEAD
         public void Post([FromBody] string value)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
@@ -54,10 +53,7 @@ namespace ProjectC.Controllers
             daoManager?.UserDao.Save(user);
         }
 
-        public bool Login([FromBody] UserLoginModel input)
-=======
         public IActionResult Login([FromBody] UserLoginModel input)
->>>>>>> 4679c9491e4bbb35031d43e6366f8453da093ca6
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             var databaseUser = daoManager.UserDao.FindUserByUsername(input.Username);

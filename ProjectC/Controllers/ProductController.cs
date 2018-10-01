@@ -33,7 +33,15 @@ namespace ProjectC.Controllers
             var products = daoManager?.ProductDao.FindAll();
             return Ok(products);
         }
-        
+
+        [HttpGet("{id}")]
+        public IActionResult Get(int id)
+        {
+            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+            var product = daoManager?.ProductDao.Find(id);
+            return Ok(product);
+        }
+
         // POST: api/Product/Add
         [HttpPost]
         public IActionResult Add([FromBody] ProductAddModel product)

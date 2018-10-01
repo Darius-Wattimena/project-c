@@ -14,6 +14,18 @@ export function products(state = {}, action) {
             return {
                 error: action.error
             };
+        case productConstants.GET_REQUEST:
+            return {
+                loading: true
+            };
+        case productConstants.GET_SUCCESS:
+            return {
+                items: action.products
+            };
+        case productConstants.GET_FAILURE:
+            return {
+                error: action.error
+            };
         
         default:
             return state

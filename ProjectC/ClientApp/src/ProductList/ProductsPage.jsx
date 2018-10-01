@@ -1,5 +1,6 @@
 ﻿//node imports
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { productActions } from '../_actions';
@@ -14,15 +15,18 @@ class ProductPage extends React.Component {
    
     render() {
         const { products } = this.props;
-        console.log({ products });
         return (
             <div>
+            {products.loading && <em>Loading products...</em>}
+            {products.error && <span className="text-danger">ERROR: {products.error}</span>}
             {products.items &&
                 <div>
                 {products.items.map((product, index) => 
-                        <div class="product">
+                        <div className="product">
+                            <Link to={`/product/${product.id}`}>
                             <img></img>
                             <h4>{product.name}</h4>
+                            </Link>
                             <p>stock: {product.stock}</p>
                             <h3>{product.price},-</h3>
                         </div>
