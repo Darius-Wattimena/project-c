@@ -5,6 +5,7 @@ export const productService = {
     add
 };
 
+// Returns a collection of all products
 function getAll() {
     const requestOptions = {
         method: 'GET',
@@ -13,6 +14,7 @@ function getAll() {
     return fetch(config.apiUrl + '/product/get', requestOptions).then(handleResponse, handleError);
 }
 
+// Add a product to the database
 function add(product) {
     const requestOptions = {
         method: 'POST',

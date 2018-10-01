@@ -36,19 +36,15 @@ namespace ProjectC.Controllers
         
         // POST: api/Product/Add
         [HttpPost]
-        public IActionResult Add([FromBody] ProductAddModel product)
+        public IActionResult Add([FromBody] ProductAddModel addProduct)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
 
-            Product p = new Product
-            {
-                Name = product.Name,
-                Price = product.Price
-            };
+            Product product = new Product(addProduct);
 
-            daoManager?.ProductDao.Save(p);
+            daoManager?.ProductDao.Save(product);
 
-            return Ok("Succesfully added product");
+            return Ok($"Succesfully added {product.Name} to the inventory.");
         }
 
     }

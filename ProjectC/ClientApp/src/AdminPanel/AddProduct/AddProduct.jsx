@@ -12,7 +12,8 @@ class AddProduct extends React.Component {
         this.state = {
             product: {
                 name: "",
-                price: 0
+                price: 0,
+                imageurl: ""
             },
             submitted: false
         }
@@ -32,8 +33,11 @@ class AddProduct extends React.Component {
     }
 
     handleChange(event) {
+       
         const { name, value } = event.target;
         const { product } = this.state;
+
+        // Update the value of the property that was changed
         this.setState({
             product: {
                 ...product,
@@ -43,6 +47,7 @@ class AddProduct extends React.Component {
     }
 
     render() {
+        // Render the view
         return (
             <div className='adminPanel' class="col-md-4">
                 <form id="product" onSubmit={this.handleSubmit} onChange={this.handleChange}>
@@ -55,8 +60,8 @@ class AddProduct extends React.Component {
                         <input type="number" min="0.01" step="0.01" class="form-control" name="price" id="price" placeholder="Price" defaultValue="0" />
                     </div>
                     <div class="form-group">
-                        <label for='specifications'>Specifications <span class="text-danger">(not implemented yet)</span></label>
-                        <input type="text" class="form-control" id="specifications" placeholder="?" />
+                        <label for='image'>Image URL</label>
+                        <input type="text" class="form-control" name="imageurl" id="imageurl" placeholder="Link to an image" />
                     </div>
                     <button type="submit" class="btn btn-primary">Add</button>
                 </form>

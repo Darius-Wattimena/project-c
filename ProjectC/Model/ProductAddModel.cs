@@ -9,5 +9,6 @@ namespace ProjectC.Model
     {
         public string Name;
         public double Price;
+        public string ImageURL;
     }
 }

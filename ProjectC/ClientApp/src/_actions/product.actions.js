@@ -1,5 +1,6 @@
 ﻿import { productConstants } from '../_constants';
 import { productService } from '../_services';
+import { history } from '../_helpers';
 
 export const productActions = {
     getAll,
@@ -32,7 +33,7 @@ function add(product) {
             .then(
                 () => {
                     //dispatch(success());
-                    //history.push('/adminpanel');
+                    history.push('/adminpanel');
                     //dispatch(alertActions.success('Added product'));
                 },
                 error => {
