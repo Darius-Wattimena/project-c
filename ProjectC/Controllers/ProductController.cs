@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
 using ProjectC.Model;
-using System.Net;
-using System.Net.Http;
 
 namespace ProjectC.Controllers
 {
@@ -25,7 +24,7 @@ namespace ProjectC.Controllers
         
         // POST: api/Product
         [HttpPost]
-        public HttpResponseMessage Add([FromBody] ProductAddModel product)
+        public IActionResult Add([FromBody] ProductAddModel product)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
 
@@ -37,7 +36,7 @@ namespace ProjectC.Controllers
 
             daoManager?.ProductDao.Save(p);
 
-            return new HttpResponseMessage(HttpStatusCode.OK);
+            return Ok("Succesfully added product");
         }
 
     }

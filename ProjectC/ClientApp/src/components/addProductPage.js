@@ -14,14 +14,14 @@ export default class addProductPage extends Component {
     render() {
         return (
             <div className='adminPanel' class="col-md-4">
-                <form action="/product" method="post">
+                <form action="/api/product" method="post">
                     <div class="form-group">
                         <label for="name">Name</label>
-                        <input type="text" class="form-control" id="name" placeholder="Name" />
+                        <input type="text" class="form-control" name="Name" id="Name" placeholder="Name" />
                     </div>
                     <div class="form-group">
                         <label for="price">Price</label>
-                        <input min="0.01" step="0.01" class="form-control" id="price" placeholder="Price" />
+                        <input min="0.01" step="0.01" class="form-control" name="Price" id="Price" placeholder="Price" />
                     </div>
                     <div class="form-group">
                         <label for='specifications'>Specifications <span class="text-danger">(not implemented yet)</span></label>
