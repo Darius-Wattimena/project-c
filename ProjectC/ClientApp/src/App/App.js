@@ -8,7 +8,7 @@ import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { RegisterPage } from '../RegisterPage';
 
-import productPage from '../components/productPage';
+import { ProductPage } from '../components';
 import singleProduct from '../components/singleProduct';
 
 class App extends Component {
@@ -36,7 +36,7 @@ class App extends Component {
                                 <PrivateRoute exact path="/" component={HomePage} />
                                 <Route path="/home" component={HomePage} />
                                 <Route path="/register" component={RegisterPage} />
-                                <Route exact path="/products" component={productPage} />
+                                <Route exact path="/products" component={ProductPage} />
                                 <Route path="/product/" component={singleProduct} />
                             </div>
                         </Router>

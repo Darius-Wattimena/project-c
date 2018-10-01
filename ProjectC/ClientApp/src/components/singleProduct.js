@@ -3,22 +3,11 @@
 import '../styling/SingleItemStyling.css';
 
 class singleProduct extends Component {
-    constructor(props) {
-        super(props);
-        this.state = { product: [], loading: true };
-
-    }
 
     render() {
         var itemId = this.props.location.pathname.replace("/product/", "");
 
-        fetch('api/Product/' + itemId)
-            .then(response => response.json())
-            .then(data => {
-                this.setState({ product: data, loading: false });
-            });
-
-        var phone = this.state.product[0]
+        var phone = {}
         return (
             <div className="singleProduct">
                 <div class="row">
