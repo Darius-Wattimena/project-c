@@ -64,6 +64,7 @@ class AddProduct extends React.Component {
                         <input type="text" class="form-control" name="imageurl" id="imageurl" placeholder="Link to an image" />
                     </div>
                     <button type="submit" class="btn btn-primary">Add</button>
+                    <a href="/adminpanel" className="btn btn-danger">Back</a>
                 </form>
             </div>
         );
