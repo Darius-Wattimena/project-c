@@ -15,6 +15,7 @@ class ProductPage extends React.Component {
    
     render() {
         const { products } = this.props;
+        console.log( products.items );
         return (
             <div>
             {products.loading && <em>Loading products...</em>}
@@ -24,7 +25,7 @@ class ProductPage extends React.Component {
                 {products.items.map((product, index) => 
                         <div className="product">
                             <Link to={`/product/${product.id}`}>
-                            <img></img>
+                                <img src={product.imageUrl}></img>
                             <h4>{product.name}</h4>
                             </Link>
                             <p>stock: {product.stock}</p>

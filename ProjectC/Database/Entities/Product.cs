@@ -19,6 +19,9 @@ namespace ProjectC.Database.Entities
         [Field(Core.Type.Decimal)]
         public double Price;
 
+        [Field(Core.Type.Varchar, Size = 256)]
+        public string ImageUrl;
+
         public int GetId()
         {
             return Id;

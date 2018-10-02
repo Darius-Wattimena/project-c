@@ -51,7 +51,9 @@ namespace ProjectC.Controllers
             Product p = new Product
             {
                 Name = product.Name,
-                Price = product.Price
+                Stock = product.Stock,
+                Price = product.Price,
+                ImageUrl = product.ImageUrl
             };
 
             daoManager?.ProductDao.Save(p);
