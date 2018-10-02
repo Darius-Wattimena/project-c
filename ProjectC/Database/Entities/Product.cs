@@ -7,6 +7,7 @@ namespace ProjectC.Database.Entities
     [Entity("Product")]
     public class Product : IEntity
     {
+
         public Product()
         {
 
@@ -15,8 +16,9 @@ namespace ProjectC.Database.Entities
         public Product(ProductAddModel p)
         {
             Name = p.Name;
+            Stock = p.Stock;
             Price = p.Price;
-            ImageURL = p.ImageURL;
+            ImageUrl = p.ImageURL;
         }
 
         [Field("ProductId", Core.Type.Integer, Primary = true)]
@@ -32,11 +34,7 @@ namespace ProjectC.Database.Entities
         public double Price;
 
         [Field(Core.Type.Varchar, Size = 256)]
-<<<<<<< HEAD
         public string ImageUrl;
-=======
-        public string ImageURL;
->>>>>>> d43a9bafcd8004a85a00cc4f48f469d87455897d
 
         public int GetId()
         {

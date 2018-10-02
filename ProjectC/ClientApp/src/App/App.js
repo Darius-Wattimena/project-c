@@ -12,7 +12,8 @@ import { ProductPage } from '../ProductList';
 import { SingleProductPage } from '../SingleProduct';
 
 import { AdminPanel } from '../AdminPanel';
-import { AddProduct } from '../AdminPanel/AddProduct';
+import { AdminProducts } from '../AdminProducts';
+import { AddProduct } from '../AdminProducts/AddProduct';
 
 class App extends Component {
     constructor(props) {
@@ -39,14 +40,11 @@ class App extends Component {
                                 <PrivateRoute exact path="/" component={HomePage} />
                                 <Route path="/home" component={HomePage} />
                                 <Route path="/register" component={RegisterPage} />
-<<<<<<< HEAD
                                 <Route path="/products" component={ProductPage} />
                                 <Route path="/product/:id" component={SingleProductPage} />
-=======
                                 <Route path="/adminpanel" component={AdminPanel} />
-                                <Route path="/adminpanel/product/add" component={AddProduct} />
-                                <Route exact path="/products" component={ProductPage} />
->>>>>>> d43a9bafcd8004a85a00cc4f48f469d87455897d
+                                <Route path="/adminpanel/product" component={AdminProducts} />
+                                <Route path="/adminpanel/addproduct" component={AddProduct} />
                             </div>
                         </Router>
                     </div>

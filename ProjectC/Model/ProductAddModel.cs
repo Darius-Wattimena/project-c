@@ -10,10 +10,6 @@ namespace ProjectC.Model
         public string Name;
         public int Stock;
         public double Price;
-<<<<<<< HEAD
-        public string ImageUrl;
-=======
         public string ImageURL;
->>>>>>> d43a9bafcd8004a85a00cc4f48f469d87455897d
     }
 }

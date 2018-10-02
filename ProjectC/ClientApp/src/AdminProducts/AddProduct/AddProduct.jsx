@@ -12,6 +12,7 @@ class AddProduct extends React.Component {
         this.state = {
             product: {
                 name: "",
+                stock: 0,
                 price: 0,
                 imageurl: ""
             },
@@ -56,6 +57,10 @@ class AddProduct extends React.Component {
                         <input type="text" class="form-control" name="name" id="name" placeholder="Name" />
                     </div>
                     <div class="form-group">
+                        <label for="stock">Stock</label>
+                        <input type="number" min="0" step="1" class="form-control" name="stock" id="stock" placeholder="Stock" defaultValue="0" />
+                    </div>
+                    <div class="form-group">
                         <label for="price">Price</label>
                         <input type="number" min="0.01" step="0.01" class="form-control" name="price" id="price" placeholder="Price" defaultValue="0" />
                     </div>
@@ -64,7 +69,7 @@ class AddProduct extends React.Component {
                         <input type="text" class="form-control" name="imageurl" id="imageurl" placeholder="Link to an image" />
                     </div>
                     <button type="submit" class="btn btn-primary">Add</button>
-                    <a href="/adminpanel" className="btn btn-danger">Back</a>
+                    <a href="/adminpanel/product" className="btn btn-danger">Back</a>
                 </form>
             </div>
         );

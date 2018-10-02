@@ -2,11 +2,9 @@
 
 export const productService = {
     getAll,
-<<<<<<< HEAD
-    getById
-=======
+    getById,
+    _delete,
     add
->>>>>>> d43a9bafcd8004a85a00cc4f48f469d87455897d
 };
 
 // Returns a collection of all products
@@ -18,14 +16,15 @@ function getAll() {
     return fetch(config.apiUrl + '/product/get', requestOptions).then(handleResponse, handleError);
 }
 
-<<<<<<< HEAD
+
 function getById(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
     return fetch(config.apiUrl + '/product/get/' + id, requestOptions).then(handleResponse, handleError);
-=======
+}
+
 // Add a product to the database
 function add(product) {
     const requestOptions = {
@@ -35,7 +34,16 @@ function add(product) {
     };
 
     return fetch(config.apiUrl + '/product/add', requestOptions).then(handleResponse, handleError);
->>>>>>> d43a9bafcd8004a85a00cc4f48f469d87455897d
+}
+
+// prefixed function name with underscore because delete is a reserved word in javascript
+function _delete(id) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader()
+    };
+
+    return fetch(config.apiUrl + '/product/delete/' + id, requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {

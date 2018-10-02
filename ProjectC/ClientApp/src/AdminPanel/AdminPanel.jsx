@@ -9,7 +9,7 @@ class AdminPanel extends React.Component {
             <div className="col-md-6 col-md-offset-3">
                 <h1>Hi!</h1>
                 <p>Welcome to the admin panel</p>
-                <a href="/adminpanel/product/add">Add a product</a>
+                <a href="/adminpanel/product">Products list and actions</a>
             </div>
         );
     }

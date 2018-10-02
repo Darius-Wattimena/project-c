@@ -5,11 +5,9 @@ import { history } from '../_helpers';
 
 export const productActions = {
     getAll,
-<<<<<<< HEAD
-    getById
-=======
-    add
->>>>>>> d43a9bafcd8004a85a00cc4f48f469d87455897d
+    getById,
+    add,
+    _delete
 };
 
 function getAll() {
@@ -30,7 +28,6 @@ function getAll() {
     function failure(error) { return { type: productConstants.GETALL_FAILURE, error } }
 }
 
-<<<<<<< HEAD
 function getById(id) {
     return dispatch => {
         dispatch(request());
@@ -45,7 +42,6 @@ function getById(id) {
     function success(products) { return { type: productConstants.GET_SUCCESS, products } }
     function failure(error) { return { type: productConstants.GET_FAILURE, error } }
 }
-=======
 function add(product) {
     return dispatch => {
         dispatch(request(product));
@@ -68,4 +64,24 @@ function add(product) {
     function success(product) { return { type: productConstants.ADD_SUCCESS, product } }
     function failure(error) { return { type: productConstants.ADD_FAILURE, error } }
 }
->>>>>>> d43a9bafcd8004a85a00cc4f48f469d87455897d
+
+// prefixed function name with underscore because delete is a reserved word in javascript
+function _delete(id) {
+    return dispatch => {
+        dispatch(request(id));
+
+        productService._delete(id)
+            .then(
+                () => {
+                    dispatch(success(id));
+                },
+                error => {
+                    dispatch(failure(id, error));
+                }
+            );
+    };
+
+    function request(id) { return { type: productConstants.DELETE_REQUEST, id } }
+    function success(id) { return { type: productConstants.DELETE_SUCCESS, id } }
+    function failure(id, error) { return { type: productConstants.DELETE_FAILURE, id, error } }
+}

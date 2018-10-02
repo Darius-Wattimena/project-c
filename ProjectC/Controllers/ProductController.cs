@@ -48,21 +48,19 @@ namespace ProjectC.Controllers
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
 
-<<<<<<< HEAD
-            Product p = new Product
-            {
-                Name = product.Name,
-                Stock = product.Stock,
-                Price = product.Price,
-                ImageUrl = product.ImageUrl
-            };
-=======
             Product product = new Product(addProduct);
->>>>>>> d43a9bafcd8004a85a00cc4f48f469d87455897d
 
             daoManager?.ProductDao.Save(product);
 
             return Ok($"Succesfully added {product.Name} to the inventory.");
+        }
+
+        [HttpDelete("{id}")]
+        public IActionResult Delete(int id)
+        {
+            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+            daoManager?.ProductDao.Delete(id);
+            return Ok();
         }
 
     }
