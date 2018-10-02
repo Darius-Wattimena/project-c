@@ -14,7 +14,7 @@ export default class addProductPage extends Component {
     render() {
         return (
             <div className='adminPanel' class="col-md-4">
-                <form action="/api/product/add" method="post" id="product" name="product">
+                <form id="product" onSubmit={this.handleSubmit}>
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" class="form-control" name="Name" id="Name" placeholder="Name" />

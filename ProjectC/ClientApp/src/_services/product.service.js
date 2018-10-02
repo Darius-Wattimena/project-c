@@ -2,9 +2,14 @@
 
 export const productService = {
     getAll,
+<<<<<<< HEAD
     getById
+=======
+    add
+>>>>>>> d43a9bafcd8004a85a00cc4f48f469d87455897d
 };
 
+// Returns a collection of all products
 function getAll() {
     const requestOptions = {
         method: 'GET',
@@ -13,12 +18,24 @@ function getAll() {
     return fetch(config.apiUrl + '/product/get', requestOptions).then(handleResponse, handleError);
 }
 
+<<<<<<< HEAD
 function getById(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
     return fetch(config.apiUrl + '/product/get/' + id, requestOptions).then(handleResponse, handleError);
+=======
+// Add a product to the database
+function add(product) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(product)
+    };
+
+    return fetch(config.apiUrl + '/product/add', requestOptions).then(handleResponse, handleError);
+>>>>>>> d43a9bafcd8004a85a00cc4f48f469d87455897d
 }
 
 function handleResponse(response) {
