@@ -5,6 +5,8 @@ import { connect } from 'react-redux';
 
 import { userActions } from '../_actions';
 
+import { history } from '../_helpers';
+
 class RegisterPage extends React.Component {
     constructor(props) {
         super(props);

@@ -1,0 +1,18 @@
+﻿.product {
+    float: left;
+    width: 100%;
+    height: auto;
+    padding: 20px;
+    margin: 5px;
+    background-color: white;
+    border: 0.5px gray solid;
+}
+
+.actionsColumn button {
+    float:right;
+}
+
+.imageColumn img {
+    height: 50%;
+    width: 50%;
+}
