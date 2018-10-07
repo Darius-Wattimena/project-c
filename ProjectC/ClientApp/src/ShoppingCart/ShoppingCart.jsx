@@ -6,6 +6,15 @@ import { history } from '../_helpers';
 
 import '../styling/ShoppingCartListingStyle.css';
 
+function getIndex(value, arr) {
+    for (var i = 0; i < arr.length; i++) {
+        if (arr[i] === value) {
+            return i;
+        }
+    }
+    return -1; //to handle the case where the value doesn't exist
+}
+
 class ShoppingCart extends React.Component {
     constructor(props) {
         super(props);
@@ -33,24 +42,44 @@ class ShoppingCart extends React.Component {
 
     }
 
-    // Removing an item from ze basket
-    handleRemove(id, event) {
-        console.log(id);
-        var products = JSON.parse(localStorage.getItem('shoppingCart'));
-        for (var i = 0; i < products.items.length; i++) {
-            if (products.items[i].id === id) {
-                // subtract one
-                products.items[i].amount -= 1;
+    // IGNORE BAD CODE BELOW :P
 
-                // if zero, remove it
-                if (products.items[i].amount <= 0) {
-                    products.items.splice(i, 1);
-                }
-            }
+    // Removing an item from ze basket
+    handleRemove(product, event) {
+
+        var products = JSON.parse(localStorage.getItem('shoppingCart'));
+        var index = getIndex(product, products);
+        products.items.splice(index, 1);
+        // update shopping cart
+        localStorage.setItem('shoppingCart', JSON.stringify(products));
+        // refresh
+        history.push("/checkout");
+    }
+
+    // Subtracting quantity for an item from ze basket
+    handleSubtract(product, event) {
+        var products = JSON.parse(localStorage.getItem('shoppingCart'));
+        // subtract one
+        products.items[index].amount -= 1;
+
+        // if zero, remove it
+        if (products.items[index].amount <= 0) {
+            products.items.splice(index, 1);
         }
         // update shopping cart
         localStorage.setItem('shoppingCart', JSON.stringify(products));
+        // refresh
+        history.push("/checkout");
+    }
 
+    // Adding quantity
+    handleAdd(product, event) {
+        console.log("Index:" + index);
+        var products = JSON.parse(localStorage.getItem('shoppingCart'));
+        // add one
+        products.items[index].amount += 1;
+        // update shopping cart
+        localStorage.setItem('shoppingCart', JSON.stringify(products));
         // refresh
         history.push("/checkout");
     }
@@ -83,11 +112,16 @@ class ShoppingCart extends React.Component {
                                         <h4>{product.name}</h4>
                                     </Link>
                                     <h2>{product.price},-</h2>
-                                    <p>Quantity: {product.amount}</p>
+                                <p>Quantity:
+                                <button class="btn btn-sm" onClick={this.handleAdd(this, index)}>-</button>
+                                    {product.amount}
+                                    <button class="btn btn-sm" onClick={this.handleSubtract(this, index)}>+</button>
+                                </p>
                                 </div>
-                                <div className="actionsColumn col-md-4">
-                                    <button className="btn btn-danger" onClick={this.handleRemove.bind(this, product.id)}>Remove</button>
-                                </div>
+                            <div className="actionsColumn col-md-4">
+                                <button className="btn btn-danger" onClick={this.handleRemove(this, index)}>Remove</button>
+                                <button className="btn btn-primary">Add to wishlist</button>
+                            </div>
                             </div>
                         )}
                     </div>
