@@ -1,4 +1,5 @@
-﻿using ProjectC.Database.Core.Annotations;
+﻿using ProjectC.Database.Core;
+using ProjectC.Database.Core.Annotations;
 using ProjectC.Database.Core.Interfaces;
 using ProjectC.Model;
 
@@ -7,7 +8,6 @@ namespace ProjectC.Database.Entities
     [Entity("Product")]
     public class Product : IEntity
     {
-
         public Product()
         {
 
@@ -21,19 +21,19 @@ namespace ProjectC.Database.Entities
             ImageUrl = p.ImageURL;
         }
 
-        [Field("ProductId", Core.Type.Integer, Primary = true)]
+        [Field("ProductId", FieldType.Integer, Primary = true)]
         public int Id;
 
-        [Field(Core.Type.Varchar, Size = 45)]
+        [Field(FieldType.Varchar, Size = 45)]
         public string Name;
 
-        [Field(Core.Type.Integer, Size = 11)]
+        [Field(FieldType.Integer, Size = 11)]
         public int Stock;
 
-        [Field(Core.Type.Decimal)]
+        [Field(FieldType.Decimal)]
         public double Price;
 
-        [Field(Core.Type.Varchar, Size = 256)]
+        [Field(FieldType.Varchar, Size = 256)]
         public string ImageUrl;
 
         public int GetId()

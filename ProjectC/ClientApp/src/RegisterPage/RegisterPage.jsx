@@ -11,7 +11,6 @@ class RegisterPage extends React.Component {
 
         this.state = {
             user: {
-                username: "",
                 firstname: "",
                 lastname: "",
                 password: "",
@@ -41,7 +40,7 @@ class RegisterPage extends React.Component {
         this.setState({ submitted: true });
         const { user } = this.state;
         const { dispatch } = this.props;
-        if (user.firstname && user.lastname && user.username && user.password && user.mailaddress) {
+        if (user.firstname && user.lastname && user.password && user.mailaddress) {
             dispatch(userActions.register(user));
         }
     }
@@ -67,11 +66,11 @@ class RegisterPage extends React.Component {
                             <div className="help-block">Last Name is required</div>
                         }
                     </div>
-                    <div className={'form-group' + (submitted && !user.username ? ' has-error' : '')}>
-                        <label htmlFor="username">Username</label>
-                        <input type="text" className="form-control" name="username" value={user.username} onChange={this.handleChange} />
-                        {submitted && !user.username &&
-                            <div className="help-block">Username is required</div>
+                    <div className={'form-group' + (submitted && !user.mailaddress ? ' has-error' : '')}>
+                        <label htmlFor="mailaddress">Email</label>
+                        <input type="email" className="form-control" name="mailaddress" value={user.mailaddress} onChange={this.handleChange} />
+                        {submitted && !user.mailaddress &&
+                            <div className="help-block">Email is required</div>
                         }
                     </div>
                     <div className={'form-group' + (submitted && !user.password ? ' has-error' : '')}>
@@ -79,13 +78,6 @@ class RegisterPage extends React.Component {
                         <input type="password" className="form-control" name="password" value={user.password} onChange={this.handleChange} />
                         {submitted && !user.password &&
                             <div className="help-block">Password is required</div>
-                        }
-                    </div>
-                    <div className={'form-group' + (submitted && !user.mailaddress ? ' has-error' : '')}>
-                        <label htmlFor="mailaddress">Email</label>
-                        <input type="email" className="form-control" name="mailaddress" value={user.mailaddress} onChange={this.handleChange} />
-                        {submitted && !user.mailaddress &&
-                            <div className="help-block">Email is required</div>
                         }
                     </div>
                 </form>

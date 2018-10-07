@@ -1,6 +1,5 @@
 ﻿using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
-using ProjectC.Database.SQL;
 
 namespace ProjectC.Database.Daos
 {
@@ -11,9 +10,9 @@ namespace ProjectC.Database.Daos
 
         }
 
-        public User FindUserByMailAddress(string mailaddress)
+        public User FindUserByMailAddress(string email)
         {
-            var users = Find("Mailaddress", mailaddress);
+            var users = Find("MailAddress", email);
             return users.Count > 0 ? users[0] : null;
         }
     }

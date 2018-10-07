@@ -1,4 +1,3 @@
-
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -56,15 +55,13 @@ namespace ProjectC.Controllers
         public IActionResult Login([FromBody] UserLoginModel input)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var databaseUser = daoManager.UserDao.FindUserByMailAddress(input.Mailaddress);
+            var databaseUser = daoManager.UserDao.FindUserByMailAddress(input.MailAddress);
 
             if (databaseUser == null || !BCryptHelper.CheckPassword(input.Password, databaseUser.PasswordHash))
             {
                 return BadRequest("Username or password is incorrect");
             }
-
-            var userLoginHashedPassword = BCryptHelper.HashPassword(input.Password, databaseUser.PasswordHash);
-
+            
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -81,7 +78,6 @@ namespace ProjectC.Controllers
 
             // return basic user info (without password) and token to store client side
             databaseUser.PasswordHash = null;
-            
 
             return Ok(databaseUser);
         }
@@ -96,10 +92,10 @@ namespace ProjectC.Controllers
             {
                 return BadRequest("Passwords are not the same");
             }
-
+            
             if (daoManager.UserDao.FindUserByMailAddress(input.MailAddress) != null)
             {
-                return BadRequest("Username already taken");
+                return BadRequest("Mail address already been used");
             }
 
             var user = new User(input);
@@ -119,8 +115,14 @@ namespace ProjectC.Controllers
             {
                 return BadRequest("User not found");
             }
-
-           
+            
+            if (!BCryptHelper.CheckPassword(input.Password, databaseUser.PasswordHash))
+            {
+                var salt = BCryptHelper.GenerateSalt();
+                var hashedPassword = BCryptHelper.HashPassword(input.Password, salt);
+                databaseUser.PasswordHash = hashedPassword;
+            }
+            
             databaseUser.Firstname = input.Firstname;
             databaseUser.Lastname = input.Lastname;
             databaseUser.MailAddress = input.MailAddress;

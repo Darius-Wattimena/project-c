@@ -12,7 +12,7 @@ namespace ProjectC.Database.Core
         private const string LOGGING_SQL_PREFIX = "SQL Executing | ";
 
         protected readonly DB Database;
-        protected readonly System.Type Type;
+        protected readonly Type Type;
         protected FieldInfo[] Fields;
         protected readonly TableConfig<T> TableConfig;
 
@@ -32,11 +32,11 @@ namespace ProjectC.Database.Core
             foreach(var field in Fields)
             {
                 var cfg = DBUtil.CreateFieldConfig<T>(field);
-                if (cfg.primary)
+                if (cfg.Primary)
                 {
                     TableConfig.primaryFieldConfig = cfg;
                 }
-                TableConfig.fields.Add(cfg.name, cfg);
+                TableConfig.fields.Add(cfg.Name, cfg);
             }
         }
 
@@ -88,8 +88,8 @@ namespace ProjectC.Database.Core
                 var result = Activator.CreateInstance<T>();
                 foreach (var fieldConfig in TableConfig.fields.Values)
                 {
-                    var value = dataReader[fieldConfig.name];
-                    fieldConfig.field.SetValue(result, value);
+                    var value = dataReader[fieldConfig.Name];
+                    fieldConfig.Field.SetValue(result, value);
                 }
                 results.Add(result);
             }

@@ -14,6 +14,9 @@ import { SingleProductPage } from '../SingleProduct';
 import { AdminPanel } from '../AdminPanel';
 import { AdminProducts } from '../AdminProducts';
 import { AddProduct } from '../AdminProducts/AddProduct';
+import { EditUserPage } from '../EditUserPage';
+
+import { ProductPage } from '../ProductPage';
 
 class App extends Component {
     constructor(props) {
@@ -45,6 +48,8 @@ class App extends Component {
                                 <Route path="/adminpanel" component={AdminPanel} />
                                 <Route path="/adminpanel/product" component={AdminProducts} />
                                 <Route path="/adminpanel/addproduct" component={AddProduct} />
+                                <Route exact path="/products" component={ProductPage} />
+                                <Route path="/user/edit/:id" component={EditUserPage} />
                             </div>
                         </Router>
                     </div>

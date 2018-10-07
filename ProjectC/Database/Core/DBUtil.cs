@@ -43,12 +43,12 @@ namespace ProjectC.Database.Core
 
             var cfg = new FieldConfig<T>
             {
-                field = field,
-                name = fieldName,
-                type = Type.GetByName(fieldAttr.FieldType),
-                primary = fieldAttr.Primary,
-                size = fieldAttr.Size,
-                digitSize = fieldAttr.DigitSize
+                Field = field,
+                Name = fieldName,
+                FieldType = FieldType.GetByName(fieldAttr.FieldType),
+                Primary = fieldAttr.Primary,
+                Size = fieldAttr.Size,
+                DigitSize = fieldAttr.DigitSize
             };
 
             return cfg;

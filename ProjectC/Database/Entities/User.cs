@@ -1,4 +1,5 @@
 ﻿using DevOne.Security.Cryptography.BCrypt;
+using ProjectC.Database.Core;
 using ProjectC.Database.Core.Annotations;
 using ProjectC.Database.Core.Interfaces;
 using ProjectC.Model;
@@ -17,33 +18,26 @@ namespace ProjectC.Database.Entities
         {
             var salt = BCryptHelper.GenerateSalt();
             var hashedPassword = BCryptHelper.HashPassword(model.Password, salt);
-            
-           
             PasswordHash = hashedPassword;
             Firstname = model.Firstname;
             Lastname = model.Lastname;
             MailAddress = model.MailAddress;
         }
 
-        [Field("UserId", Core.Type.Integer, Primary = true)]
+        [Field("UserId", FieldType.Integer, Primary = true)]
         public int Id;
 
-       
-
-        [Field(Core.Type.Varchar, Size = 100)]
+        [Field(FieldType.Varchar, Size = 100)]
         public string Firstname;
 
-        [Field(Core.Type.Varchar, Size = 100)]
+        [Field(FieldType.Varchar, Size = 100)]
         public string Lastname;
 
-        [Field(Core.Type.Varchar)]
+        [Field(FieldType.Varchar)]
         public string MailAddress;
 
-        [Field(Core.Type.Varchar, Size = 61)]
+        [Field(FieldType.Varchar, Size = 61)]
         public string PasswordHash;
-
-       
-        
 
         public int GetId()
         {

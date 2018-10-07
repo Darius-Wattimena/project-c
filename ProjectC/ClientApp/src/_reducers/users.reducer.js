@@ -2,6 +2,30 @@
 
 export function users(state = {}, action) {
     switch (action.type) {
+    case userConstants.GET_REQUEST:
+        return {
+            loading: true
+        };
+    case userConstants.GET_SUCCESS:
+        return {
+            item: action.user
+        };
+    case userConstants.GET_FAILURE:
+        return {
+            error: action.error
+        };
+    case userConstants.GETEDIT_REQUEST:
+        return {
+            loading: true
+        };
+    case userConstants.GETEDIT_SUCCESS:
+        return {
+            item: action.editUser
+        };
+    case userConstants.GETEDIT_FAILURE:
+        return {
+            error: action.error
+        };
     case userConstants.GETALL_REQUEST:
         return {
             loading: true

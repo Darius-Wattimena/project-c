@@ -2,8 +2,7 @@
 {
     public class UserLoginModel
     {
-        public string Mailaddress;
-
+        public string MailAddress;
         public string Password;
     }
 }
