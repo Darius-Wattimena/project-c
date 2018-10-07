@@ -22,14 +22,14 @@ class ProductPage extends React.Component {
             {products.items &&
                 <div>
                 {products.items.map((product, index) => 
-                        <div className="product">
-                            <Link to={`/product/${product.id}`}>
-                                <img src={product.imageUrl}></img>
+                    <div className="product">
+                        <Link to={`/product/${product.id}`}>
+                            <img src={product.imageUrl}></img>
                             <h4>{product.name}</h4>
-                            </Link>
-                            <p>stock: {product.stock}</p>
-                            <h3>{product.price},-</h3>
-                        </div>
+                        </Link>
+                        <p>stock: {product.stock}</p>
+                        <h3>{product.price},-</h3>
+                    </div>
                 )}
                 </div>
         }

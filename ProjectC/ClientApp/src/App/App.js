@@ -18,6 +18,8 @@ import { EditUserPage } from '../EditUserPage';
 
 import { ProductPage } from '../ProductPage';
 
+import { ShoppingCart } from '../ShoppingCart/ShoppingCart';
+
 class App extends Component {
     constructor(props) {
         super(props);
@@ -50,6 +52,7 @@ class App extends Component {
                                 <Route path="/adminpanel/addproduct" component={AddProduct} />
                                 <Route exact path="/products" component={ProductPage} />
                                 <Route path="/user/edit/:id" component={EditUserPage} />
+                                <Route path="/checkout" component={ShoppingCart} />
                             </div>
                         </Router>
                     </div>
