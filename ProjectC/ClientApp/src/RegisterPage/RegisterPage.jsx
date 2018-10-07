@@ -55,20 +55,6 @@ class RegisterPage extends React.Component {
               
                 <form id="form" onSubmit={this.handleSubmit}>
                     <h2>Register</h2>
-                    <div className={'form-group' + (submitted && !user.firstname ? ' has-error' : '')}>
-                        <label htmlFor="firstname">First Name</label>
-                        <input type="text" className="form-control" name="firstname" value={user.firstname} onChange={this.handleChange} />
-                        {submitted && !user.firstname &&
-                            <div className="help-block">First Name is required</div>
-                        }
-                    </div>
-                    <div className={'form-group' + (submitted && !user.lastname ? ' has-error' : '')}>
-                        <label htmlFor="lastname">Last Name</label>
-                        <input type="text" className="form-control" name="lastname" value={user.lastname} onChange={this.handleChange} />
-                        {submitted && !user.lastname &&
-                            <div className="help-block">Last Name is required</div>
-                        }
-                    </div>
                     <div className={'form-group' + (submitted && !user.mailaddress ? ' has-error' : '')}>
                         <label htmlFor="mailaddress">Email</label>
                         <input type="email" className="form-control" name="mailaddress" value={user.mailaddress} onChange={this.handleChange} />
@@ -83,11 +69,18 @@ class RegisterPage extends React.Component {
                             <div className="help-block">Password is required</div>
                         }
                     </div>
-                    <div className={'form-group' + (submitted && !user.mailaddress ? ' has-error' : '')}>
-                        <label htmlFor="mailaddress">Email</label>
-                        <input type="email" className="form-control" name="mailaddress" value={user.mailaddress} onChange={this.handleChange} />
-                        {submitted && !user.mailaddress &&
-                            <div className="help-block">Email is required</div>
+                    <div className={'form-group' + (submitted && !user.firstname ? ' has-error' : '')}>
+                        <label htmlFor="firstname">First Name</label>
+                        <input type="text" className="form-control" name="firstname" value={user.firstname} onChange={this.handleChange} />
+                        {submitted && !user.firstname &&
+                            <div className="help-block">First Name is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.lastname ? ' has-error' : '')}>
+                        <label htmlFor="lastname">Last Name</label>
+                        <input type="text" className="form-control" name="lastname" value={user.lastname} onChange={this.handleChange} />
+                        {submitted && !user.lastname &&
+                            <div className="help-block">Last Name is required</div>
                         }
                     </div>
                     <button type="submit" form="form" className="btn btn-primary">Register</button>
