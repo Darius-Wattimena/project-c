@@ -14,18 +14,6 @@ export function products(state = {}, action) {
             return {
                 error: action.error
             };
-        case productConstants.GET_REQUEST:
-            return {
-                loading: true
-            };
-        case productConstants.GET_SUCCESS:
-            return {
-                items: action.products
-            };
-        case productConstants.GET_FAILURE:
-            return {
-                error: action.error
-            };
         case productConstants.DELETE_REQUEST:
             // add 'deleting:true' property to user being deleted
             return {
@@ -55,6 +43,24 @@ export function products(state = {}, action) {
 
                     return product;
                 })
+            };
+        default:
+            return state
+    }
+}
+export function product(state = {}, action) {
+    switch (action.type) {
+        case productConstants.GET_REQUEST:
+            return {
+                loading: true
+            };
+        case productConstants.GET_SUCCESS:
+            return {
+                items: action.product
+            };
+        case productConstants.GET_FAILURE:
+            return {
+                error: action.error
             };
         default:
             return state

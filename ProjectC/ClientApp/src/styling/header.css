@@ -1,0 +1,39 @@
+﻿
+
+nav.fixed-top {
+    padding: 10px 0 !important;
+    border-bottom: 1px solid #223843
+}
+
+input{
+    width: 70% !important;
+}
+
+form{
+    width: 40% !important;
+}
+
+.input-group{
+    width: 100% !important;
+}
+
+.navbar-nav {
+    -webkit-flex-direction: row;
+    -ms-flex-direction: row;
+    flex-direction: row;
+}
+
+.nav-item {
+    padding-right: 50px !important;
+    margin: 0;
+}
+
+.nav-link {
+    margin: 0;
+    padding: 0;
+    color: white !important;
+}
+
+.nav-link:hover {
+    color: lightgray !important;
+}

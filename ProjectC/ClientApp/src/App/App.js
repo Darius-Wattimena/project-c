@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { Header } from '../Header';
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
 import { PrivateRoute } from '../_components';
@@ -29,7 +30,8 @@ class App extends Component {
     render() {
         const { alert } = this.props;
         return (
-            <div className="jumbotron">
+                <div>
+                <Header />
                 <div className="container">
                     <div className="col-sm-8 col-sm-offset-2">
                         {alert.message &&
@@ -48,7 +50,7 @@ class App extends Component {
                             </div>
                         </Router>
                     </div>
-                </div>
+                    </div>
             </div>
         );
     }

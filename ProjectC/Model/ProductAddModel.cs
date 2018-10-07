@@ -11,5 +11,6 @@ namespace ProjectC.Model
         public int Stock;
         public double Price;
         public string ImageURL;
+        public string Description;
     }
 }

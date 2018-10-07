@@ -19,6 +19,7 @@ namespace ProjectC.Database.Entities
             Stock = p.Stock;
             Price = p.Price;
             ImageUrl = p.ImageURL;
+            Description = p.Description;
         }
 
         [Field("ProductId", Core.Type.Integer, Primary = true)]
@@ -35,6 +36,9 @@ namespace ProjectC.Database.Entities
 
         [Field(Core.Type.Varchar, Size = 256)]
         public string ImageUrl;
+
+        [Field(Core.Type.Text)]
+        public string Description;
 
         public int GetId()
         {

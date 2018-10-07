@@ -39,7 +39,7 @@ function getById(id) {
     };
 
     function request() { return { type: productConstants.GET_REQUEST } }
-    function success(products) { return { type: productConstants.GET_SUCCESS, products } }
+    function success(product) { return { type: productConstants.GET_SUCCESS, product } }
     function failure(error) { return { type: productConstants.GET_FAILURE, error } }
 }
 function add(product) {
