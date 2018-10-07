@@ -47,41 +47,41 @@ class ShoppingCart extends React.Component {
     // Removing an item from ze basket
     handleRemove(product, event) {
 
-        var products = JSON.parse(localStorage.getItem('shoppingCart'));
-        var index = getIndex(product, products);
-        products.items.splice(index, 1);
-        // update shopping cart
-        localStorage.setItem('shoppingCart', JSON.stringify(products));
-        // refresh
-        history.push("/checkout");
+        //var products = JSON.parse(localStorage.getItem('shoppingCart'));
+        //var index = getIndex(product, products);
+        //products.items.splice(index, 1);
+        //// update shopping cart
+        //localStorage.setItem('shoppingCart', JSON.stringify(products));
+        //// refresh
+        //history.push("/checkout");
     }
 
     // Subtracting quantity for an item from ze basket
     handleSubtract(product, event) {
-        var products = JSON.parse(localStorage.getItem('shoppingCart'));
-        // subtract one
-        products.items[index].amount -= 1;
-
-        // if zero, remove it
-        if (products.items[index].amount <= 0) {
-            products.items.splice(index, 1);
-        }
-        // update shopping cart
-        localStorage.setItem('shoppingCart', JSON.stringify(products));
-        // refresh
-        history.push("/checkout");
+        //var products = JSON.parse(localStorage.getItem('shoppingCart'));
+        //// subtract one
+        //products.items[index].amount -= 1;
+        //
+        //// if zero, remove it
+        //if (products.items[index].amount <= 0) {
+        //    products.items.splice(index, 1);
+        //}
+        //// update shopping cart
+        //localStorage.setItem('shoppingCart', JSON.stringify(products));
+        //// refresh
+        //history.push("/checkout");
     }
 
     // Adding quantity
     handleAdd(product, event) {
-        console.log("Index:" + index);
-        var products = JSON.parse(localStorage.getItem('shoppingCart'));
-        // add one
-        products.items[index].amount += 1;
-        // update shopping cart
-        localStorage.setItem('shoppingCart', JSON.stringify(products));
-        // refresh
-        history.push("/checkout");
+        //console.log("Index:" + index);
+        //var products = JSON.parse(localStorage.getItem('shoppingCart'));
+        //// add one
+        //products.items[index].amount += 1;
+        //// update shopping cart
+        //localStorage.setItem('shoppingCart', JSON.stringify(products));
+        //// refresh
+        //history.push("/checkout");
     }
 
     render() {
