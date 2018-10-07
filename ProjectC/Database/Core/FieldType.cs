@@ -2,7 +2,7 @@
 
 namespace ProjectC.Database.Core
 {
-    public class Type
+    public class FieldType
     {
         public const string Boolean = "Boolean";
         public const string Date = "Date";
@@ -16,19 +16,19 @@ namespace ProjectC.Database.Core
         public const string BigInt = "BigInt";
         public const string Decimal = "Decimal";
 
-        public static readonly Type _BOOLEAN = new Type(1);
-        public static readonly Type _DATE = new Type();
-        public static readonly Type _DATETIME = new Type();
-        public static readonly Type _TIME = new Type();
-        public static readonly Type _CHAR = new Type(255);
-        public static readonly Type _VARCHAR = new Type(255);
-        public static readonly Type _TEXT = new Type();
-        public static readonly Type _SMALLINT = new Type(5);
-        public static readonly Type _INTEGER = new Type(10);
-        public static readonly Type _BIGINT = new Type(19);
-        public static readonly Type _DECIMAL = new Type(38, 5);
+        public static readonly FieldType _BOOLEAN = new FieldType(1);
+        public static readonly FieldType _DATE = new FieldType();
+        public static readonly FieldType _DATETIME = new FieldType();
+        public static readonly FieldType _TIME = new FieldType();
+        public static readonly FieldType _CHAR = new FieldType(255);
+        public static readonly FieldType _VARCHAR = new FieldType(255);
+        public static readonly FieldType _TEXT = new FieldType();
+        public static readonly FieldType _SMALLINT = new FieldType(5);
+        public static readonly FieldType _INTEGER = new FieldType(10);
+        public static readonly FieldType _BIGINT = new FieldType(19);
+        public static readonly FieldType _DECIMAL = new FieldType(38, 5);
 
-        public static IEnumerable<Type> Values
+        public static IEnumerable<FieldType> Values
         {
             get
             {
@@ -46,18 +46,18 @@ namespace ProjectC.Database.Core
             }
         }
 
-        private Type()
+        private FieldType()
         {
 
         }
 
-        private Type(int size)
+        private FieldType(int size)
         {
             Size = size;
             NeedSize = true;
         }
 
-        private Type(int size, int digitSize)
+        private FieldType(int size, int digitSize)
         {
             Size = size;
             DigitSize = digitSize;
@@ -85,7 +85,7 @@ namespace ProjectC.Database.Core
 
         public bool NeedDigitSize { get; private set; }
 
-        public static Type GetByName(string Name)
+        public static FieldType GetByName(string Name)
         {
             switch (Name)
             {

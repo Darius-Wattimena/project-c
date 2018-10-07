@@ -7,8 +7,7 @@ class AdminPanel extends React.Component {
     render() {
         return (
             <div className="col-md-6 col-md-offset-3">
-                <h1>Hi!</h1>
-                <p>Welcome to the admin panel</p>
+                <h1>Adminpanel</h1>
                 <a href="/adminpanel/product">Products list and actions</a>
             </div>
         );

@@ -2,18 +2,21 @@ import React, { Component } from 'react';
 import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { Header } from '../Header';
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
 import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { RegisterPage } from '../RegisterPage';
-
-import { ProductPage } from '../ProductList';
-import { SingleProductPage } from '../SingleProduct';
+import { LoginPage } from '../LoginPage';
+import { SingleProductPage } from '../SingleProductPage';
 
 import { AdminPanel } from '../AdminPanel';
 import { AdminProducts } from '../AdminProducts';
 import { AddProduct } from '../AdminProducts/AddProduct';
+import { EditUserPage } from '../EditUserPage';
+
+import { ProductPage } from '../ProductPage';
 
 import { ShoppingCart } from '../ShoppingCart/ShoppingCart';
 
@@ -31,7 +34,8 @@ class App extends Component {
     render() {
         const { alert } = this.props;
         return (
-            <div className="jumbotron">
+                <div>
+                <Header />
                 <div className="container">
                     <div className="col-sm-8 col-sm-offset-2">
                         {alert.message &&
@@ -47,11 +51,15 @@ class App extends Component {
                                 <Route path="/adminpanel" component={AdminPanel} />
                                 <Route path="/adminpanel/product" component={AdminProducts} />
                                 <Route path="/adminpanel/addproduct" component={AddProduct} />
+                                <Route exact path="/products" component={ProductPage} />
+                                <Route path="/user/edit/:id" component={EditUserPage} />
                                 <Route path="/checkout" component={ShoppingCart} />
+                                <Route path="/login" component={LoginPage} />
+
                             </div>
                         </Router>
                     </div>
-                </div>
+                    </div>
             </div>
         );
     }

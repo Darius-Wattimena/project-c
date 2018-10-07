@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace ProjectC.Model
+﻿namespace ProjectC.Model
 {
     public class ProductAddModel
     {
@@ -11,5 +6,6 @@ namespace ProjectC.Model
         public int Stock;
         public double Price;
         public string ImageURL;
+        public string Description;
     }
 }

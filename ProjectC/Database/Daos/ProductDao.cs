@@ -1,6 +1,5 @@
 ﻿using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
-using ProjectC.Database.SQL;
 
 namespace ProjectC.Database.Daos
 {

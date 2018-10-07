@@ -2,6 +2,8 @@
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import '../../styling/form.css';
+
 import { productActions } from '../../_actions';
 
 class AddProduct extends React.Component {
@@ -14,7 +16,8 @@ class AddProduct extends React.Component {
                 name: "",
                 stock: 0,
                 price: 0,
-                imageurl: ""
+                imageurl: "",
+                description: ""
             },
             submitted: false
         }
@@ -50,7 +53,7 @@ class AddProduct extends React.Component {
     render() {
         // Render the view
         return (
-            <div className='adminPanel' class="col-md-4">
+            <div className='adminPanel' class="container">
                 <form id="product" onSubmit={this.handleSubmit} onChange={this.handleChange}>
                     <div class="form-group">
                         <label for="name">Name</label>
@@ -67,6 +70,10 @@ class AddProduct extends React.Component {
                     <div class="form-group">
                         <label for='image'>Image URL</label>
                         <input type="text" class="form-control" name="imageurl" id="imageurl" placeholder="Link to an image" />
+                    </div>
+                    <div class="form-group">
+                        <label for='description'>Description</label>
+                        <input type="text" class="form-control" name="description" id="description" placeholder="Description of the product" />
                     </div>
                     <button type="submit" class="btn btn-primary">Add</button>
                     <a href="/adminpanel/product" className="btn btn-danger">Back</a>

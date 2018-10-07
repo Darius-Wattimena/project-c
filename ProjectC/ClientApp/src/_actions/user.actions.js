@@ -7,15 +7,17 @@ export const userActions = {
     login,
     logout,
     register,
+    getEditUser,
     getAll,
+    update,
     delete: _delete
 };
 
-function login(username, password) {
+function login(user) {
     return dispatch => {
-        dispatch(request({ username }));
+        dispatch(request({ user }));
 
-        userService.login(username, password)
+        userService.login(user)
             .then(
                 user => {
                     dispatch(success(user));
@@ -61,6 +63,24 @@ function register(user) {
     function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
 
+function getEditUser(id) {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getById(id)
+            .then(
+                editUser => {
+                    dispatch(success(editUser));
+                },
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.GETEDIT_REQUEST } }
+    function success(editUser) { return { type: userConstants.GETEDIT_SUCCESS, editUser } }
+    function failure(error) { return { type: userConstants.GETEDIT_FAILURE, error } }
+}
+
 function getAll() {
     return dispatch => {
         dispatch(request());
@@ -75,6 +95,28 @@ function getAll() {
     function request() { return { type: userConstants.GETALL_REQUEST } }
     function success(users) { return { type: userConstants.GETALL_SUCCESS, users } }
     function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
+}
+
+function update(user) {
+    return dispatch => {
+        dispatch(request(user));
+
+        userService.update()
+            .then(
+                () => {
+                    dispatch(success());
+                    dispatch(alertActions.success('User updated'));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    }
+
+    function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
+    function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

@@ -1,0 +1,16 @@
+﻿#product{
+    width: 100% !important;
+    padding: 40px;
+}
+
+#form {
+    width: 100% !important;
+    padding: 40px !important;
+}
+
+#product .form-group .form-control {
+    width: 100% !important;
+}
+    #form .form-group .form-control {
+        width: 100% !important;
+    }
