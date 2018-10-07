@@ -1,1 +1,1 @@
-﻿export * from './SingleProduct';
+﻿export * from './SingleProductPage';

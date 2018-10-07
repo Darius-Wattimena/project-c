@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { Router, Route } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { Header } from '../Header';
 import { history } from '../_helpers';
 import { alertActions } from '../_actions';
 import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { RegisterPage } from '../RegisterPage';
 import { LoginPage } from '../LoginPage';
-import { ProductPage } from '../ProductList';
-import { SingleProductPage } from '../SingleProduct';
+import { SingleProductPage } from '../SingleProductPage';
 
 import { AdminPanel } from '../AdminPanel';
 import { AdminProducts } from '../AdminProducts';
@@ -34,7 +34,8 @@ class App extends Component {
     render() {
         const { alert } = this.props;
         return (
-            <div className="jumbotron">
+                <div>
+                <Header />
                 <div className="container">
                     <div className="col-sm-8 col-sm-offset-2">
                         {alert.message &&
@@ -53,10 +54,12 @@ class App extends Component {
                                 <Route exact path="/products" component={ProductPage} />
                                 <Route path="/user/edit/:id" component={EditUserPage} />
                                 <Route path="/checkout" component={ShoppingCart} />
+                                <Route path="/login" component={LoginPage} />
+
                             </div>
                         </Router>
                     </div>
-                </div>
+                    </div>
             </div>
         );
     }

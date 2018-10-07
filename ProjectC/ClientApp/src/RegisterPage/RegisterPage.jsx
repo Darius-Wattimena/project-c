@@ -1,7 +1,7 @@
 ﻿//node imports
 import React from 'react';
 import { connect } from 'react-redux';
-
+import '../styling/form.css';
 
 import { userActions } from '../_actions';
 
@@ -51,9 +51,10 @@ class RegisterPage extends React.Component {
         const { registering } = this.props;
         const { user, submitted } = this.state;
         return (
-            <div className="col-md-6 col-md-offset-3">
-                <h2>Register</h2>
+            <div className="col-md-offset-3">
+              
                 <form id="form" onSubmit={this.handleSubmit}>
+                    <h2>Register</h2>
                     <div className={'form-group' + (submitted && !user.firstname ? ' has-error' : '')}>
                         <label htmlFor="firstname">First Name</label>
                         <input type="text" className="form-control" name="firstname" value={user.firstname} onChange={this.handleChange} />
@@ -82,13 +83,19 @@ class RegisterPage extends React.Component {
                             <div className="help-block">Password is required</div>
                         }
                     </div>
+                    <div className={'form-group' + (submitted && !user.mailaddress ? ' has-error' : '')}>
+                        <label htmlFor="mailaddress">Email</label>
+                        <input type="email" className="form-control" name="mailaddress" value={user.mailaddress} onChange={this.handleChange} />
+                        {submitted && !user.mailaddress &&
+                            <div className="help-block">Email is required</div>
+                        }
+                    </div>
+                    <button type="submit" form="form" className="btn btn-primary">Register</button>
+                    {registering &&
+                        <div>Creating a new account</div>
+                    }
+                    <a href="home" className="btn btn-danger">Back</a>
                 </form>
-
-                <button type="submit" form="form" className="btn btn-primary">Register</button>
-                {registering &&
-                    <div>Creating a new account</div>
-                }
-                <a href="home" className="btn btn-danger">Back</a>
             </div>
         );
     }
