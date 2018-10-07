@@ -1,7 +1,7 @@
 ﻿//node imports
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-
 
 import { userActions } from '../_actions';
 
@@ -64,15 +64,17 @@ class LoginPage extends React.Component {
                             <label class="form-check-label" for="exampleCheck1">Check me out</label>
                         </div>
                         <button type="submit" class="btn btn-primary">Login</button>
+
+                        <Link to="/register" className="btn btn-link">Register</Link>
                     </form>
             </div>
         );
     }
 }
 function mapStateToProps(state) {
-    const { registering } = state;
+    const { loggingIn } = state.authentication;
     return {
-        registering
+        loggingIn
     };
 }
 
