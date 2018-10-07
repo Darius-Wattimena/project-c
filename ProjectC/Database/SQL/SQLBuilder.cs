@@ -74,7 +74,7 @@ namespace ProjectC.Database.SQL
             _query.Append("SELECT ")
                 .Append(SelectRange)
                 .Append(" FROM ")
-                .Append(_tableConfig.name)
+                .Append(_tableConfig.name.ToLower()) // Always use lower case table names
                 .Append(" WHERE 1=1 ");
 
             if (_parameters.Count != 0 || _parameterLists.Count != 0)
