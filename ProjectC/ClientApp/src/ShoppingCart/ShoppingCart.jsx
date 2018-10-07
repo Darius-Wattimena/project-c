@@ -10,67 +10,36 @@ import '../styling/ProductListingStyle.css';
 class ShoppingCart extends React.Component {
     constructor(props) {
         super(props);
-        // TODO: 
+        
         // TEST
-        localStorage.setItem('shoppingCart', {
+        /*
+        localStorage.setItem('shoppingCart', JSON.stringify({
                 items: [
                     {
                         id: 0,
+                        name: 'Product 1',
+                        imageUrl: 'https://img.freepik.com/free-icon/smartphone_318-81372.jpg?size=338c&ext=jpg',
                         amount: 1
                     },
                     {
                         id: 1,
+                        name: 'Product 2',
+                        imageUrl: 'https://img.freepik.com/free-icon/smartphone_318-81372.jpg?size=338c&ext=jpg',
                         amount: 2
                     }
                 ]
-        });
-    }
-
-    componentDidMount() {
-        
+        }));
+        */
     }
 
     render() {
-        //const { products } = this.props;
 
+        var products = { items: [] };
 
-        //const { products } = {
-        //    products: {
-        //        type: 'TEST',
-        //        items: [
-        //            {
-        //                id: 0,
-        //                name: 'test',
-        //                amount: 1
-        //            }
-        //        ]
-        //    }
-        //};
-
-        //shoppingCart.items.map((item, index) => {
-        //    var product = productActions.getById(item.id);
-        //    console.log(product);
-        //    products.items.push({
-        //        id: product.id,
-        //        name: product.name,
-        //        amount: item.amount
-        //    });
-        //    console.log(product.id);
-        //});
-
-        const products = {
-            items: [
-                {
-                    id: 0,
-                    amount: 1
-                },
-                {
-                    id: 1,
-                    amount: 2
-                }
-            ]
-        };//localStorage.getItem('shoppingCart');
-        console.log(products);
+        // Retrieve shopping cart products
+        if (localStorage.getItem('shoppingCart') != null) {
+            products = JSON.parse(localStorage.getItem('shoppingCart'));
+        }
 
         return (
             <div className="col-md-6 col-md-offset-3">
@@ -78,6 +47,7 @@ class ShoppingCart extends React.Component {
                 <p>This will become the shopping cart</p>
                 {products.items &&
                     <div>
+                    {products.items.length == 0 && <h2>Your shopping cart is empty.</h2>}
                         {products.items.map((product, index) =>
                             <div className="product" key={index}>
                                 <Link to={`/product/${product.id}`}>
