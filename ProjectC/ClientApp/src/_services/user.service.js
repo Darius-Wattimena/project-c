@@ -5,6 +5,7 @@ export const userService = {
     getAll,
     getById,
     update,
+    login,
     delete: _delete
 };
 
@@ -34,6 +35,15 @@ function register(user) {
     };
 
     return fetch(config.apiUrl + '/user/Register', requestOptions).then(handleResponse, handleError);
+}
+
+function login(user) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+    return fetch(config.apiUrl + '/user/Login', requestOptions).then(handleResponse, handleError);
 }
 
 function update(user) {

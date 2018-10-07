@@ -2,7 +2,6 @@
 {
     public class UserRegisterModel
     {
-        public string Username;
 
         public string Password;
 

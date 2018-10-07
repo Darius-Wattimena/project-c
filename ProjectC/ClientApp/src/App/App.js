@@ -7,7 +7,7 @@ import { alertActions } from '../_actions';
 import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { RegisterPage } from '../RegisterPage';
-
+import { LoginPage } from '../LoginPage';
 import { ProductPage } from '../ProductList';
 import { SingleProductPage } from '../SingleProduct';
 

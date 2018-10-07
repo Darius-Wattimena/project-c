@@ -17,8 +17,8 @@ namespace ProjectC.Database.Entities
         {
             var salt = BCryptHelper.GenerateSalt();
             var hashedPassword = BCryptHelper.HashPassword(model.Password, salt);
-            Username = model.Username;
-            PasswordSalt = salt;
+            
+           
             PasswordHash = hashedPassword;
             Firstname = model.Firstname;
             Lastname = model.Lastname;
@@ -28,8 +28,7 @@ namespace ProjectC.Database.Entities
         [Field("UserId", Core.Type.Integer, Primary = true)]
         public int Id;
 
-        [Field(Core.Type.Varchar, Size = 45)]
-        public string Username;
+       
 
         [Field(Core.Type.Varchar, Size = 100)]
         public string Firstname;
@@ -43,8 +42,8 @@ namespace ProjectC.Database.Entities
         [Field(Core.Type.Varchar, Size = 61)]
         public string PasswordHash;
 
-        [Field(Core.Type.Varchar, Size = 29)]
-        public string PasswordSalt;
+       
+        
 
         public int GetId()
         {

@@ -56,14 +56,14 @@ namespace ProjectC.Controllers
         public IActionResult Login([FromBody] UserLoginModel input)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var databaseUser = daoManager.UserDao.FindUserByUsername(input.Username);
+            var databaseUser = daoManager.UserDao.FindUserByMailAddress(input.Mailaddress);
 
             if (databaseUser == null || !BCryptHelper.CheckPassword(input.Password, databaseUser.PasswordHash))
             {
                 return BadRequest("Username or password is incorrect");
             }
 
-            var userLoginHashedPassword = BCryptHelper.HashPassword(input.Password, databaseUser.PasswordSalt);
+            var userLoginHashedPassword = BCryptHelper.HashPassword(input.Password, databaseUser.PasswordHash);
 
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
@@ -81,7 +81,7 @@ namespace ProjectC.Controllers
 
             // return basic user info (without password) and token to store client side
             databaseUser.PasswordHash = null;
-            databaseUser.PasswordSalt = null;
+            
 
             return Ok(databaseUser);
         }
@@ -97,7 +97,7 @@ namespace ProjectC.Controllers
                 return BadRequest("Passwords are not the same");
             }
 
-            if (daoManager.UserDao.FindUserByUsername(input.Username) != null)
+            if (daoManager.UserDao.FindUserByMailAddress(input.MailAddress) != null)
             {
                 return BadRequest("Username already taken");
             }
@@ -120,7 +120,7 @@ namespace ProjectC.Controllers
                 return BadRequest("User not found");
             }
 
-            databaseUser.Username = input.Username;
+           
             databaseUser.Firstname = input.Firstname;
             databaseUser.Lastname = input.Lastname;
             databaseUser.MailAddress = input.MailAddress;
