@@ -2,8 +2,6 @@
 {
     public class UserUpdateModel
     {
-        public string Username;
-
         public string Password;
 
         public string Firstname;

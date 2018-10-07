@@ -7,16 +7,16 @@ namespace ProjectC.Database.Entities
     public class Product : IEntity
     {
 
-        [Field("ProductId", Core.Type.Integer, Primary = true)]
+        [Field("ProductId", Core.FieldType.Integer, Primary = true)]
         public int Id;
 
-        [Field(Core.Type.Varchar, Size = 50)]
+        [Field(Core.FieldType.Varchar, Size = 50)]
         public string Name;
 
-        [Field(Core.Type.Integer)]
+        [Field(Core.FieldType.Integer)]
         public int Stock;
 
-        [Field(Core.Type.Decimal)]
+        [Field(Core.FieldType.Decimal)]
         public double Price;
 
         public int GetId()

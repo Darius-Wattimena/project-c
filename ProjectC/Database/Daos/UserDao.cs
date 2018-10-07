@@ -11,9 +11,9 @@ namespace ProjectC.Database.Daos
 
         }
 
-        public User FindUserByUsername(string username)
+        public User FindUserByEmail(string email)
         {
-            var users = Find("Username", username);
+            var users = Find("MailAddress", email);
             return users.Count > 0 ? users[0] : null;
         }
     }

@@ -6,13 +6,13 @@ namespace ProjectC.Database.Core
     public class FieldConfig<T> where T : IEntity
     {
         // Database Config
-        public string name;
-        public Type type;
-        public bool primary;
-        public int size;
-        public int digitSize;
+        public string Name;
+        public FieldType FieldType;
+        public bool Primary;
+        public int Size;
+        public int DigitSize;
 
         // Field in code
-        public FieldInfo field;
+        public FieldInfo Field;
     }
 }

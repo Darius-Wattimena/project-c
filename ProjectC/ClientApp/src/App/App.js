@@ -7,8 +7,9 @@ import { alertActions } from '../_actions';
 import { PrivateRoute } from '../_components';
 import { HomePage } from '../HomePage';
 import { RegisterPage } from '../RegisterPage';
+import { EditUserPage } from '../EditUserPage';
 
-import { ProductPage } from '../ProductList';
+import { ProductPage } from '../ProductPage';
 
 class App extends Component {
     constructor(props) {
@@ -36,6 +37,7 @@ class App extends Component {
                                 <Route path="/home" component={HomePage} />
                                 <Route path="/register" component={RegisterPage} />
                                 <Route exact path="/products" component={ProductPage} />
+                                <Route path="/user/edit/:id" component={EditUserPage} />
                             </div>
                         </Router>
                     </div>

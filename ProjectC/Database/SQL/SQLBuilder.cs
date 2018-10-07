@@ -10,6 +10,7 @@ namespace ProjectC.Database.SQL
     internal class SqlBuilder<T> where T : IEntity
     {
         private const string NewLine = "\n";
+        private const string BasicSelectRange = "*";
 
         private readonly T _entity;
         private readonly TableConfig<T> _tableConfig;
@@ -18,7 +19,7 @@ namespace ProjectC.Database.SQL
         private readonly StringBuilder _query;
 
         public int Id;
-        public string SelectRange = "*";
+        public string SelectRange = BasicSelectRange;
 
         public SqlBuilder(TableConfig<T> tableConfig) : this(tableConfig, default(T))
         {
@@ -56,7 +57,10 @@ namespace ProjectC.Database.SQL
                 case QueryType.Select:
                     return BuildSelectQuery();
                 case QueryType.SelectCount:
-                    SelectRange = "COUNT(*)";
+                    if (SelectRange == BasicSelectRange)
+                    {
+                        SelectRange = "COUNT(*)";
+                    }
                     return BuildSelectQuery();
                 case QueryType.Insert:
                     return BuildInsertQuery();
@@ -112,7 +116,7 @@ namespace ProjectC.Database.SQL
             {
                 _query.Append(NewLine);
                 _query.Append(" AND ")
-                    .Append(_tableConfig.primaryFieldConfig.name)
+                    .Append(_tableConfig.primaryFieldConfig.Name)
                     .Append(" = '").Append(Id).Append("'");
             }
 
@@ -132,8 +136,8 @@ namespace ProjectC.Database.SQL
 
             foreach (var pair in _tableConfig.fields)
             {
-                if (pair.Value.primary) continue;
-                var value = pair.Value.field.GetValue(_entity);
+                if (pair.Value.Primary) continue;
+                var value = pair.Value.Field.GetValue(_entity);
 
                 switch (value)
                 {
@@ -181,9 +185,9 @@ namespace ProjectC.Database.SQL
             var where = "";
             foreach (var pair in _tableConfig.fields)
             {
-                if (!pair.Value.primary)
+                if (!pair.Value.Primary)
                 {
-                    var value = pair.Value.field.GetValue(_entity);
+                    var value = pair.Value.Field.GetValue(_entity);
 
                     switch (value)
                     {
@@ -200,7 +204,7 @@ namespace ProjectC.Database.SQL
                 }
                 else
                 {
-                    where = " WHERE " + pair.Key + " = '" + pair.Value.field.GetValue(_entity) + "'";
+                    where = " WHERE " + pair.Key + " = '" + pair.Value.Field.GetValue(_entity) + "'";
                 }
             }
 
@@ -242,7 +246,7 @@ namespace ProjectC.Database.SQL
             {
                 _query.Append(NewLine);
                 _query.Append(" WHERE ")
-                    .Append(_tableConfig.primaryFieldConfig.name)
+                    .Append(_tableConfig.primaryFieldConfig.Name)
                     .Append(" = '").Append(Id).Append("'");
                 first = false;
             }
