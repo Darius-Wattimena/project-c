@@ -69,16 +69,16 @@ function getEditUser(id) {
 
         userService.getById(id)
             .then(
-                editUser => {
-                    dispatch(success(editUser));
+                user => {
+                    dispatch(success(user));
                 },
                 error => dispatch(failure(error))
             );
     };
 
-    function request() { return { type: userConstants.GETEDIT_REQUEST } }
-    function success(editUser) { return { type: userConstants.GETEDIT_SUCCESS, editUser } }
-    function failure(error) { return { type: userConstants.GETEDIT_FAILURE, error } }
+    function request() { return { type: userConstants.GET_REQUEST } }
+    function success(user) { return { type: userConstants.GET_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.GET_FAILURE, error } }
 }
 
 function getAll() {
@@ -101,10 +101,11 @@ function update(user) {
     return dispatch => {
         dispatch(request(user));
 
-        userService.update()
+        userService.update(user)
             .then(
                 () => {
                     dispatch(success());
+                    history.push('/home');
                     dispatch(alertActions.success('User updated'));
                 },
                 error => {
