@@ -16,17 +16,17 @@ class ShoppingCart extends React.Component {
             items: [
                 {
                     id: 0,
-                    name: 'Product 1',
-                    imageUrl: 'https://img.freepik.com/free-icon/smartphone_318-81372.jpg?size=338c&ext=jpg',
+                    name: 'Samsung S9',
+                    imageUrl: 'https://image.coolblue.nl/max/2048x1536/products/818820',
                     amount: 1,
-                    price: 3000
+                    price: 670
                 },
                 {
                     id: 1,
-                    name: 'Product 2',
-                    imageUrl: 'https://img.freepik.com/free-icon/smartphone_318-81372.jpg?size=338c&ext=jpg',
+                    name: 'Iphone XS',
+                    imageUrl: 'https://static.toiimg.com/photo/65625284/Apple-iPhone-XS.jpg',
                     amount: 2,
-                    price: 200
+                    price: 649
                 }
             ]
         }));
