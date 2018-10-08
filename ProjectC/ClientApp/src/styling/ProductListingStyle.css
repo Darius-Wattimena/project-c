@@ -1,18 +1,18 @@
-﻿.product {
+﻿.product-item {
     float: left;
-    width: 275px;
-    height: 400px;
-    padding: 20px;
+    width: 255px;
+    height: 370px;
+    padding: 25px;
     margin: 5px;
     background-color: white;
     border: 0.5px gray solid;
 }
 
-.product img{
+.product-item img{
     height: 60%;
     width: auto;
 }
 
-.product h3{
+.product-item h3{
     float: right;
 }
