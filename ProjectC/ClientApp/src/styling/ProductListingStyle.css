@@ -1,4 +1,4 @@
-﻿.product {
+﻿.product-item {
     float: left;
     width: 275px;
     height: 400px;
@@ -8,11 +8,11 @@
     border: 0.5px gray solid;
 }
 
-.product img{
-    height: 60%;
+.product-item img{
+    height: 240px;
     width: auto;
 }
 
-.product h3{
+.product-item h3{
     float: right;
 }

@@ -23,7 +23,7 @@ class ProductPage extends React.Component {
             {products.items &&
                 <div>
                 {products.items.map((product, index) => 
-                    <div className="product">
+                    <div className="product-item">
                         <Link to={`/product/${product.id}`}>
                             <img src={product.imageUrl}></img>
                             <h4>{product.name}</h4>
