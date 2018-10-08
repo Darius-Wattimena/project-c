@@ -35,31 +35,31 @@ class App extends Component {
         const { alert } = this.props;
         return (
                 <div>
-                <Header />
-                <div className="container">
-                    <div className="col-sm-8 col-sm-offset-2">
-                        {alert.message &&
-                            <div className={`alert ${alert.type}`}>{alert.message}</div>
-                        }
+                
                         <Router history={history}>
                             <div>
-                                <PrivateRoute exact path="/" component={HomePage} />
-                                <Route path="/home" component={HomePage} />
-                                <Route path="/register" component={RegisterPage} />
-                                <Route path="/products" component={ProductPage} />
-                                <Route path="/product/:id" component={SingleProductPage} />
-                                <Route path="/adminpanel" component={AdminPanel} />
-                                <Route path="/adminpanel/product" component={AdminProducts} />
-                                <Route path="/adminpanel/addproduct" component={AddProduct} />
-                                <Route exact path="/products" component={ProductPage} />
-                                <Route path="/user/edit/:id" component={EditUserPage} />
-                                <Route path="/checkout" component={ShoppingCart} />
-                                <Route path="/login" component={LoginPage} />
+                                <Header />
+                                <div className="container">
+                                    <div className="col-sm-8 col-sm-offset-2">
+                                        {alert.message &&
+                                            <div className={`alert ${alert.type}`}>{alert.message}</div>
+                                        }
+                                        <PrivateRoute exact path="/" component={HomePage} />
+                                        <Route path="/home" component={HomePage} />
+                                        <Route path="/register" component={RegisterPage} />
+                                        <Route path="/products" component={ProductPage} />
+                                        <Route path="/product/:id" component={SingleProductPage} />
+                                        <Route path="/adminpanel" component={AdminPanel} />
+                                        <Route path="/adminpanel/product" component={AdminProducts} />
+                                        <Route path="/adminpanel/addproduct" component={AddProduct} />
+                                        <Route path="/user/edit/:id" component={EditUserPage} />
+                                        <Route path="/checkout" component={ShoppingCart} />
+                                        <Route path="/login" component={LoginPage} />
 
                             </div>
-                        </Router>
+                        </div>
                     </div>
-                    </div>
+                    </Router>
             </div>
         );
     }

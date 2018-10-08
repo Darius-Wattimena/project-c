@@ -1,5 +1,5 @@
 ﻿import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import './styling/header.css';
 import { connect } from 'react-redux';
 
@@ -55,13 +55,13 @@ class Header extends React.Component {
                     <div class="container">
                         <ul class="navbar-nav">
                             <li class="nav-item active">
-                                <a href="/home" class="nav-link">Home</a>
+                                <Link to={`/home`} class="nav-link">Home</Link>
                             </li>
                             <li class="nav-item active">
-                                <a href="/products" class="nav-link">Phones</a>
+                                <Link to={`/products`} class="nav-link">Phones</Link>
                             </li>
                             <li class="nav-item active">
-                                <a class="nav-link">Accessories</a>
+                                <Link to={`/products`} class="nav-link">Accessories</Link>
                             </li>
                         </ul>
                     </div>
