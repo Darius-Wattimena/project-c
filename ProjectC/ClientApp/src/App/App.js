@@ -43,7 +43,8 @@ class App extends Component {
                                     <div className="col-sm-8 col-sm-offset-2">
                                         {alert.message &&
                                             <div className={`alert ${alert.type}`}>{alert.message}</div>
-                                        }
+                                }
+                                </div>
                                         <PrivateRoute exact path="/" component={HomePage} />
                                         <Route path="/home" component={HomePage} />
                                         <Route path="/register" component={RegisterPage} />
@@ -56,7 +57,7 @@ class App extends Component {
                                         <Route path="/checkout" component={ShoppingCart} />
                                         <Route path="/login" component={LoginPage} />
 
-                            </div>
+                            
                         </div>
                     </div>
                     </Router>
