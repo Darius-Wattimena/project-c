@@ -17,7 +17,8 @@ class AdminProducts extends React.Component {
     render() {
         const { products } = this.props;
         return (
-            <div>
+            <div class="col-md-8" style={{ float: "left" }}>
+                <h3>Products</h3>
                 {products.loading && <em>Loading products...</em>}
                 {products.error && <span className="text-danger">ERROR: {products.error}</span>}
                 {products.items &&
