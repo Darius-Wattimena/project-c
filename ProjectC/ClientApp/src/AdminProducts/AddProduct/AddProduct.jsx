@@ -53,7 +53,7 @@ class AddProduct extends React.Component {
     render() {
         // Render the view
         return (
-            <div class="col-md-8" style={{ float: "left" }}>
+            <div class="panel col-md-8">
             <div className='adminPanel' class="container">
 
                 

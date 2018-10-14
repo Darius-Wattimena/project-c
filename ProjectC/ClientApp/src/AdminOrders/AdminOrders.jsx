@@ -3,7 +3,7 @@
 export class AdminOrders extends React.Component {
     render() {
         return (
-            <div>
+            <div class="panel">
                 
             </div>
         );
