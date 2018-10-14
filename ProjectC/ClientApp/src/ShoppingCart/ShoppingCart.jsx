@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { history } from '../_helpers';
 
 import '../styling/ShoppingCartListingStyle.css';
+import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 
 class ShoppingCart extends React.Component {
     constructor(props) {
@@ -33,9 +34,6 @@ class ShoppingCart extends React.Component {
 
     }
 
-    // IGNORE BAD CODE BELOW :P
-
-    // Removing an item from ze basket
     handleRemove(id, event) {
         var products = JSON.parse(localStorage.getItem('shoppingCart'));
         
@@ -74,27 +72,33 @@ class ShoppingCart extends React.Component {
     }
 
     // Adding quantity
-    handleAdd(id, event) {
-        var products = JSON.parse(localStorage.getItem('shoppingCart'));
+    handleAdd(product) {
 
-        console.log(products.items.length);
-        for (var i = 0; i < products.items.length; i++) {
-            console.log(i);
-            if (products.items[i].id === id) {
-                console.log("ADD");
-                // add one
-                products.items[i].amount += 1;
-            }
-        }
-        // update shopping cart
-        localStorage.setItem('shoppingCart', JSON.stringify(products));
-        // refresh
+        this.props.addProduct(product);
         history.push("/checkout");
+
+        //var products = JSON.parse(localStorage.getItem('shoppingCart'));
+        //
+        //console.log(products.items.length);
+        //for (var i = 0; i < products.items.length; i++) {
+        //    console.log(i);
+        //    if (products.items[i].id === id) {
+        //        console.log("ADD");
+        //        // add one
+        //        products.items[i].amount += 1;
+        //    }
+        //}
+        //// update shopping cart
+        //localStorage.setItem('shoppingCart', JSON.stringify(products));
+        //// refresh
+        //history.push("/checkout");
     }
 
     render() {
 
         var products = { items: [] };
+
+        console.log(this.props);
 
         // Retrieve shopping cart products
         if (localStorage.getItem('shoppingCart') != null) {
@@ -123,7 +127,7 @@ class ShoppingCart extends React.Component {
                                 <p>Quantity:
                                 <button className="btn btn-sm" onClick={this.handleSubtract.bind(this, product.id)}>-</button>
                                     {product.amount}
-                                    <button className="btn btn-sm" onClick={this.handleAdd.bind(this, product.id)}>+</button>
+                                    <button className="btn btn-sm" onClick={this.handleAdd.bind(this, product)}>Test Add</button>
                                 </p>
                                 </div>
                             <div className="actionsColumn col-md-4">
@@ -146,5 +150,13 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedShoppingCart = connect(mapStateToProps)(ShoppingCart);
+// Map actions to props
+const mapDispatchToProps = (dispatch) => {
+    return {
+        // this.props.addProduct
+        addProduct: product => dispatch(shoppingCartActions.addProduct(product))
+    }
+};
+
+const connectedShoppingCart = connect(mapStateToProps, mapDispatchToProps)(ShoppingCart);
 export { connectedShoppingCart as ShoppingCart };
