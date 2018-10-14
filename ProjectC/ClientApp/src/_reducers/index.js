@@ -2,9 +2,8 @@
 
 import { registration } from './registration.reducer';
 import { authentication } from './authentication.reducer';
-import { users } from './users.reducer';
-import { products } from './product.reducer';
-import { product } from './product.reducer';
+import { users, editUser } from './users.reducer';
+import { products, product } from './product.reducer';
 import { alert } from './alert.reducer';
 import { shoppingCart } from './shoppingCart.reducer'
 
@@ -12,6 +11,7 @@ const rootReducer = combineReducers({
     registration,
     authentication,
     users,
+    editUser,
     products,
     product,
     alert,
