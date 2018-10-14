@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { history } from '../_helpers';
 
 import '../styling/ShoppingCartListingStyle.css';
+import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 
 class ShoppingCart extends React.Component {
     constructor(props) {
@@ -33,68 +34,23 @@ class ShoppingCart extends React.Component {
 
     }
 
-    // IGNORE BAD CODE BELOW :P
-
-    // Removing an item from ze basket
-    handleRemove(id, event) {
-        var products = JSON.parse(localStorage.getItem('shoppingCart'));
-        
-        for (var i = 0; i < products.items.length; i++) {
-            if (products.items[i].id === id) {
-                products.items.splice(i, 1);
-            }
-        }
-        // update shopping cart
-        localStorage.setItem('shoppingCart', JSON.stringify(products));
-        // refresh
-        history.push("/checkout");
-    }
-
-    // Subtracting quantity for an item from ze basket
-    handleSubtract(id, event) {
-        var products = JSON.parse(localStorage.getItem('shoppingCart'));
-        
-        for (var i = 0; i < products.items.length; i++) {
-            if (products.items[i].id === id) {
-                console.log(id);
-                // subtract one
-                products.items[i].amount -= 1;
-        
-                // if zero, remove it
-                if (products.items[i].amount <= 0) {
-                    products.items.splice(i, 1);
-                }
-            }
-        }
-        
-        // update shopping cart
-        localStorage.setItem('shoppingCart', JSON.stringify(products));
+    handleRemove(product) {
+        this.props.removeProduct(product);
         // refresh
         history.push("/checkout");
     }
 
     // Adding quantity
-    handleAdd(id, event) {
-        var products = JSON.parse(localStorage.getItem('shoppingCart'));
-
-        console.log(products.items.length);
-        for (var i = 0; i < products.items.length; i++) {
-            console.log(i);
-            if (products.items[i].id === id) {
-                console.log("ADD");
-                // add one
-                products.items[i].amount += 1;
-            }
-        }
-        // update shopping cart
-        localStorage.setItem('shoppingCart', JSON.stringify(products));
-        // refresh
+    handleAdd(product) {
+        this.props.addProduct(product);
         history.push("/checkout");
     }
 
     render() {
 
         var products = { items: [] };
+
+        console.log(this.props);
 
         // Retrieve shopping cart products
         if (localStorage.getItem('shoppingCart') != null) {
@@ -121,13 +77,13 @@ class ShoppingCart extends React.Component {
                                     </Link>
                                     <h2>{product.price},-</h2>
                                 <p>Quantity:
-                                <button className="btn btn-sm" onClick={this.handleSubtract.bind(this, product.id)}>-</button>
+                                <button className="btn btn-sm" onClick={this.handleRemove.bind(this, product)}>-</button>
                                     {product.amount}
-                                    <button className="btn btn-sm" onClick={this.handleAdd.bind(this, product.id)}>+</button>
+                                    <button className="btn btn-sm" onClick={this.handleAdd.bind(this, product)}>+</button>
                                 </p>
                                 </div>
                             <div className="actionsColumn col-md-4">
-                                <button className="btn btn-danger" onClick={this.handleRemove.bind(this, product.id)}>Remove</button>
+                                <button className="btn btn-danger" onClick={this.handleRemove.bind(this, product)}>Remove</button>
                                 <button className="btn btn-primary">Add to wishlist</button>
                             </div>
                             </div>
@@ -146,5 +102,16 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedShoppingCart = connect(mapStateToProps)(ShoppingCart);
+// Map actions to props
+const mapDispatchToProps = (dispatch) => {
+    return {
+        // this.props.addProduct
+        addProduct: product => dispatch(shoppingCartActions.addProduct(product)),
+
+        // this.props.removeProduct
+        removeProduct: product => dispatch(shoppingCartActions.removeProduct(product))
+    }
+};
+
+const connectedShoppingCart = connect(mapStateToProps, mapDispatchToProps)(ShoppingCart);
 export { connectedShoppingCart as ShoppingCart };

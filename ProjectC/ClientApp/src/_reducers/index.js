@@ -5,6 +5,7 @@ import { authentication } from './authentication.reducer';
 import { users, editUser } from './users.reducer';
 import { products, product } from './product.reducer';
 import { alert } from './alert.reducer';
+import { shoppingCart } from './shoppingCart.reducer'
 
 const rootReducer = combineReducers({
     registration,
@@ -13,7 +14,8 @@ const rootReducer = combineReducers({
     editUser,
     products,
     product,
-    alert
+    alert,
+    shoppingCart
 });
 
 export default rootReducer;
