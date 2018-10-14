@@ -1,13 +1,21 @@
 ﻿import { shoppingCartConstants } from '../_constants';
 
-export function shoppingCart(state = {}, action) {
+
+const initialState = {
+    products: []
+};
+
+export function shoppingCart(state = initialState, action) {
     switch (action.type) {
         case shoppingCartConstants.ADD_PRODUCT:
-            return [
+            return {
                 ...state,
-                Object.assign({}, action.product)
-            ];
+                products: [...state.products, action.product]
+             };
 
+        case shoppingCartConstants.REMOVE_PRODUCT:
+            const filteredProducts = state.products.filter((item) => item.id !== action.product.id);
+            return { ...state, products: filteredProducts }
 
         
         default:
