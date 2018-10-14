@@ -3,11 +3,16 @@
 namespace ProjectC.Database.Core.Annotations
 {
     [AttributeUsage(AttributeTargets.Class)]
-    public class Entity : Attribute
+    public class EntityAttribute : Attribute
     {
         public string TableName { get; }
 
-        public Entity(string tableName)
+        public EntityAttribute()
+        {
+            TableName = string.Empty;
+        }
+
+        public EntityAttribute(string tableName)
         {
             TableName = tableName;
         }

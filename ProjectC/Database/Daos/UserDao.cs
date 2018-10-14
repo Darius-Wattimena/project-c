@@ -5,7 +5,7 @@ namespace ProjectC.Database.Daos
 {
     public class UserDao : Dao<User>
     {
-        public UserDao(DatabaseContext context) : base(context)
+        public UserDao(DatabaseContext context, DaoManager manager) : base(context, manager)
         {
 
         }

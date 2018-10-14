@@ -7,10 +7,7 @@ namespace ProjectC.Database.Core
     {
         // Database Config
         public string Name;
-        public FieldType FieldType;
         public bool Primary;
-        public int Size;
-        public int DigitSize;
 
         // Field in code
         public FieldInfo Field;

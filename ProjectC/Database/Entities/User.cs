@@ -1,12 +1,11 @@
 ﻿using DevOne.Security.Cryptography.BCrypt;
-using ProjectC.Database.Core;
 using ProjectC.Database.Core.Annotations;
 using ProjectC.Database.Core.Interfaces;
 using ProjectC.Model;
 
 namespace ProjectC.Database.Entities
 {
-    [Entity("User")]
+    [Entity]
     public class User : IEntity
     {
         public User()
@@ -24,20 +23,16 @@ namespace ProjectC.Database.Entities
             MailAddress = model.MailAddress;
         }
 
-        [Field("UserId", FieldType.Integer, Primary = true)]
+        [Field("UserId", Primary = true)]
         public int Id;
 
-        [Field(FieldType.Varchar, Size = 100)]
-        public string Firstname;
-
-        [Field(FieldType.Varchar, Size = 100)]
-        public string Lastname;
-
-        [Field(FieldType.Varchar)]
-        public string MailAddress;
-
-        [Field(FieldType.Varchar, Size = 61)]
-        public string PasswordHash;
+        [Field] public string Firstname;
+        [Field] public string Lastname;
+        [Field] public string MailAddress;
+        [Field] public string PasswordHash;
+        [Field] public int AddressId;
+        [Field] public int ShippingAddressId;
+        [Field] public int RoleId;
 
         public int GetId()
         {

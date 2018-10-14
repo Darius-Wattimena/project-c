@@ -1,11 +1,10 @@
-﻿using ProjectC.Database.Core;
-using ProjectC.Database.Core.Annotations;
+﻿using ProjectC.Database.Core.Annotations;
 using ProjectC.Database.Core.Interfaces;
 using ProjectC.Model;
 
 namespace ProjectC.Database.Entities
 {
-    [Entity("Product")]
+    [Entity]
     public class Product : IEntity
     {
         public Product()
@@ -22,23 +21,14 @@ namespace ProjectC.Database.Entities
             Description = p.Description;
         }
 
-        [Field("ProductId", FieldType.Integer, Primary = true)]
+        [Field("ProductId", Primary = true)]
         public int Id;
 
-        [Field(FieldType.Varchar, Size = 45)]
-        public string Name;
-
-        [Field(FieldType.Integer, Size = 11)]
-        public int Stock;
-
-        [Field(FieldType.Decimal)]
-        public double Price;
-
-        [Field(FieldType.Varchar, Size = 256)]
-        public string ImageUrl;
-
-        [Field(FieldType.Text)]
-        public string Description;
+        [Field] public string Name;
+        [Field] public string Description;
+        [Field] public double Price;
+        [Field] public int Stock;
+        [Field] public string ImageUrl;
 
         public int GetId()
         {
