@@ -3,6 +3,7 @@ using ProjectC.Database.Core.Interfaces;
 
 namespace ProjectC.Database.Entities
 {
+    [Entity]
     public class OrderProducts : IEntity
     {
         [Field("OrderProductsId", Primary = true)]

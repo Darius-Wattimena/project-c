@@ -3,6 +3,7 @@ using ProjectC.Database.Core.Interfaces;
 
 namespace ProjectC.Database.Entities
 {
+    [Entity]
     public class CouponCodeProduct : IEntity
     {
         [Field("CouponCodeProductId", Primary = true)]

@@ -14,7 +14,7 @@ namespace ProjectC.Database.Entities
         [Field] public int OrderState;
         [Field] public DateTime OrderDate;
         [Field] public int UserId;
-        [Field] public int OrderId;
+        [Field] public int CouponCodeId;
 
         public int GetId()
         {
