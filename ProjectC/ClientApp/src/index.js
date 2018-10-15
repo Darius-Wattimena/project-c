@@ -1,5 +1,4 @@
-import './bootstrap/css/bootstrap.css';
-import './bootstrap/css/bootstrap-grid.css'
+import './bootstrap/css/bootstrap.min.css';
 
 import React from 'react';
 import ReactDOM from 'react-dom';

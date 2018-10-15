@@ -53,8 +53,12 @@ class AddProduct extends React.Component {
     render() {
         // Render the view
         return (
+            <div class="panel col-md-8">
             <div className='adminPanel' class="container">
+
+                
                 <form id="product" onSubmit={this.handleSubmit} onChange={this.handleChange}>
+                    <h3>Add Products</h3>
                     <div class="form-group">
                         <label for="name">Name</label>
                         <input type="text" class="form-control" name="name" id="name" placeholder="Name" />
@@ -78,6 +82,7 @@ class AddProduct extends React.Component {
                     <button type="submit" class="btn btn-primary">Add</button>
                     <a href="/adminpanel/product" className="btn btn-danger">Back</a>
                 </form>
+                </div>
             </div>
         );
     }

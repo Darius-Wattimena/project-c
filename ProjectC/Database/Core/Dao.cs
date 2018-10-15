@@ -12,26 +12,35 @@ namespace ProjectC.Database.Core
         private const string LOGGING_SQL_PREFIX = "SQL Executing | ";
 
         protected readonly DB Database;
-        protected readonly Type Type;
+        protected readonly Type EntityType;
         protected FieldInfo[] Fields;
         protected readonly TableConfig<T> TableConfig;
 
-        protected Dao(DatabaseContext context)
-        {
-            Database = DB.Get(context);
-            Type = typeof(T);
+        protected readonly DaoManager DaoManager;
 
-            TableConfig = DBUtil.CreateTableConfig<T>(Type);
+        protected Dao(DatabaseContext context, DaoManager manager)
+        {
+            DaoManager = manager;
+            Database = DB.Get(context);
+            EntityType = typeof(T);
+
+            TableConfig = DatabaseUtil.CreateTableConfig<T>(EntityType);
 
             CreateFieldConfigs();
         }
 
         private void CreateFieldConfigs()
         {
-            Fields = Type.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
+            Fields = EntityType.GetFields(BindingFlags.Instance | BindingFlags.NonPublic | BindingFlags.Public);
             foreach(var field in Fields)
             {
-                var cfg = DBUtil.CreateFieldConfig<T>(field);
+                var cfg = DatabaseUtil.CreateFieldConfig<T>(field);
+
+                if (cfg == null)
+                {
+                    continue;
+                }
+
                 if (cfg.Primary)
                 {
                     TableConfig.primaryFieldConfig = cfg;
@@ -43,7 +52,7 @@ namespace ProjectC.Database.Core
         protected List<T> Execute(string sql)
         {
             Console.WriteLine(LOGGING_SQL_PREFIX + sql);
-            using (var query = DBUtil.CreateQuery(sql, Database))
+            using (var query = DatabaseUtil.CreateQuery(sql, Database))
             {
                 Database.OpenConnection();
                 using (var reader = query.ExecuteReader())
@@ -58,7 +67,7 @@ namespace ProjectC.Database.Core
         protected int ExecuteCount(string sql)
         {
             Console.WriteLine(LOGGING_SQL_PREFIX + sql);
-            var query = DBUtil.CreateQuery(sql, Database);
+            var query = DatabaseUtil.CreateQuery(sql, Database);
             Database.OpenConnection();
             var reader = query.ExecuteReader();
             var result = 0;
@@ -73,7 +82,7 @@ namespace ProjectC.Database.Core
         protected void ExecuteNoResult(string sql)
         {
             Console.WriteLine(LOGGING_SQL_PREFIX + sql);
-            var query = DBUtil.CreateQuery(sql, Database);
+            var query = DatabaseUtil.CreateQuery(sql, Database);
             Database.OpenConnection();
             query.ExecuteNonQuery();
             Database.CloseConnection();
@@ -88,8 +97,11 @@ namespace ProjectC.Database.Core
                 var result = Activator.CreateInstance<T>();
                 foreach (var fieldConfig in TableConfig.fields.Values)
                 {
-                    var value = dataReader[fieldConfig.Name];
-                    fieldConfig.Field.SetValue(result, value);
+                    var fieldValue = dataReader[fieldConfig.Name];
+                    if (fieldValue.GetType() != typeof(DBNull))
+                    {
+                        fieldConfig.Field.SetValue(result, fieldValue);
+                    }
                 }
                 results.Add(result);
             }
