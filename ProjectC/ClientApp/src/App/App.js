@@ -51,7 +51,7 @@ class App extends Component {
                         <Route path="/adminpanel" component={AdminPanel} />
                         <Route path="/adminpanel/statistics" component={AdminStatistics} />
                         <Route path="/adminpanel/product" component={AdminProducts} />
-                        <Route path="/adminpanel/product/add" component={AddProduct} />
+                        <Route path="/adminpanel/addproduct" component={AddProduct} />
                         <Route path="/adminpanel/users" component={AdminUsers} />
                         <Route path="/adminpanel/orders" component={AdminOrders} />
                         <Route path="/adminpanel/sales" component={AdminSales} />

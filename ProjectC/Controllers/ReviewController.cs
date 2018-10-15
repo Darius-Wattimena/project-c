@@ -1,15 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using ProjectC.Database.Core;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
-using ProjectC.Model;
 
 namespace ProjectC.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ProductController : DaoController<ProductDao, Product>
+    public class ReviewController : DaoController<ReviewDao, Review>
     {
         [HttpGet]
         public override IActionResult Get()
@@ -24,13 +21,13 @@ namespace ProjectC.Controllers
         }
 
         [HttpPost]
-        public override IActionResult Create([FromBody] Product input)
+        public override IActionResult Create([FromBody] Review input)
         {
             return InnerSave(input);
         }
 
         [HttpPut("{id}")]
-        public override IActionResult Update(int id, [FromBody] Product input)
+        public override IActionResult Update(int id, [FromBody] Review input)
         {
             return InnerSave(input);
         }

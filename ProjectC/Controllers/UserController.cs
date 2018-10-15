@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using ProjectC.Database.Core;
+using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
 using ProjectC.Helper;
 using ProjectC.Model;
@@ -17,7 +17,7 @@ namespace ProjectC.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : DaoController<UserDao, User>
     {
         private readonly AppSettings _appSettings;
 
@@ -26,30 +26,34 @@ namespace ProjectC.Controllers
             _appSettings = appSettings.Value;
         }
 
-        //Get all users
         [HttpGet]
-        public IActionResult Get()
+        public override IActionResult Get()
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var users = daoManager?.UserDao.FindAll();
-            return Ok(users);
+            return InnerGet();
         }
 
-        //Get 1 user with the given id
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public override IActionResult Get(int id)
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var user = daoManager?.UserDao.Find(id);
-            return Ok(user);
+            return InnerGet(id);
         }
-        
+
         [HttpPost]
-        public void Post([FromBody] string value)
+        public override IActionResult Create([FromBody] User input)
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var user = JsonConvert.DeserializeObject<User>(value);
-            daoManager?.UserDao.Save(user);
+            return InnerSave(input);
+        }
+
+        [HttpPut("{id}")]
+        public override IActionResult Update(int id, [FromBody] User input)
+        {
+            return InnerSave(input);
+        }
+
+        [HttpDelete("{id}")]
+        public override IActionResult Delete(int id)
+        {
+            return InnerDelete(id);
         }
 
         public IActionResult Login([FromBody] UserLoginModel input)
@@ -129,15 +133,6 @@ namespace ProjectC.Controllers
 
             daoManager.UserDao.Save(databaseUser);
 
-            return Ok();
-        }
-
-        //Delete the user with the given id
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            daoManager?.UserDao.Delete(id);
             return Ok();
         }
     }
