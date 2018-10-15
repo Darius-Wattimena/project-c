@@ -10,7 +10,7 @@ import { HomePage } from '../HomePage';
 import { RegisterPage } from '../RegisterPage';
 import { LoginPage } from '../LoginPage';
 import { SingleProductPage } from '../SingleProductPage';
-
+import { OrderPage } from '../OrderPage';
 import { AdminPanel } from '../AdminPanel';
 import { AdminProducts } from '../AdminProducts';
 import { AddProduct } from '../AdminProducts/AddProduct';
@@ -56,6 +56,8 @@ class App extends Component {
                                         <Route path="/user/edit/:id" component={EditUserPage} />
                                         <Route path="/checkout" component={ShoppingCart} />
                                         <Route path="/login" component={LoginPage} />
+                                        <Route path="/order" component={OrderPage}/>
+
 
                             
                         </div>
