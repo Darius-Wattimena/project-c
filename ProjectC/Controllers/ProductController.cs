@@ -4,6 +4,7 @@ using ProjectC.Database.Core;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
 using ProjectC.Model;
+using System.Collections.Generic;
 
 namespace ProjectC.Controllers
 {
@@ -39,6 +40,14 @@ namespace ProjectC.Controllers
         public override IActionResult Delete(int id)
         {
             return InnerDelete(id);
+        }
+
+        [HttpGet("{value}")]
+        public IActionResult Search(string value)
+        {
+            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+            List<Product> products = daoManager.ProductDao.Search(value);
+            return Ok(products);
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectC.Database.Core;
 using ProjectC.Database.Core.Interfaces;
+using ProjectC.Database.Daos;
 
 namespace ProjectC.Controllers
 {
@@ -35,7 +36,7 @@ namespace ProjectC.Controllers
             var dao = FindDao();
             return dao == null ? BadRequest("Dao not found!") : ExecuteFunction(new Func<int, TU>(dao.Find), id);
         }
-        
+
         protected IActionResult InnerSave(TU entity)
         {
             var dao = FindDao();

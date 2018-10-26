@@ -14,7 +14,6 @@ function onClick(e) {
     vertical = !vertical;
     history.push("/products");
 }
-
 function Listing(props) {
     const products = props.products;
     const vertical = props.vertical
