@@ -38,6 +38,12 @@ namespace ProjectC.Controllers
             return InnerGet(id);
         }
 
+        [HttpGet]
+        public override IActionResult Search(string f, string i)
+        {
+            return InnerSearch(f, i);
+        }
+
         [HttpPost]
         public override IActionResult Create([FromBody] User input)
         {
@@ -92,17 +98,17 @@ namespace ProjectC.Controllers
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
 
-            if (input.Password.Equals(input.ConfirmPassword))
+            /*if (!input.Password.Equals(input.ConfirmPassword)) TODO add confirm password field
             {
                 return BadRequest("Passwords are not the same");
-            }
+            }*/
             
             if (daoManager.UserDao.FindUserByMailAddress(input.MailAddress) != null)
             {
                 return BadRequest("Mail address already been used");
             }
 
-            var user = new User(input);
+            var user = input.SetupUser(input);
             daoManager.UserDao.Save(user);
 
             return Ok();
@@ -110,7 +116,7 @@ namespace ProjectC.Controllers
 
         //Update the given user
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] UserUpdateModel input)
+        public IActionResult EditUser(int id, [FromBody] UserUpdateModel input)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             var databaseUser = daoManager.UserDao.Find(id);

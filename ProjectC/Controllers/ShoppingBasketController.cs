@@ -20,6 +20,12 @@ namespace ProjectC.Controllers
             return InnerGet(id);
         }
 
+        [HttpGet]
+        public override IActionResult Search(string f, string i)
+        {
+            return InnerSearch(f, i);
+        }
+
         [HttpPost]
         public override IActionResult Create([FromBody] ShoppingBasket input)
         {

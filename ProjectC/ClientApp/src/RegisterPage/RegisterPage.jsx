@@ -16,7 +16,9 @@ class RegisterPage extends React.Component {
                 firstname: "",
                 lastname: "",
                 password: "",
-                mailaddress: ""
+                mailaddress: "",
+                roleId: 2,
+                AddressId: 1
             },
             submitted: false
         }

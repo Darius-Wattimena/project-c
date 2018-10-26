@@ -150,6 +150,14 @@ namespace ProjectC.Database.Core
             var query = sqlBuilder.Build(QueryType.Select);
             return Execute(query);
         }
+
+        public List<T> Search(string field, string input)
+        {
+            var sqlBuilder = new SqlBuilder<T>(TableConfig);
+            sqlBuilder.AddParameter(field, input, QueryPartType.Like);
+            var query = sqlBuilder.Build(QueryType.Select);
+            return Execute(query);
+        }
         
         public int Count(int id)
         {

@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectC.Database.Core;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
-using ProjectC.Model;
 
 namespace ProjectC.Controllers
 {
@@ -17,10 +17,24 @@ namespace ProjectC.Controllers
             return InnerGet();
         }
 
+        [HttpGet("{value}")]
+        public IActionResult Search(string value)
+        {
+            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+            List<Product> products = daoManager.ProductDao.SearchProduct(value);
+            return Ok(products);
+        }
+
         [HttpGet("{id}")]
         public override IActionResult Get(int id)
         {
             return InnerGet(id);
+        }
+
+        [HttpGet]
+        public override IActionResult Search(string f, string i)
+        {
+            return InnerSearch(f, i);
         }
 
         [HttpPost]
