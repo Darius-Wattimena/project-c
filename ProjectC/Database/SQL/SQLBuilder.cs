@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Microsoft.AspNetCore.Rewrite.Internal.UrlMatches;
 using ProjectC.Database.Core;
 using ProjectC.Database.Core.Interfaces;
 
@@ -14,7 +15,7 @@ namespace ProjectC.Database.SQL
 
         private readonly T _entity;
         private readonly TableConfig<T> _tableConfig;
-        private readonly Dictionary<string, string> _parameters;
+        private readonly Dictionary<string, QueryPart> _parameters;
         private readonly Dictionary<string, List<string>> _parameterLists;
         private readonly StringBuilder _query;
 
@@ -30,14 +31,14 @@ namespace ProjectC.Database.SQL
         {
             _tableConfig = tableConfig;
             _entity = entity;
-            _parameters = new Dictionary<string, string>();
+            _parameters = new Dictionary<string, QueryPart>();
             _parameterLists = new Dictionary<string, List<string>>();
             _query = new StringBuilder();
         }
 
-        public void AddParameter(string key, string value)
+        public void AddParameter(string key, string value, QueryPartType type = QueryPartType.Equal)
         {
-            _parameters.Add(key, value);
+            _parameters.Add(key, new QueryPart(key, value, type));
         }
 
         public void AddParameters(string key, List<string> values)
@@ -47,7 +48,7 @@ namespace ProjectC.Database.SQL
 
         public void AddParameters(Dictionary<string, string> parameters)
         {
-            parameters.ToList().ForEach(x => _parameters[x.Key] = x.Value);
+            parameters.ToList().ForEach(x => _parameters[x.Key] = new QueryPart(x.Key, x.Value));
         }
 
         public string Build(QueryType queryType)
@@ -88,7 +89,10 @@ namespace ProjectC.Database.SQL
                 foreach (var parameter in _parameters)
                 {
                     _query.Append(NewLine);
-                    _query.Append(" AND ").Append(parameter.Key).Append(" = '").Append(parameter.Value).Append("'");
+                    _query.Append(" AND ")
+                        .Append(parameter.Key)
+                        .Append(" " + parameter.Value.Type.GetString() + " ")
+                        .Append("'").Append(parameter.Value.Value).Append("'");
                 }
 
                 foreach (var parameterList in _parameterLists)
@@ -125,6 +129,28 @@ namespace ProjectC.Database.SQL
             return _query.ToString();
         }
 
+        private void ProcessFieldValue(object value, KeyValuePair<string, FieldConfig<T>> pair, Dictionary<string, string> fields)
+        {
+            switch (value)
+            {
+                case null:
+                    break;
+                case int intValue:
+                    if (intValue != 0)
+                    {
+                        fields.Add(pair.Key, value.ToString());
+                    }
+                    break;
+                case DateTime dateValue:
+                    var mySqlFormatDate = dateValue.ToString("yyyy-MM-dd HH:mm:ss");
+                    fields.Add(pair.Key, mySqlFormatDate);
+                    break;
+                default:
+                    fields.Add(pair.Key, value.ToString());
+                    break;
+            }
+        }
+
         private string BuildInsertQuery()
         {
             _query.Append("INSERT INTO ")
@@ -142,18 +168,7 @@ namespace ProjectC.Database.SQL
                 if (pair.Value.Primary) continue;
                 var value = pair.Value.Field.GetValue(_entity);
 
-                switch (value)
-                {
-                    case null:
-                        continue;
-                    case DateTime dateValue:
-                        var mySqlFormatDate = dateValue.ToString("yyyy-MM-dd HH:mm:ss");
-                        fields.Add(pair.Key, mySqlFormatDate);
-                        break;
-                    default:
-                        fields.Add(pair.Key, value.ToString());
-                        break;
-                }
+                ProcessFieldValue(value, pair, fields);
             }
 
             var firstField = true;
@@ -192,18 +207,7 @@ namespace ProjectC.Database.SQL
                 {
                     var value = pair.Value.Field.GetValue(_entity);
 
-                    switch (value)
-                    {
-                        case null:
-                            continue;
-                        case DateTime dateValue:
-                            var mySqlFormatDate = dateValue.ToString("yyyy-MM-dd HH:mm:ss");
-                            fields.Add(pair.Key, mySqlFormatDate);
-                            break;
-                        default:
-                            fields.Add(pair.Key, value.ToString());
-                            break;
-                    }
+                    ProcessFieldValue(value, pair, fields);
                 }
                 else
                 {
@@ -257,17 +261,17 @@ namespace ProjectC.Database.SQL
                 first = false;
             }
 
-            foreach (var paramter in _parameters)
+            foreach (var parameter in _parameters)
             {
                 _query.Append(NewLine);
                 if (first)
                 {
-                    _query.Append(" WHERE ").Append(paramter.Key).Append(" = '").Append(paramter.Value).Append("'");
+                    _query.Append(" WHERE ").Append(parameter.Key).Append(" = '").Append(parameter.Value).Append("'");
                     first = false;
                 }
                 else
                 {
-                    _query.Append(" AND ").Append(paramter.Key).Append(" = '").Append(paramter.Value).Append("'");
+                    _query.Append(" AND ").Append(parameter.Key).Append(" = '").Append(parameter.Value).Append("'");
                 }
             }
 

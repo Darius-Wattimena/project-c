@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
 using ProjectC.Database.Core;
+using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
 using ProjectC.Helper;
 using ProjectC.Model;
@@ -17,7 +17,7 @@ namespace ProjectC.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class UserController : ControllerBase
+    public class UserController : DaoController<UserDao, User>
     {
         private readonly AppSettings _appSettings;
 
@@ -26,30 +26,40 @@ namespace ProjectC.Controllers
             _appSettings = appSettings.Value;
         }
 
-        //Get all users
         [HttpGet]
-        public IActionResult Get()
+        public override IActionResult Get()
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var users = daoManager?.UserDao.FindAll();
-            return Ok(users);
+            return InnerGet();
         }
 
-        //Get 1 user with the given id
         [HttpGet("{id}")]
-        public IActionResult Get(int id)
+        public override IActionResult Get(int id)
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var user = daoManager?.UserDao.Find(id);
-            return Ok(user);
+            return InnerGet(id);
         }
-        
-        [HttpPost]
-        public void Post([FromBody] string value)
+
+        [HttpGet]
+        public override IActionResult Search(string f, string i)
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var user = JsonConvert.DeserializeObject<User>(value);
-            daoManager?.UserDao.Save(user);
+            return InnerSearch(f, i);
+        }
+
+        [HttpPost]
+        public override IActionResult Create([FromBody] User input)
+        {
+            return InnerSave(input);
+        }
+
+        [HttpPut("{id}")]
+        public override IActionResult Update(int id, [FromBody] User input)
+        {
+            return InnerSave(input);
+        }
+
+        [HttpDelete("{id}")]
+        public override IActionResult Delete(int id)
+        {
+            return InnerDelete(id);
         }
 
         public IActionResult Login([FromBody] UserLoginModel input)
@@ -88,17 +98,17 @@ namespace ProjectC.Controllers
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
 
-            if (input.Password.Equals(input.ConfirmPassword))
+            /*if (!input.Password.Equals(input.ConfirmPassword)) TODO add confirm password field
             {
                 return BadRequest("Passwords are not the same");
-            }
+            }*/
             
             if (daoManager.UserDao.FindUserByMailAddress(input.MailAddress) != null)
             {
                 return BadRequest("Mail address already been used");
             }
 
-            var user = new User(input);
+            var user = input.SetupUser(input);
             daoManager.UserDao.Save(user);
 
             return Ok();
@@ -106,7 +116,7 @@ namespace ProjectC.Controllers
 
         //Update the given user
         [HttpPut("{id}")]
-        public IActionResult Update(int id, [FromBody] UserUpdateModel input)
+        public IActionResult EditUser(int id, [FromBody] UserUpdateModel input)
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             var databaseUser = daoManager.UserDao.Find(id);
@@ -129,15 +139,6 @@ namespace ProjectC.Controllers
 
             daoManager.UserDao.Save(databaseUser);
 
-            return Ok();
-        }
-
-        //Delete the user with the given id
-        [HttpDelete("{id}")]
-        public IActionResult Delete(int id)
-        {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            daoManager?.UserDao.Delete(id);
             return Ok();
         }
     }

@@ -10,6 +10,7 @@ import { HomePage } from '../HomePage';
 import { RegisterPage } from '../RegisterPage';
 import { LoginPage } from '../LoginPage';
 import { SingleProductPage } from '../SingleProductPage';
+import { OrderPage } from '../OrderPage';
 
 import { AdminPanelHeader } from '../AdminPanelHeader';
 import { AdminPanel } from '../AdminPanel';
@@ -51,7 +52,7 @@ class App extends Component {
                         <Route path="/adminpanel" component={AdminPanel} />
                         <Route path="/adminpanel/statistics" component={AdminStatistics} />
                         <Route path="/adminpanel/product" component={AdminProducts} />
-                        <Route path="/adminpanel/product/add" component={AddProduct} />
+                        <Route path="/adminpanel/addproduct" component={AddProduct} />
                         <Route path="/adminpanel/users" component={AdminUsers} />
                         <Route path="/adminpanel/orders" component={AdminOrders} />
                         <Route path="/adminpanel/sales" component={AdminSales} />
@@ -72,7 +73,7 @@ class App extends Component {
                                         <Route path="/user/edit/:id" component={EditUserPage} />
                                         <Route path="/checkout" component={ShoppingCart} />
                                         <Route path="/login" component={LoginPage} />
-
+                                        <Route path="/order" component={OrderPage}/>
                                 </div>
                             </div>
                     </Router>

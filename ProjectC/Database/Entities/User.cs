@@ -1,4 +1,5 @@
 ﻿using DevOne.Security.Cryptography.BCrypt;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProjectC.Database.Core.Annotations;
 using ProjectC.Database.Core.Interfaces;
 using ProjectC.Model;
@@ -13,14 +14,12 @@ namespace ProjectC.Database.Entities
 
         }
 
-        public User(UserRegisterModel model)
+        public User SetupUser(UserRegisterModel model)
         {
             var salt = BCryptHelper.GenerateSalt();
             var hashedPassword = BCryptHelper.HashPassword(model.Password, salt);
             PasswordHash = hashedPassword;
-            Firstname = model.Firstname;
-            Lastname = model.Lastname;
-            MailAddress = model.MailAddress;
+            return this;
         }
 
         [Field("UserId", Primary = true)]

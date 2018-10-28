@@ -63,7 +63,7 @@ function update(user) {
         body: JSON.stringify(user)
     };
 
-    return fetch(config.apiUrl + '/user/update/' + user.id, requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/user/edituser/' + user.id, requestOptions).then(handleResponse, handleError);
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

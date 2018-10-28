@@ -33,7 +33,7 @@ function add(product) {
         body: JSON.stringify(product)
     };
 
-    return fetch(config.apiUrl + '/product/add', requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/product/create', requestOptions).then(handleResponse, handleError);
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

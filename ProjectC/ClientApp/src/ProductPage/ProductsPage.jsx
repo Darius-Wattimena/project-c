@@ -15,7 +15,6 @@ function onClick(e) {
     vertical = !vertical;
     history.push("/products");
 }
-
 function Listing(props) {
     const products = props.products;
     const vertical = props.vertical
@@ -98,6 +97,13 @@ class ProductPage extends React.Component {
     render() {
         const { products } = this.props;
         return (
+            <div>
+            <nav class="path-nav" aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><Link to="/home">Home</Link></li>
+                    <li class="breadcrumb-item active">Products</li>
+                </ol>
+            </nav>
             <div className="row">
                 <div class="filters-container col-sm-3">
                     <nav class="navbar navbar-dark bg-info">
@@ -115,6 +121,7 @@ class ProductPage extends React.Component {
                     {products.loading && <em>Loading products...</em>}
                     {products.error && <span className="text-danger">ERROR: {products.error}</span>}
                     {products.items && <Listing products={products.items} vertical={vertical} />}
+                </div>
                 </div>
             </div>
         );
