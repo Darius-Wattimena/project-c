@@ -10,11 +10,11 @@ export function shoppingCart(state = initialState, action) {
         case shoppingCartConstants.ADD_PRODUCT:
 
             // If the item already exists:
-            if (state.items.some(p => p.id === action.product.id)) {
+            if (state.items.some(p => p.productId === action.product.id)) {
 
                 // Increment the amount of that product
                 state.items.map(i => {
-                    if (i.id === action.product.id)
+                    if (i.productId === action.product.id)
                         i.amount += 1;
                 });
 
@@ -31,7 +31,7 @@ export function shoppingCart(state = initialState, action) {
 
             //TODO: Remove, temporary fix
             // make sure the item does not have an id to avoid conflict with model
-            delete newItem.id;
+            //delete newItem.id;
 
             return {
                 // Whatever was in the state
@@ -42,13 +42,13 @@ export function shoppingCart(state = initialState, action) {
 
         case shoppingCartConstants.REMOVE_PRODUCT:
             // Filter the products to exclude items that contain the id of the product to delete
-            const filteredItems = state.items.filter((item) => item.id !== action.product.id);
+            const filteredItems = state.items.filter((item) => item.productId !== action.product.id);
             return { ...state, items: filteredItems };
 
         case shoppingCartConstants.SUBTRACT_PRODUCT:
             // Subtract the amount of products
             state.items.map(i => {
-                if (i.id === action.product.id)
+                if (i.productId === action.product.id)
                     i.amount -= 1;
             });
 
