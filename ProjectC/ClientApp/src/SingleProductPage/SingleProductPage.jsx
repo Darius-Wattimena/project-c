@@ -20,10 +20,24 @@ class SingleProductPage extends React.Component {
             <div>
                 {product.items &&
                     <div>
-                    <h2>{product.items.name}</h2>
-                    <img src={product.items.imageUrl} alt=""/>
-                    <h3>{product.items.price},-</h3>
-                    <p>{product.items.description}</p>
+                        <h2>{product.items.name}</h2>
+                        <img src={product.items.imageUrl} alt=""/>
+                        <h3>{product.items.price},-</h3>
+                        <p>{product.items.description}</p>
+                    {product.items.specifications &&
+                        <table class="table">
+                        <tr>
+                            <th scope="col">#</th>
+                            <th scope="col">Specificaties</th>
+                        </tr>
+                        {product.items.specifications.map((spec, index) =>
+                        <tr>
+                            <td scope="row">{spec.name}</td>
+                            <td>{spec.value}</td>
+                        </tr>
+                        )}
+                        </table>
+                    }
                     </div>
                 }
             </div>

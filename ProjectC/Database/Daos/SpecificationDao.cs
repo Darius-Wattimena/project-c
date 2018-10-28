@@ -1,5 +1,7 @@
-﻿using ProjectC.Database.Core;
+﻿using System.Collections.Generic;
+using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
+using ProjectC.Helper;
 
 namespace ProjectC.Database.Daos
 {
@@ -8,6 +10,11 @@ namespace ProjectC.Database.Daos
         public SpecificationDao(DatabaseContext context, DaoManager manager) : base(context, manager)
         {
 
+        }
+
+        public List<Specification> FindSpecificationsByProductId(int id)
+        {
+            return Find("productId", id.ToString());
         }
     }
 }

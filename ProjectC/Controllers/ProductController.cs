@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectC.Database.Core;
@@ -23,6 +24,24 @@ namespace ProjectC.Controllers
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             List<Product> products = daoManager.ProductDao.SearchProduct(value);
             return Ok(products);
+        }
+
+        [HttpGet("{id}")]
+        public IActionResult GetWithSpecifications(int id)
+        {
+            var dao = GetDao();
+            return dao == null
+                ? NoDaoFound
+                : ExecuteFunction(new Func<int, Product>(dao.FindWithSpecifications), id);
+        }
+
+        [HttpGet]
+        public IActionResult GetAllWithSpecifications()
+        {
+            var dao = GetDao();
+            return dao == null
+                ? NoDaoFound
+                : ExecuteFunction(new Func<List<Product>>(dao.FindAllWithSpecifications));
         }
 
         [HttpGet("{id}")]

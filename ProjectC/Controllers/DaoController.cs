@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using ProjectC.Database.Core;
 using ProjectC.Database.Core.Interfaces;
-using ProjectC.Database.Daos;
 
 namespace ProjectC.Controllers
 {
@@ -12,22 +11,22 @@ namespace ProjectC.Controllers
         where T : Dao<TU>
         where TU : IEntity
     {
-        private readonly IActionResult _noDaoFound = new BadRequestObjectResult("Dao not found! Check the DaoManager class.");
+        protected readonly IActionResult NoDaoFound = new BadRequestObjectResult("Dao not found! Check the DaoManager class.");
 
-        protected T Dao;
+        private T _dao;
 
-        private T FindDao()
+        protected T GetDao()
         {
-            if (Dao == null)
+            if (_dao == null)
             {
                 var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-                Dao = daoManager.FindDao<T, TU>(typeof(T).Name);
+                _dao = daoManager.FindDao<T, TU>(typeof(T).Name);
             }
             
-            return Dao;
+            return _dao;
         }
 
-        private IActionResult ExecuteFunction(Delegate method, params object[] args)
+        protected IActionResult ExecuteFunction(Delegate method, params object[] args)
         {
             var result = method.DynamicInvoke(args);
             return Ok(result);
@@ -35,42 +34,42 @@ namespace ProjectC.Controllers
 
         protected IActionResult InnerGet()
         {
-            var dao = FindDao();
-            return dao == null 
-                ? _noDaoFound 
-                : ExecuteFunction(new Func<List<TU>>(dao.FindAll));
+            GetDao();
+            return _dao == null 
+                ? NoDaoFound 
+                : ExecuteFunction(new Func<List<TU>>(_dao.FindAll));
         }
 
         protected IActionResult InnerGet(int id)
         {
-            var dao = FindDao();
-            return dao == null 
-                ? _noDaoFound 
-                : ExecuteFunction(new Func<int, TU>(dao.Find), id);
+            GetDao();
+            return _dao == null 
+                ? NoDaoFound 
+                : ExecuteFunction(new Func<int, TU>(_dao.Find), id);
         }
 
         protected IActionResult InnerSearch(string field, string input)
         {
-            var dao = FindDao();
-            return dao == null
-                ? _noDaoFound
-                : ExecuteFunction(new Func<string, string, List<TU>>(dao.Search), field, input);
+            GetDao();
+            return _dao == null
+                ? NoDaoFound
+                : ExecuteFunction(new Func<string, string, List<TU>>(_dao.Search), field, input);
         }
 
         protected IActionResult InnerSave(TU entity)
         {
-            var dao = FindDao();
-            return dao == null 
-                ? _noDaoFound 
-                : ExecuteFunction(new Func<TU, TU>(dao.Save), entity);
+            GetDao();
+            return _dao == null 
+                ? NoDaoFound 
+                : ExecuteFunction(new Func<TU, TU>(_dao.Save), entity);
         }
         
         protected IActionResult InnerDelete(int id)
         {
-            var dao = FindDao();
-            return dao == null 
-                ? _noDaoFound 
-                : ExecuteFunction(new Action<int>(dao.Delete), id);
+            GetDao();
+            return _dao == null 
+                ? NoDaoFound 
+                : ExecuteFunction(new Action<int>(_dao.Delete), id);
         }
 
         public abstract IActionResult Get();

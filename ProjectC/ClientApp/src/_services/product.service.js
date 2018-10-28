@@ -3,6 +3,8 @@
 export const productService = {
     getAll,
     getById,
+    getWithSpecifications,
+    getAllWithSpecifications,
     _delete,
     add
 };
@@ -23,6 +25,24 @@ function getById(id) {
         headers: authHeader()
     };
     return fetch(config.apiUrl + '/product/get/' + id, requestOptions).then(handleResponse, handleError);
+}
+
+function getWithSpecifications(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(config.apiUrl + '/product/getWithSpecifications/' + id, requestOptions).then(handleResponse, handleError);
+}
+
+function getAllWithSpecifications() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(config.apiUrl + '/product/getAllWithSpecifications', requestOptions).then(handleResponse, handleError);
 }
 
 // Add a product to the database

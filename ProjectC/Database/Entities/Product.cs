@@ -1,4 +1,5 @@
-﻿using ProjectC.Database.Core.Annotations;
+﻿using System.Collections.Generic;
+using ProjectC.Database.Core.Annotations;
 using ProjectC.Database.Core.Interfaces;
 using ProjectC.Model;
 
@@ -29,6 +30,8 @@ namespace ProjectC.Database.Entities
         [Field] public double Price;
         [Field] public int Stock;
         [Field] public string ImageUrl;
+
+        public List<Specification> Specifications;
 
         public int GetId()
         {

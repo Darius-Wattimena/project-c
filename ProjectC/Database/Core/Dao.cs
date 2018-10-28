@@ -190,6 +190,16 @@ namespace ProjectC.Database.Core
             return Insert(entity);
         }
 
+        public List<T> Save(List<T> entities)
+        {
+            var resultEntities = new List<T>();
+            foreach (var entity in entities)
+            {
+                resultEntities.Add(Save(entity));
+            }
+            return resultEntities;
+        }
+
         public T Save(T entity)
         {
             return entity.GetId() == 0 ? Insert(entity) : Update(entity);

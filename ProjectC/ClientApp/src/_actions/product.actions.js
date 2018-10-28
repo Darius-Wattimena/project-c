@@ -31,7 +31,7 @@ function getAll() {
 function getById(id) {
     return dispatch => {
         dispatch(request());
-        productService.getById(id)
+        productService.getWithSpecifications(id)
             .then(
                 products => dispatch(success(products)),
                 error => dispatch(failure(error))
@@ -50,7 +50,7 @@ function add(product) {
             .then(
                 () => {
                     dispatch(success());
-                    history.push('/adminpanel');
+                    history.push('/adminpanel/products');
                     dispatch(alertActions.success('Added ' + product.name + ' to the inventory.'));
                 },
                 error => {
