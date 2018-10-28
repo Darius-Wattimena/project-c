@@ -3,37 +3,46 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { orderActions } from '../_actions/order.actions';
+
 import '../styling/OrderStyling.css';
 import { history } from '../_helpers';
 
 var string = "none";
-
-function Checkout(e) {
-    if (string == "Ideal") {
-        history.push("/products");
-        alert("Your Payment with Ideal was succesfull");
-    } else if (string == "Paypal") {
-        history.push("/products");
-        alert("Your Payment with Paypal was succesfull");
-    } else if (string == "Visa") {
-        history.push("/products");
-        alert("Your Payment with Visa was succesfull");
-    } else {
-        alert("Sorry you need to select a payment option");
-    }
-}
 
 function onChange(e) {
     string = e;
 }
 
 class OrderPage extends React.Component {
+
+    handleOrder(shoppingCartItems) {
+        this.props.createOrder(shoppingCartItems);
+        alert("Order was placed succesfully.");
+        this.forceUpdate();
+    }
+
+    checkout(string, items) {
+        if (string == "Ideal") {
+            alert("Your Payment with Ideal was succesfull");
+            this.handleOrder(items);
+        } else if (string == "Paypal") {
+            alert("Your Payment with Paypal was succesfull");
+            this.handleOrder(items);
+        } else if (string == "Visa") {
+            alert("Your Payment with Visa was succesfull");
+            this.handleOrder(items);
+        } else {
+            alert("Sorry you need to select a payment option");
+        }
+    }
+
     render() {
         const { user } = this.props;
-        const { products } = this.props;
+        const items = this.props.items;
         var total = 0;
-        for (var i = 0; i < products.length; i++) {
-            total += products[i].price;
+        for (var i = 0; i < items.length; i++) {
+            total += items[i].price * items[i].amount;
         }
 
         if (user == null) {
@@ -46,18 +55,22 @@ class OrderPage extends React.Component {
                         <div class="row">
                             <div class="col-sm-7">
                                 <div className="section orderbox">
-                                    {products.map((product, index) =>
+                                    {items.map((item, index) =>
                                         <div class="row cartitem">
                                             <div class="col-md-3">
-                                                <img src={product.ImageUrl} height="80px" width="80px;" />
-                                            </div>
-                                            <div class="col-md-5">
-                                                <h6>Name</h6>
-                                                <p>{product.name}</p>
+                                                <img src={item.imageUrl} height="80px" width="80px;" />
                                             </div>
                                             <div class="col-md-4">
+                                                <h6>Name</h6>
+                                                <p>{item.name}</p>
+                                            </div>
+                                            <div class="col-md-2">
                                                 <h6>Price</h6>
-                                                <p>{product.price}</p>
+                                                <p>{item.price}</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6>Amount</h6>
+                                                <p>{item.amount}</p>
                                             </div>
                                         </div>
                                     )}
@@ -118,7 +131,7 @@ class OrderPage extends React.Component {
                                             </div>
                                         </div>
                                     </form>
-                                    <button class="btn btn-info checkout-btn" onClick={() => { Checkout(string) }}>Checkout</button>
+                                    <button class="btn btn-info checkout-btn" onClick={() => { this.checkout(string, items) }}>Checkout</button>
                                 </div>
                             </div>
                         </div>
@@ -135,15 +148,25 @@ class OrderPage extends React.Component {
 }
 
 function mapStateToProps(state) {
+    console.log(state);
     const { authentication } = state;
     const { shoppingCart } = state;
     const { user } = authentication;
-    const { products } = shoppingCart;
+    const { items } = shoppingCart;
+    console.log(items);
     return {
         user,
-        products
+        items
     };
 }
 
-const connectedOrderPage = connect(mapStateToProps)(OrderPage);
+// Map actions to props
+const mapDispatchToProps = (dispatch) => {
+    return {
+        // props.createOrder
+        createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems))
+    }
+};
+
+const connectedOrderPage = connect(mapStateToProps, mapDispatchToProps)(OrderPage);
 export { connectedOrderPage as OrderPage };

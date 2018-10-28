@@ -90,9 +90,12 @@ class ShoppingCart extends React.Component {
                                 </div>
                             </div>
                     )}
-                    <button className="btn btn-danger" onClick={this.handleOrder.bind(this, shoppingCart.items)}>
-                        Order
-                </button>
+                    {
+                        shoppingCart.items &&
+                        <Link className="btn btn-danger" to="/order">
+                            Order
+                            </Link>
+                    }
                     </div>
                 }
             </div>
