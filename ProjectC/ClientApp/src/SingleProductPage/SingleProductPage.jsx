@@ -21,10 +21,10 @@ class SingleProductPage extends React.Component {
                 {product.items &&
                     <div>
                         <h2>{product.items.name}</h2>
-                        <img src={product.items.imageUrl} alt=""/>
+                    <img src={product.items.imageUrl} style={{ width: 24 + 'em' }} alt=""/>
                         <h3>{product.items.price},-</h3>
                         <p>{product.items.description}</p>
-                    {product.items.specifications &&
+                    {product.items.specifications && 
                         <table class="table">
                         <tr>
                             <th scope="col">#</th>

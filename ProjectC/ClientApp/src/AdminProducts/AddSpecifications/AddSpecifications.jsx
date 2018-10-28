@@ -72,7 +72,7 @@ class AddSpecifications extends React.Component {
             <div class="panel col-md-8">
             <div className='adminPanel' class="container">
                 <form id="product" onSubmit={this.handleSubmit} onChange={this.handleChange}>
-                    <h3>Add Products</h3>
+                    <h3>Add Specifications</h3>
                     <div class="form-group">
                         <label for="merk">Merk</label>
                         <input type="text" class="form-control" name="merk" id="merk" placeholder="Merk" />
