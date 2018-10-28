@@ -3,39 +3,37 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import '../styling/OrderStyling.css';
+import { history } from '../_helpers';
 
 class OrderPage extends React.Component {
-    constructor(props) {
-        super(props);
-
-    }
-
-
     render() {
+        const { user } = this.props;
+        if (user == null) {
+            history.push("/login");
+            return (null);
+        } else {
+            return (
+                <div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <div className="section">
 
+                                </div>
+                            </div>
 
-        return (
-            <div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            Order Information
-                            <div class="product">
-                                <h5>Apple IPhone X</h5>
-                                <p>Amount 2</p>
-                                <p>Price €2120</p>
-
+                            <div class="col-sm-5">
+                                <div className="section">
+                                    <div className="row"><i class="fas fa-user-circle user"></i><h5>{user.firstname} {user.lastname}</h5></div>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="col-sm-6">
-                            Shipping Address
-                        </div>
                     </div>
-                </div>
 
-            </div>
-        );
+                </div>
+            );
+        }
     }
 
 
@@ -43,12 +41,11 @@ class OrderPage extends React.Component {
 
 }
 
-
-
 function mapStateToProps(state) {
-    const { order } = state.authentication;
+    const { authentication } = state;
+    const { user } = authentication;
     return {
-        order
+        user
     };
 }
 

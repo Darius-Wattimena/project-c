@@ -74,11 +74,6 @@ class App extends Component {
                                         <Route path="/checkout" component={ShoppingCart} />
                                         <Route path="/login" component={LoginPage} />
                                         <Route path="/order" component={OrderPage}/>
-
-
-                            
-                        </div>
-                    </div>
                                 </div>
                             </div>
                     </Router>

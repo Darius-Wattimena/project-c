@@ -1,0 +1,13 @@
+﻿.section {
+    border-radius: 25px;
+    border: 2px solid #223843;
+    padding: 20px;
+    min-height: 75vh;
+    margin: 15px;
+    width: 100%;
+}
+
+.user{
+    font-size: 30px;
+    margin: 0 15px 0 10px;
+}
