@@ -78,7 +78,9 @@ namespace ProjectC.Database.SQL
             _query.Append("SELECT ")
                 .Append(SelectRange)
                 .Append(" FROM ")
+                .Append("`")
                 .Append(_tableConfig.name.ToLower()) // Always use lower case table names
+                .Append("`")
                 .Append(" WHERE 1=1 ");
 
             if (_parameters.Count != 0 || _parameterLists.Count != 0)
@@ -126,8 +128,9 @@ namespace ProjectC.Database.SQL
         private string BuildInsertQuery()
         {
             _query.Append("INSERT INTO ")
+                .Append("`")
                 .Append(_tableConfig.name)
-                .Append(" ")
+                .Append("` ")
                 .Append(NewLine);
 
             var fields = new Dictionary<string, string>();
@@ -209,8 +212,9 @@ namespace ProjectC.Database.SQL
             }
 
             _query.Append("UPDATE ")
+                .Append("`")
                 .Append(_tableConfig.name)
-                .Append(" ")
+                .Append("` ")
                 .Append(NewLine);
 
             
@@ -238,7 +242,9 @@ namespace ProjectC.Database.SQL
         private string BuildDeleteQuery()
         {
             _query.Append("DELETE FROM ")
-                .Append(_tableConfig.name);
+                .Append("`")
+                .Append(_tableConfig.name)
+                .Append("`");
 
             var first = true;
 
