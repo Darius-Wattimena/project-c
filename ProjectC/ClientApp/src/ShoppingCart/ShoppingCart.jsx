@@ -6,6 +6,7 @@ import { history } from '../_helpers';
 
 import '../styling/ShoppingCartListingStyle.css';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
+import { orderActions } from '../_actions/order.actions';
 
 class ShoppingCart extends React.Component {
     constructor(props) {
@@ -13,81 +14,85 @@ class ShoppingCart extends React.Component {
 
         // TEST
 
+        // TODO: Should we store the shopping cart in local storage?
         localStorage.setItem('shoppingCart', JSON.stringify({
             items: [
-                {
-                    id: 0,
-                    name: 'Samsung S9',
-                    imageUrl: 'https://image.coolblue.nl/max/2048x1536/products/818820',
-                    amount: 1,
-                    price: 670
-                },
-                {
-                    id: 1,
-                    name: 'Iphone XS',
-                    imageUrl: 'https://static.toiimg.com/photo/65625284/Apple-iPhone-XS.jpg',
-                    amount: 2,
-                    price: 649
-                }
             ]
         }));
 
     }
 
+    handleOrder(shoppingCartItems) {
+        console.log(shoppingCartItems);
+        this.props.createOrder(shoppingCartItems);
+        console.log("OK");
+    }
+
     handleRemove(product) {
         this.props.removeProduct(product);
-        // refresh
-        history.push("/checkout");
+        // re-render
+        this.forceUpdate();
     }
 
     // Adding quantity
     handleAdd(product) {
         this.props.addProduct(product);
-        history.push("/checkout");
+        // re-render
+        this.forceUpdate();
+    }
+
+    handleSubtract(product) {
+        this.props.subtractProduct(product);
+        // re-render
+        this.forceUpdate();
     }
 
     render() {
 
-        var products = { items: [] };
-
-        console.log(this.props);
+        var shoppingCart = this.props.shoppingCart;
 
         // Retrieve shopping cart products
-        if (localStorage.getItem('shoppingCart') != null) {
-            products = JSON.parse(localStorage.getItem('shoppingCart'));
-        }
+        //if (localStorage.getItem('shoppingCart') != null) {
+        //    products = JSON.parse(localStorage.getItem('shoppingCart'));
+        //}
 
         return (
             <div>
-                <h2>Shopping Cart</h2>
-                <p>This will become the shopping cart</p>
-                {products.items &&
+                <h2 style={{'padding-top' : '1em'}}>Shopping Cart</h2>
+                {shoppingCart.items &&
                     <div>
-                        {products.items.length == 0 && <h2>Your shopping cart is empty.</h2>}
-                        {products.items.map((product, index) =>
+                        {shoppingCart.items.length == 0 &&
+                            <div>
+                                <h3 style={{ 'padding-top': '2em' }}>Your shopping cart is empty. ☹</h3>
+                            </div>
+                        }
+                        {shoppingCart.items.map((item, index) =>
                             <div className="product row" key={index}>
                                 <div className="imageColumn col-md-4">
-                                    <Link to={`/product/${product.id}`}>
-                                        <img src={product.imageUrl} />
+                                    <Link to={`/product/${item.id}`}>
+                                        <img src={item.imageUrl} />
                                     </Link>
                                 </div>
                                 <div className="productColumn col-md-4">
-                                    <Link to={`/product/${product.id}`}>
-                                        <h4>{product.name}</h4>
+                                    <Link to={`/product/${item.id}`}>
+                                        <h4>{item.name}</h4>
                                     </Link>
-                                    <h2>{product.price},-</h2>
-                                <p>Quantity:
-                                <button className="btn btn-sm" onClick={this.handleRemove.bind(this, product)}>-</button>
-                                    {product.amount}
-                                    <button className="btn btn-sm" onClick={this.handleAdd.bind(this, product)}>+</button>
-                                </p>
+                                    <h2>{item.price},-</h2>
+                                    <p>Quantity:
+                                <button className="btn btn-sm" onClick={this.handleSubtract.bind(this, item)}>-</button>
+                                        {item.amount}
+                                        <button className="btn btn-sm" onClick={this.handleAdd.bind(this, item)}>+</button>
+                                    </p>
                                 </div>
-                            <div className="actionsColumn col-md-4">
-                                <button className="btn btn-danger" onClick={this.handleRemove.bind(this, product)}>Remove</button>
-                                <button className="btn btn-primary">Add to wishlist</button>
+                                <div className="actionsColumn col-md-4">
+                                    <button className="btn btn-danger" onClick={this.handleRemove.bind(this, item)}>Remove</button>
+                                    <button className="btn btn-primary">Add to wishlist</button>
+                                </div>
                             </div>
-                            </div>
-                        )}
+                    )}
+                    <button className="btn btn-danger" onClick={this.handleOrder.bind(this, shoppingCart.items)}>
+                        Order
+                </button>
                     </div>
                 }
             </div>
@@ -96,9 +101,10 @@ class ShoppingCart extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { products } = state;
+    const { shoppingCart } = state;
     return {
-        products
+        //this.props.shoppingCart
+        shoppingCart
     };
 }
 
@@ -109,7 +115,13 @@ const mapDispatchToProps = (dispatch) => {
         addProduct: product => dispatch(shoppingCartActions.addProduct(product)),
 
         // this.props.removeProduct
-        removeProduct: product => dispatch(shoppingCartActions.removeProduct(product))
+        removeProduct: product => dispatch(shoppingCartActions.removeProduct(product)),
+
+        //this.props.subtractProduct
+        subtractProduct: product => dispatch(shoppingCartActions.subtractProduct(product)),
+
+        // props.createOrder
+        createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems))
     }
 };
 

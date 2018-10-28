@@ -10,11 +10,11 @@ namespace ProjectC.Database.Entities
         [Field("OrderId", Primary = true)]
         public int Id;
 
-        [Field] public string TotalPrice;
+        [Field] public double TotalPrice;
         [Field] public int OrderState;
-        [Field] public DateTime OrderDate;
+        [Field] public DateTime? OrderDate;
         [Field] public int UserId;
-        [Field] public int CouponCodeId;
+        [Field] public int? CouponCodeId;
 
         public int GetId()
         {

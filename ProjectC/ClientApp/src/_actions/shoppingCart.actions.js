@@ -4,7 +4,8 @@ import { alertActions } from './';
 
 export const shoppingCartActions = {
     addProduct,
-    removeProduct
+    removeProduct,
+    subtractProduct
 };
 
 function addProduct(product) {
@@ -21,4 +22,12 @@ function removeProduct(product) {
     }
 
     function remove(product) { return { type: shoppingCartConstants.REMOVE_PRODUCT, product } }
+}
+
+function subtractProduct(product) {
+    return dispatch => {
+        dispatch(subtract(product));
+    }
+
+    function subtract(product) { return { type: shoppingCartConstants.SUBTRACT_PRODUCT, product } }
 }

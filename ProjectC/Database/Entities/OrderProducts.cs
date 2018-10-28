@@ -6,6 +6,12 @@ namespace ProjectC.Database.Entities
     [Entity]
     public class OrderProducts : IEntity
     {
+        public OrderProducts(ShoppingBasketItem shoppingBasketItem)
+        {
+            this.Amount = shoppingBasketItem.Amount;
+            this.ProductId = shoppingBasketItem.ProductId;
+        }
+
         [Field("OrderProductsId", Primary = true)]
         public int Id;
 
