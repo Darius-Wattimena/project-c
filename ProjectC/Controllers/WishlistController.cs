@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using ProjectC.Database.Core;
+﻿using Microsoft.AspNetCore.Mvc;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
 
@@ -9,20 +6,12 @@ namespace ProjectC.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class ProductController : DaoController<ProductDao, Product>
+    public class WishlistController : DaoController<WishlistDao, Wishlist>
     {
         [HttpGet]
         public override IActionResult Get()
         {
             return InnerGet();
-        }
-
-        [HttpGet("{value}")]
-        public IActionResult Search(string value)
-        {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            List<Product> products = daoManager.ProductDao.SearchProduct(value);
-            return Ok(products);
         }
 
         [HttpGet("{id}")]
@@ -38,13 +27,13 @@ namespace ProjectC.Controllers
         }
 
         [HttpPost]
-        public override IActionResult Create([FromBody] Product input)
+        public override IActionResult Create([FromBody] Wishlist input)
         {
             return InnerSave(input);
         }
 
         [HttpPut("{id}")]
-        public override IActionResult Update(int id, [FromBody] Product input)
+        public override IActionResult Update(int id, [FromBody] Wishlist input)
         {
             return InnerSave(input);
         }

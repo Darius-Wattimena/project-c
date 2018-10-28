@@ -38,7 +38,7 @@ class Header extends React.Component {
                         <img src={logo} width="auto" height="60" alt=""/>
                         <form class="form-inline">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search..."/>
+                                <input type="text" class="form-control" placeholder="Search..." onChange=""/>
                                 <div class="input-group-append">
                                     <button class="btn btn-outline-info" type="button">Search</button>
                                 </div>
