@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { productActions } from '../_actions';
+import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 
 import '../styling/ProductListingStyle.css';
 import { history } from '../_helpers';
@@ -26,9 +27,12 @@ function Listing(props) {
     }
 }
 
-function CartButton() {
+function CartButton(props) {
+    console.log(window.component.props);
     return (
-        <button class="btn cartbutton">Add to cart</button>
+        <button class="btn cartbutton" onClick={window.component.props.addProduct.bind(this, props.product)}>
+            Add to cart
+        </button>
     );
 }
 
@@ -37,13 +41,13 @@ function HorizontalListing(props) {
     return (
         <div>
             {products.map((product, index) =>
-                <div className="product-item">
+                <div className="product-item" key={index}>
                     <Link to={`/product/${product.id}`}>
                         <img src={product.imageUrl}></img>
                         <h4>{product.name}</h4>
                     </Link>
                     <h3>{product.price},-</h3>
-                    <CartButton />
+                    <CartButton product={product} />
                 </div>
             )}
         </div>
@@ -65,7 +69,7 @@ function VerticalListing(props) {
                         <h4>{product.name}</h4>
                         <p>stock: {product.stock}</p>
                         <h3>{product.price},-</h3>
-                        <CartButton />
+                        <CartButton product={product} />
                     </div>
                 </div>
             )}
@@ -73,17 +77,25 @@ function VerticalListing(props) {
     );
 }
 
-
 //base class
 class ProductPage extends React.Component {
 
+    // Adding quantity (or new product)
+    handleAdd(product) {
+        console.log("Adding product");
+        console.log(product);
+        this.props.addProduct(product);
+        history.push("/checkout");
+    }
 
     componentDidMount() {
-        this.props.dispatch(productActions.getAll());
+        this.props.getAllProducts();
+
+        // Make component accessible
+        window.component = this;
     }
 
     render() {
-        console.log(this.props);
         const { products } = this.props;
         return (
             <div className="row">
@@ -115,5 +127,16 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedProductPage = connect(mapStateToProps)(ProductPage);
+// Map actions to props
+const mapDispatchToProps = (dispatch) => {
+    return {
+        // accessible via this.props.getAllProducts
+        getAllProducts: () => dispatch(productActions.getAll()),
+
+        // this.props.addProduct
+        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); window.alert(product.name + " was added to the shopping cart! (TEST)"); console.log("Added product to the basket."); },
+    }
+};
+
+const connectedProductPage = connect(mapStateToProps, mapDispatchToProps)(ProductPage);
 export { connectedProductPage as ProductPage };
