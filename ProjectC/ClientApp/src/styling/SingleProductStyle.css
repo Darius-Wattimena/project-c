@@ -1,0 +1,25 @@
+﻿.path-nav{
+    margin-top: 10px;
+}
+
+.img-container {
+    height: 400px;
+    width: 400px;
+    border: 0.5px solid gray;
+    padding: 30px;
+}
+
+.img-container img{
+    height: 100%;
+    width: auto;
+    margin: auto;
+    display: block;
+}
+
+.button-group{
+    width: 70%;
+}
+.button-group button{
+    width: 70%;
+    margin: 5px 0;
+}

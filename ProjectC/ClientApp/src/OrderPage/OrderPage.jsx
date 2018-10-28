@@ -3,39 +3,143 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
+import { orderActions } from '../_actions/order.actions';
+
+import '../styling/OrderStyling.css';
+import { history } from '../_helpers';
+
+var string = "none";
+
+function onChange(e) {
+    string = e;
+}
 
 class OrderPage extends React.Component {
-    constructor(props) {
-        super(props);
 
+    handleOrder(shoppingCartItems) {
+        this.props.createOrder(shoppingCartItems);
+        alert("Order was placed succesfully.");
+        this.forceUpdate();
     }
 
+    checkout(string, items) {
+        if (string == "Ideal") {
+            alert("Your Payment with Ideal was succesfull");
+            this.handleOrder(items);
+        } else if (string == "Paypal") {
+            alert("Your Payment with Paypal was succesfull");
+            this.handleOrder(items);
+        } else if (string == "Visa") {
+            alert("Your Payment with Visa was succesfull");
+            this.handleOrder(items);
+        } else {
+            alert("Sorry you need to select a payment option");
+        }
+    }
 
     render() {
+        const { user } = this.props;
+        const items = this.props.items;
+        var total = 0;
+        for (var i = 0; i < items.length; i++) {
+            total += items[i].price * items[i].amount;
+        }
 
+        if (user == null) {
+            history.push("/login");
+            return (null);
+        } else {
+            return (
+                <div>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm-7">
+                                <div className="section orderbox">
+                                    {items.map((item, index) =>
+                                        <div class="row cartitem">
+                                            <div class="col-md-3">
+                                                <img src={item.imageUrl} height="80px" width="80px;" />
+                                            </div>
+                                            <div class="col-md-4">
+                                                <h6>Name</h6>
+                                                <p>{item.name}</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6>Price</h6>
+                                                <p>{item.price}</p>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <h6>Amount</h6>
+                                                <p>{item.amount}</p>
+                                            </div>
+                                        </div>
+                                    )}
+                                </div>
+                                <div className="section pricebox">
+                                    <label>Coupon Code:</label>
+                                    <input type="text" />
+                                    <div class="price">
+                                        <p>total price: <span>{total}</span></p>
+                                    </div>
+                                </div>
+                            </div>
 
-        return (
-            <div>
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-6">
-                            Order Information
-                            <div class="product">
-                                <h5>Apple IPhone X</h5>
-                                <p>Amount 2</p>
-                                <p>Price €2120</p>
+                            <div class="col-sm-5">
+                                <div className="section userbox">
+                                    <div className="row"><i class="fas fa-user-circle user"></i><h5>{user.firstname} {user.lastname}</h5></div>
+                                </div>
+                                <div className="section paymentbox">
+                                    <form>
+                                        <div class="row payment">
+                                            <div class="col-md-2">
+                                                <input type="radio" name="drone" id="Ideal" onChange={() => { onChange("Ideal") }} />
+                                            </div>
+                                            <div class="col-md-10">
+                                                <div class="row">
+                                                    <img alt="" src="https://upload.wikimedia.org/wikipedia/commons/e/e9/IDEAL_Logo.png" width="40px" height="40px" />
+                                                    <p>Ideal</p>
+                                                    <select>
+                                                        <option value="Ing">Ing</option>
+                                                        <option value="Rabobank">Rabobank</option>
+                                                        <option value="Abn">ABN Ambro</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
 
+                                        <div class="row payment">
+                                            <div class="col-md-2">
+                                                <input type="radio" name="drone" id="Paypal" onChange={() => { onChange("Paypal") }} />
+                                            </div>
+                                            <div class="col-md-10">
+                                                <div class="row">
+                                                    <img alt="" src="https://pbs.twimg.com/profile_images/1014219302495375360/dIgZhxTm_400x400.jpg" width="40px" height="40px" />
+                                                    <p>Paypal</p>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row payment">
+                                            <div class="col-md-2">
+                                                <input type="radio" name="drone" id="Visa" onChange={() => { onChange("Visa") }}  />
+                                            </div>
+                                            <div class="col-md-10">
+                                                <div class="row">
+                                                    <img alt="" src="https://business.visa.com/Content/images/tarjeta-visa-empresarial/tarjetas.png" width="40px" height="40px" />
+                                                    <p>Visa</p>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </form>
+                                    <button class="btn btn-info checkout-btn" onClick={() => { this.checkout(string, items) }}>Checkout</button>
+                                </div>
                             </div>
                         </div>
-
-                        <div class="col-sm-6">
-                            Shipping Address
-                        </div>
                     </div>
-                </div>
 
-            </div>
-        );
+                </div>
+            );
+        }
     }
 
 
@@ -43,14 +147,26 @@ class OrderPage extends React.Component {
 
 }
 
-
-
 function mapStateToProps(state) {
-    const { order } = state.authentication;
+    console.log(state);
+    const { authentication } = state;
+    const { shoppingCart } = state;
+    const { user } = authentication;
+    const { items } = shoppingCart;
+    console.log(items);
     return {
-        order
+        user,
+        items
     };
 }
 
-const connectedOrderPage = connect(mapStateToProps)(OrderPage);
+// Map actions to props
+const mapDispatchToProps = (dispatch) => {
+    return {
+        // props.createOrder
+        createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems))
+    }
+};
+
+const connectedOrderPage = connect(mapStateToProps, mapDispatchToProps)(OrderPage);
 export { connectedOrderPage as OrderPage };
