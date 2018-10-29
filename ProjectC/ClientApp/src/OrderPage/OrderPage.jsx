@@ -19,6 +19,8 @@ class OrderPage extends React.Component {
     handleOrder(shoppingCartItems) {
         this.props.createOrder(shoppingCartItems);
         alert("Order was placed succesfully.");
+        setTimeout(function () { history.push("/products"); }, 3000);
+
         this.forceUpdate();
     }
 

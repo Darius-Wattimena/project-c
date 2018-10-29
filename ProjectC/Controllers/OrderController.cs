@@ -8,12 +8,15 @@ using ProjectC.Model;
 using System;
 using System.Linq;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using ProjectC.Database.Daos;
+using ProjectC.Database.Entities;
 
 namespace ProjectC.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class OrderController : ControllerBase
+    public class OrderController : DaoController<OrderProductsDao, OrderProducts>
     {
 
         // POST: api/Order/Create
@@ -55,5 +58,34 @@ namespace ProjectC.Controllers
             return Ok($"Succesfully created a new order for {shoppingBasketItems.Count} products.");
         }
 
+        public override IActionResult Create(OrderProducts input)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IActionResult Delete(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IActionResult Get()
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IActionResult Get(int id)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IActionResult Search(string field, string input)
+        {
+            throw new NotImplementedException();
+        }
+
+        public override IActionResult Update(int id, OrderProducts input)
+        {
+            throw new NotImplementedException();
+        }
     }
 }
