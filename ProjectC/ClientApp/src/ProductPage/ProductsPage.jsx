@@ -81,10 +81,9 @@ class ProductPage extends React.Component {
 
     // Adding quantity (or new product)
     handleAdd(product) {
-        console.log("Adding product");
-        console.log(product);
+        console.log("Adding product " + product.name + " to the shopping basket");
         this.props.addProduct(product);
-        history.push("/checkout");
+        this.forceUpdate();
     }
 
     componentDidMount() {

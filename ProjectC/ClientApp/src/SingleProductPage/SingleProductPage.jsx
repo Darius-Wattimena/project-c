@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { productActions } from '../_actions';
+import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 
 import '../styling/SingleProductStyle.css';
 
@@ -10,7 +11,14 @@ import '../styling/SingleProductStyle.css';
 class SingleProductPage extends React.Component {
 
     componentDidMount() {
-        this.props.dispatch(productActions.getById(this.props.match.params.id));
+        this.props.getProductById(this.props.match.params.id);
+    }
+
+    // Adding quantity (or new product)
+    handleAdd(product) {
+        console.log("Adding product " + product.name + " to the shopping basket");
+        this.props.addProduct(product);
+        this.forceUpdate();
     }
     
     render() {
@@ -37,8 +45,8 @@ class SingleProductPage extends React.Component {
                                 <div className="col-md-7">
                                     <h2>{product.items.name}</h2>
                                     <h3>{product.items.price},-</h3>
-                                    <div className="button-group">
-                                        <button className="btn btn-success">Add to cart</button>
+                                <div className="button-group">
+                                    <button className="btn btn-success" onClick={this.handleAdd.bind(this, product.items)}>Add to cart</button>
                                         <button className="btn btn-info">Add to wishlist</button>
                                     </div>
                                     <p>{product.items.description}</p>
@@ -77,5 +85,13 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedProductPage = connect(mapStateToProps)(SingleProductPage);
+// Map actions to props
+const mapDispatchToProps = (dispatch) => {
+    return {
+        getProductById: id => { dispatch(productActions.getById(id)); },
+        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); window.alert(product.name + " was added to the shopping cart!"); },
+    }
+};
+
+const connectedProductPage = connect(mapStateToProps, mapDispatchToProps)(SingleProductPage);
 export { connectedProductPage as SingleProductPage };
