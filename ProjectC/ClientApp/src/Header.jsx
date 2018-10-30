@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import './styling/header.css';
 import { connect } from 'react-redux';
-
+import { history } from '../src/_helpers';
 import logo from './styling/cmobile.jpg';
 
 function UserLoggedIn(props) {
@@ -29,8 +29,37 @@ function UserGreeting(props) {
 }
 
 class Header extends React.Component {
-    render() {
-        const { user } = this.props;
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            searchValue: ""
+        }
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        console.log(event.target.value);
+        const { searchValue } = this.state;
+        this.setState({
+            searchValue: event.target.value
+        });
+    }
+
+
+    handleSubmit(event) {
+        event.preventDefault();
+        this.setState({ submitted: true });
+        const { searchValue } = this.state;
+        console.log(searchValue);
+        history.push("/products?q=" + searchValue);
+    }
+    render()
+
+    {
+        const { user, searchValue } = this.props;
         return (
             <div>
                 <nav class="navbar navbar-light bg-light fixed-top">
@@ -38,9 +67,9 @@ class Header extends React.Component {
                         <img src={logo} width="auto" height="60" alt=""/>
                         <form class="form-inline">
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search..."/>
+                                <input type="text" class="form-control" value={searchValue} onChange={this.handleChange} placeholder="Search..."/>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-info" type="button">Search</button>
+                                    <button onClick={this.handleSubmit} class="btn btn-outline-info" type="button">Search</button>
                                 </div>
                             </div>
                         </form>
