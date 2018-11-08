@@ -6,7 +6,8 @@ export const productService = {
     getWithSpecifications,
     getAllWithSpecifications,
     _delete,
-    add
+    add,
+    search
 };
 
 // Returns a collection of all products
@@ -25,6 +26,15 @@ function getById(id) {
         headers: authHeader()
     };
     return fetch(config.apiUrl + '/product/get/' + id, requestOptions).then(handleResponse, handleError);
+}
+
+function search(searchValue) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    console.log(fetch(config.apiUrl + '/product/search/' + searchValue, requestOptions).then(handleResponse, handleError));
+    return fetch(config.apiUrl + '/product/search/' + searchValue, requestOptions).then(handleResponse, handleError);
 }
 
 function getWithSpecifications(id) {

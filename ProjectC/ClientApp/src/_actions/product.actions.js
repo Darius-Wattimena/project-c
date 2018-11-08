@@ -7,7 +7,8 @@ export const productActions = {
     getAll,
     getById,
     add,
-    _delete
+    _delete,
+    search
 };
 
 function getAll() {
@@ -42,6 +43,22 @@ function getById(id) {
     function success(product) { return { type: productConstants.GET_SUCCESS, product } }
     function failure(error) { return { type: productConstants.GET_FAILURE, error } }
 }
+
+function search(searchValue) {
+    return dispatch => {
+        dispatch(request(searchValue));
+        productService.search(searchValue)
+            .then(
+                products => dispatch(succes(products)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request(searchValue) { return { type: productConstants.GETSEARCH_REQUEST } }
+    function succes(products) { return { type: productConstants.GETSEARCH_SUCCESS, products } }
+    function failure(error) { return { type: productConstants.GETSEARCH_FAILURE, error } }
+}
+
 function add(product) {
     return dispatch => {
         dispatch(request(product));
