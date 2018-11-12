@@ -2,7 +2,15 @@
     background-color: #212529;
     min-height: 100vh;
     width: 16%;
+
 }
+
+.fixed {
+    position: fixed;
+    margin-top: 55px;
+    
+}
+
 .sidebar ul{
     margin: 0;
     padding: 0;
@@ -26,6 +34,11 @@
     width: 100%;
     margin-left: 5px;
     margin-right: 5px;
-    margin-top: 20px;
+    margin-top: 80px;
     float: left;
+}
+
+#product {
+    width: 100% !important;
+    padding: unset;
 }

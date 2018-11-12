@@ -8,7 +8,11 @@ class AdminPanel extends React.Component {
 
     render() {
         return (
+            <div>
             <div class="sidebar" style={{ float: "left" }}>
+            </div>
+            <div class="sidebar fixed" style={{ float: "left" }}>
+                
                 <ul>
                     <li>
                         <Link to="/adminpanel/statistics">Statistics</Link>
@@ -32,6 +36,7 @@ class AdminPanel extends React.Component {
                         <Link to="/adminpanel/reviews">Reviews</Link>
                     </li>
                 </ul>
+                </div>
             </div>
         );
     }
