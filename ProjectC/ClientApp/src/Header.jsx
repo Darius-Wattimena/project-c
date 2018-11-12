@@ -4,6 +4,7 @@ import './styling/header.css';
 import { connect } from 'react-redux';
 import { history } from '../src/_helpers';
 import logo from './styling/cmobile.jpg';
+import { productActions } from './_actions';
 
 function UserLoggedIn(props) {
     const isLoggedIn = props.isLoggedIn;
@@ -53,11 +54,12 @@ class Header extends React.Component {
         event.preventDefault();
         this.setState({ submitted: true });
         const { searchValue } = this.state;
-        console.log(searchValue);
-        history.push("/products?q=" + searchValue);
+        const { dispatch } = this.props;
+        if (searchValue) {
+            dispatch(productActions.search(searchValue));  
+        }      
     }
     render()
-
     {
         const { user, searchValue } = this.props;
         return (
@@ -65,13 +67,14 @@ class Header extends React.Component {
                 <nav class="navbar navbar-light bg-light fixed-top">
                     <div class="container">
                         <img src={logo} width="auto" height="60" alt=""/>
-                        <form class="form-inline">
+                        <form class="form-inline" onSubmit={this.handleSubmit}>
                             <div class="input-group">
-                                <input type="text" class="form-control" value={searchValue} onChange={this.handleChange} placeholder="Search..."/>
-                                <div class="input-group-append">
-                                    <button onClick={this.handleSubmit} class="btn btn-outline-info" type="button">Search</button>
+                                    <input type="text" class="form-control" value={searchValue} onChange={this.handleChange} placeholder="Search..." />
+
+                                    <div class="input-group-append">
+                                        <button onClick={this.handleSubmit} class="btn btn-outline-info" type="submit">Search</button>
+                                    </div>                               
                                 </div>
-                            </div>
                         </form>
                         <UserLoggedIn isLoggedIn={user} />
                         <Link to={`/checkout`}>

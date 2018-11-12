@@ -94,9 +94,11 @@ class ProductPage extends React.Component {
             // q bestaat...
             var searchValue = urlParams.get('q');
             this.props.search(searchValue);
+            history.push("/products");
         }
         else {
             this.props.getAllProducts();
+            history.push("/products");
         }
 
         // Make component accessible

@@ -33,8 +33,7 @@ function search(searchValue) {
         method: 'GET',
         headers: authHeader()
     };
-    console.log(fetch(config.apiUrl + '/product/search/' + searchValue, requestOptions).then(handleResponse, handleError));
-    return fetch(config.apiUrl + '/product/search/' + searchValue, requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/product/customSearch/' + searchValue, requestOptions).then(handleResponse, handleError);
 }
 
 function getWithSpecifications(id) {

@@ -19,8 +19,13 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet("{value}")]
-        public IActionResult Search(string value)
+        public IActionResult CustomSearch(string value)
         {
+            if (value == null)
+            {
+                value = string.Empty;
+            }
+
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             List<Product> products = daoManager.ProductDao.SearchProduct(value);
             return Ok(products);
