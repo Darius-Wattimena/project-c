@@ -1,6 +1,10 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
+using System.Collections.Generic;
+using System.Security.Claims;
 
 namespace ProjectC.Controllers
 {
@@ -8,6 +12,17 @@ namespace ProjectC.Controllers
     [ApiController]
     public class ShoppingBasketController : DaoController<ShoppingBasketDao, ShoppingBasket>
     {
+        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        public IActionResult Test()
+        {
+            ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
+
+            int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+            string role = identity.FindFirst(ClaimTypes.Role).Value;
+
+            return Ok(role);
+        }
+
         [HttpGet]
         public override IActionResult Get()
         {

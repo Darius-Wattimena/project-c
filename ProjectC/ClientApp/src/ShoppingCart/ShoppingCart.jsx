@@ -12,9 +12,7 @@ class ShoppingCart extends React.Component {
     constructor(props) {
         super(props);
 
-        // TEST
-
-        // TODO: Should we store the shopping cart in local storage?
+        // TODO: For later, should we store the shopping cart in local storage?
         localStorage.setItem('shoppingCart', JSON.stringify({
             items: [
             ]
@@ -23,12 +21,12 @@ class ShoppingCart extends React.Component {
     }
 
     handleOrder(shoppingCartItems) {
-        console.log(shoppingCartItems);
         this.props.createOrder(shoppingCartItems);
         console.log("OK");
     }
 
     handleRemove(product) {
+        // Remove a product from the cart
         this.props.removeProduct(product);
         // re-render
         this.forceUpdate();
@@ -36,12 +34,14 @@ class ShoppingCart extends React.Component {
 
     // Adding quantity
     handleAdd(product) {
+        // Add a product to the cart (+1)
         this.props.addProduct(product);
         // re-render
         this.forceUpdate();
     }
 
     handleSubtract(product) {
+        // -1
         this.props.subtractProduct(product);
         // re-render
         this.forceUpdate();
@@ -55,6 +55,7 @@ class ShoppingCart extends React.Component {
         //if (localStorage.getItem('shoppingCart') != null) {
         //    products = JSON.parse(localStorage.getItem('shoppingCart'));
         //}
+        // TODO: Maybe we should make the state persistent?
 
         return (
             <div>
@@ -120,10 +121,10 @@ const mapDispatchToProps = (dispatch) => {
         // this.props.removeProduct
         removeProduct: product => dispatch(shoppingCartActions.removeProduct(product)),
 
-        //this.props.subtractProduct
+        // this.props.subtractProduct
         subtractProduct: product => dispatch(shoppingCartActions.subtractProduct(product)),
 
-        // props.createOrder
+        // this.props.createOrder
         createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems))
     }
 };

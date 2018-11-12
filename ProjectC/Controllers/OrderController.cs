@@ -1,16 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
-using ProjectC.Helper;
-using ProjectC.Model;
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
 using ProjectC.Database.Daos;
-using ProjectC.Database.Entities;
 
 namespace ProjectC.Controllers
 {
@@ -60,32 +54,32 @@ namespace ProjectC.Controllers
 
         public override IActionResult Create(OrderProducts input)
         {
-            throw new NotImplementedException();
+            return NotFound();
         }
 
         public override IActionResult Delete(int id)
         {
-            throw new NotImplementedException();
+            return NotFound();
         }
 
         public override IActionResult Get()
         {
-            throw new NotImplementedException();
+            return NotFound();
         }
 
         public override IActionResult Get(int id)
         {
-            throw new NotImplementedException();
+            return NotFound();
         }
 
         public override IActionResult Search(string field, string input)
         {
-            throw new NotImplementedException();
+            return NotFound();
         }
 
         public override IActionResult Update(int id, OrderProducts input)
         {
-            throw new NotImplementedException();
+            return NotFound();
         }
     }
 }

@@ -17,7 +17,7 @@ function create(shoppingCartItems) {
             );
     };
 
-    function request() { return { type: orderConstants.CREATE_ORDER } }
+    function request() { return { type: orderConstants.CREATE_ORDER_REQUEST } }
     function success(response) { return { type: orderConstants.CREATE_ORDER_SUCCESS, response } }
     function failure(error) { return { type: orderConstants.CREATE_ORDER_FAILURE, error } }
 }
