@@ -1,7 +1,8 @@
 ﻿import { authHeader, config } from '../_helpers';
 
 export const orderService = {
-    create
+    create,
+    getAll
 };
 
 // Create a new order to be added to the database
@@ -16,6 +17,14 @@ function create(shoppingCartItems) {
     };
 
     return fetch(config.apiUrl + '/order/create', requestOptions).then(handleResponse, handleError);
+}
+
+function getAll() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(config.apiUrl + '/order/get', requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {

@@ -7,6 +7,11 @@ namespace ProjectC.Database.Entities
     [Entity]
     public class Order : IEntity
     {
+        public Order()
+        {
+
+        }
+
         [Field("OrderId", Primary = true)]
         public int Id;
 

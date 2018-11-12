@@ -6,6 +6,10 @@ namespace ProjectC.Database.Entities
     [Entity]
     public class OrderProducts : IEntity
     {
+        public OrderProducts()
+        {
+
+        }
         public OrderProducts(ShoppingBasketItem shoppingBasketItem)
         {
             this.Amount = shoppingBasketItem.Amount;

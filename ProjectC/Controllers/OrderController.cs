@@ -16,7 +16,7 @@ namespace ProjectC.Controllers
 {
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class OrderController : DaoController<OrderProductsDao, OrderProducts>
+    public class OrderController : DaoController<OrderDao, Order>
     {
 
         // POST: api/Order/Create
@@ -29,7 +29,7 @@ namespace ProjectC.Controllers
             Order newOrder = new Order
             {
                 OrderDate = DateTime.Now,
-                
+
                 TotalPrice = 0.0,
                 OrderState = 0,
                 // TODO: Get user ID through authentication
@@ -46,7 +46,7 @@ namespace ProjectC.Controllers
             Order createdOrder = daoManager?.OrderDao.Save(newOrder);
 
             // Save each product associated with the order
-            foreach(ShoppingBasketItem item in shoppingBasketItems)
+            foreach (ShoppingBasketItem item in shoppingBasketItems)
             {
                 OrderProducts op = new OrderProducts(item)
                 {
@@ -58,7 +58,7 @@ namespace ProjectC.Controllers
             return Ok($"Succesfully created a new order for {shoppingBasketItems.Count} products.");
         }
 
-        public override IActionResult Create(OrderProducts input)
+        public override IActionResult Create(Order input)
         {
             throw new NotImplementedException();
         }
@@ -68,11 +68,14 @@ namespace ProjectC.Controllers
             throw new NotImplementedException();
         }
 
+        [HttpGet]
         public override IActionResult Get()
+
         {
-            throw new NotImplementedException();
+            return InnerGet();
         }
 
+        [HttpGet("{id}")]
         public override IActionResult Get(int id)
         {
             throw new NotImplementedException();
@@ -83,7 +86,7 @@ namespace ProjectC.Controllers
             throw new NotImplementedException();
         }
 
-        public override IActionResult Update(int id, OrderProducts input)
+        public override IActionResult Update(int id, Order input)
         {
             throw new NotImplementedException();
         }
