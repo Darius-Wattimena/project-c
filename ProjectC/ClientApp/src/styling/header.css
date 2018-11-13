@@ -5,12 +5,6 @@ nav.fixed-top {
     border-bottom: 1px solid #223843
 }
 
-nav {
-    position: fixed !important;
-    z-index: 1;
-    width: 100%;
-}
-
 input{
     width: 70% !important;
 }
