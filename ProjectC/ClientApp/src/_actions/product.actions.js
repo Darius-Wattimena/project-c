@@ -42,11 +42,11 @@ function getById(id) {
     function success(product) { return { type: productConstants.GET_SUCCESS, product } }
     function failure(error) { return { type: productConstants.GET_FAILURE, error } }
 }
-function add(product) {
+function add(product, specifications) {
     return dispatch => {
-        dispatch(request(product));
+        dispatch(request(product, specifications));
 
-        productService.add(product)
+        productService.add(product, specifications)
             .then(
                 () => {
                     dispatch(success());
@@ -60,8 +60,8 @@ function add(product) {
             );
     };
 
-    function request(product) { return { type: productConstants.ADD_REQUEST, product } }
-    function success(product) { return { type: productConstants.ADD_SUCCESS, product } }
+    function request(product, specifications) { return { type: productConstants.ADD_REQUEST, product, specifications } }
+    function success(product, specifications) { return { type: productConstants.ADD_SUCCESS, product, specifications } }
     function failure(error) { return { type: productConstants.ADD_FAILURE, error } }
 }
 

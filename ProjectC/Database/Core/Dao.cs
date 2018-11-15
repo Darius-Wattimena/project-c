@@ -169,7 +169,7 @@ namespace ProjectC.Database.Core
             return Insert(entity);
         }
 
-        public List<T> Save(List<T> entities)
+        public List<T> Save(IEnumerable<T> entities)
         {
             var resultEntities = new List<T>();
             foreach (var entity in entities)
@@ -199,6 +199,14 @@ namespace ProjectC.Database.Core
             var sqlBuilder = new SqlBuilder<T>(TableConfig, entity);
             var query = sqlBuilder.Build(QueryType.Delete);
             ExecuteNoResult(query);
+        }
+
+        public void Delete(IEnumerable<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                Delete(entity);
+            }
         }
 
         private T Insert(T entity)
