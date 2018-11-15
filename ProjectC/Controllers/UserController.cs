@@ -26,12 +26,18 @@ namespace ProjectC.Controllers
             _appSettings = appSettings.Value;
         }
 
+        /// <summary>
+        /// Get all users
+        /// </summary>
         [HttpGet]
         public override IActionResult Get()
         {
             return InnerGet();
         }
 
+        /// <summary>
+        /// Get single user
+        /// </summary>
         [HttpGet("{id}")]
         public override IActionResult Get(int id)
         {

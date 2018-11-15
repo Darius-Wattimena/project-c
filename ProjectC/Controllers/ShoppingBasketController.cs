@@ -12,7 +12,7 @@ namespace ProjectC.Controllers
     [ApiController]
     public class ShoppingBasketController : DaoController<ShoppingBasketDao, ShoppingBasket>
     {
-        [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme, Roles = "Admin")]
+        [Authorize(Roles = "Admin")]
         public IActionResult Test()
         {
             ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
