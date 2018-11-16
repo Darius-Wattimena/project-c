@@ -2,29 +2,30 @@
 // TODO:
 //import { shoppingCartService } from '../_services';
 import { alertActions } from './';
-import { shoppingCart } from '../_reducers/shoppingCart.reducer';
 
 export const shoppingCartActions = {
     addProduct,
     removeProduct,
     subtractProduct,
-    removeAll
+    clear
 };
 
 function addProduct(product) {
     return dispatch => {
         dispatch(add(product));
+        dispatch(alertActions.success('Added product to basket.'));
     };
 
-    function add(product) { return { type: shoppingCartConstants.ADD_PRODUCT, product } }
+    function add(product) { return { type: shoppingCartConstants.ADD_REQUEST, product } }
 };
 
 function removeProduct(product) {
     return dispatch => {
         dispatch(remove(product));
+        dispatch(alertActions.error('Removed product from basket.'));
     }
 
-    function remove(product) { return { type: shoppingCartConstants.REMOVE_PRODUCT, product } }
+    function remove(product) { return { type: shoppingCartConstants.REMOVE_REQUEST, product } }
 }
 
 function subtractProduct(product) {
@@ -32,15 +33,15 @@ function subtractProduct(product) {
         dispatch(subtract(product));
     }
 
-    function subtract(product) { return { type: shoppingCartConstants.SUBTRACT_PRODUCT, product } }
+    function subtract(product) { return { type: shoppingCartConstants.SUBTRACT_REQUEST, product } }
 }
 
-function removeAll() {
+function clear() {
     return dispatch => {
-        dispatch(removeAll());
+        dispatch(clear());
     }
 
-    function removeAll() {
-        return { type: shoppingCartConstants.REMOVE_ALL }
+    function clear() {
+        return { type: shoppingCartConstants.CLEAR_REQUEST }
     };
 }
