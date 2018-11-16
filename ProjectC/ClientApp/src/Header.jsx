@@ -2,7 +2,7 @@
 import { Link } from 'react-router-dom';
 import './styling/header.css';
 import { connect } from 'react-redux';
-import { userActions } from './_actions';
+import { userActions, productActions } from './_actions';
 
 import logo from './styling/cmobile.jpg';
 
@@ -41,8 +41,32 @@ class Header extends React.Component {
     constructor(props) {
         super(props);
 
+        this.state = {
+            searchValue: ""
+        }
+
         // Make component accessible
         window.component = this;
+
+        this.handleChange = this.handleChange.bind(this);
+        this.handleSubmit = this.handleSubmit.bind(this);
+    }
+
+    handleChange(event) {
+        this.setState({
+            searchValue: event.target.value
+        });
+    }
+
+
+    handleSubmit(event) {
+        event.preventDefault();
+        this.setState({ submitted: true });
+        const { searchValue } = this.state;
+        const { dispatch } = this.props;
+        if (searchValue) {
+            dispatch(productActions.search(searchValue));
+        }
     }
 
     logout() {
@@ -50,17 +74,17 @@ class Header extends React.Component {
     }
 
     render() {
-        const { user } = this.props;
+        const { user, searchValue } = this.props;
         return (
             <div>
                 <nav class="navbar navbar-light bg-light fixed-top">
                     <div class="container">
                         <img src={logo} width="auto" height="60" alt=""/>
-                        <form class="form-inline">
+                        <form class="form-inline" onSubmit={this.handleSubmit}>
                             <div class="input-group">
-                                <input type="text" class="form-control" placeholder="Search..."/>
+                                <input type="text" class="form-control" value={searchValue} onChange={this.handleChange} placeholder="Search..."/>
                                 <div class="input-group-append">
-                                    <button class="btn btn-outline-info" type="button">Search</button>
+                                    <button onClick={this.handleSubmit} class="btn btn-outline-info" type="button">Search</button>
                                 </div>
                             </div>
                         </form>

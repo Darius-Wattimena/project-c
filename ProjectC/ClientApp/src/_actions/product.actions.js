@@ -49,7 +49,10 @@ function search(searchValue) {
         dispatch(request(searchValue));
         productService.search(searchValue)
             .then(
-                products => dispatch(succes(products)),
+                products => {
+                    history.push('/products/nr');
+                    dispatch(succes(products));
+                },
                 error => dispatch(failure(error))
             );
     };
