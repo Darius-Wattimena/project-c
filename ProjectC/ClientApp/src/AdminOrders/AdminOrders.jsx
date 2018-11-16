@@ -1,5 +1,6 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import { orderActions } from '../_actions';
 
 class AdminOrders extends React.Component {
@@ -13,10 +14,24 @@ class AdminOrders extends React.Component {
     render() {
         const { order } = this.props;
         return (
-            <div class="panel col-md-8">
-                {order.items && order.items.map((order, index) => 
-                    <p>{order.id}</p>
-                )}
+            <div class="panel col-md-8"> 
+                    <table class="table">
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Price</th>
+                            <th scope="col">UserId</th>
+                        </tr>
+                    {order.items && order.items.map((order, index) =>
+                        <tr>
+                            <td scope="row"><Link to={`/adminpanel/order/${order.id}`}>{order.id}</Link></td>
+                            <td><Link to={`/adminpanel/order/${order.id}`}>{order.orderDate}</Link></td>
+                            <td><Link to={`/adminpanel/order/${order.id}`}>{order.totalPrice}</Link></td>
+                            <td><Link to={`/adminpanel/order/${order.id}`}>{order.userId}</Link></td>
+                        </tr>
+                        )}
+           
+                    </table>
             </div>
         );
     }

@@ -28,6 +28,7 @@ import { EditUserPage } from '../EditUserPage';
 import { ProductPage } from '../ProductPage';
 
 import { ShoppingCart } from '../ShoppingCart/ShoppingCart';
+import { AdminOrder } from '../AdminOrders/AdminOrder/AdminOrder';
 
 
 class App extends Component {
@@ -57,6 +58,7 @@ class App extends Component {
                         <Route path="/adminpanel/addspecifications/:id" component={AddSpecifications} />
                         <Route path="/adminpanel/users" component={AdminUsers} />
                         <Route path="/adminpanel/orders" component={AdminOrders} />
+                        <Route path="/adminpanel/order/:orderid" component={AdminOrder} />
                         <Route path="/adminpanel/sales" component={AdminSales} />
                         <Route path="/adminpanel/coupons" component={AdminCoupons} />
                         <Route path="/adminpanel/reviews" component={AdminReviews} />

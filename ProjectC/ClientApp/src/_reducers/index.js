@@ -7,6 +7,7 @@ import { products, product } from './product.reducer';
 import { alert } from './alert.reducer';
 import { shoppingCart } from './shoppingCart.reducer'
 import { order } from './order.reducer'
+import { orderProducts } from './orderProducts.reducer'
 
 const rootReducer = combineReducers({
     registration,
@@ -17,7 +18,8 @@ const rootReducer = combineReducers({
     product,
     alert,
     shoppingCart,
-    order
+    order,
+    orderProducts
 });
 
 export default rootReducer;
