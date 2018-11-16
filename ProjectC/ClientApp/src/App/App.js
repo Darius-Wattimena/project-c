@@ -25,6 +25,7 @@ import { AddProduct } from '../AdminProducts/AddProduct';
 import { EditUserPage } from '../EditUserPage';
 
 import { ProductPage } from '../ProductPage';
+import { WishlistPage } from '../WishlistPage';
 
 import { ShoppingCart } from '../ShoppingCart/ShoppingCart';
 import { AdminOrder } from '../AdminOrders/AdminOrder/AdminOrder';
@@ -75,6 +76,7 @@ class App extends Component {
                             <Route path="/checkout" component={ShoppingCart} />
                             <Route path="/login" component={LoginPage} />
                             <Route path="/order" component={OrderPage}/>
+                                        <Route path="/wishlist" component={WishlistPage}/>
                         </div>
                     </div>
                 </Router>

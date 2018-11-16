@@ -1,0 +1,65 @@
+﻿.products-container {
+    margin-top: 35px;
+}
+
+.wishlist-item {
+    float: left;
+    width: 70em;
+    height: 16em;
+    padding: 25px;
+    margin-top: 5px;
+    margin-left: 0px;
+    background-color: white;
+    border: 0.5px gray solid;
+}
+
+.wishlist-image img {
+    height: 80%;
+    width: auto;
+    margin: auto;
+    margin-top: 10%;
+    position: static;
+    display: block;
+}
+
+    .wishlist-item h3 {
+        
+
+    }
+
+    .wishlist-item h4 {
+        
+        width: 100%;
+    }
+
+    .wishlist-item button {
+        width: 8em;
+        float: right;
+        
+    }
+
+.wishlist-product {
+    float: left;
+}
+
+.cartbutton {
+    background-color: #223843;
+    color: white;
+}
+
+.wishlistbutton-group {
+    float:right;
+}
+
+h3 {
+margin-top: 15px;
+}
+
+.wishlist-image {
+    border: 0.5px gray solid;
+    height: 13em;
+    width: 16em;
+
+    
+}
+

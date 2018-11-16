@@ -92,6 +92,11 @@ class Header extends React.Component {
                         <Link to={`/checkout`} class="btn btn-info">
                             Shopping Cart <i class="fas fa-shopping-cart"></i>
                         </Link>
+                        <Link to={`/wishlist`}>
+                            <span>
+                                <i class="fas fa-heart" style={{color: 'red'}}></i>
+                            </span>
+                        </Link>
                     </div>
                 </nav>
                 <nav class="navbar">
