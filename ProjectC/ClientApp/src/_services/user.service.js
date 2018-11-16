@@ -6,6 +6,7 @@ export const userService = {
     getById,
     update,
     login,
+    logout,
     delete: _delete
 };
 
@@ -54,6 +55,10 @@ function login(user) {
 
             return user;
         });
+}
+
+function logout() {
+    localStorage.removeItem('user');
 }
 
 function update(user) {

@@ -50,7 +50,7 @@ namespace ProjectC.Controllers
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] ShoppingBasket input)
         {
-            return InnerSave(input);
+            return InnerSave(input, id);
         }
 
         [HttpDelete("{id}")]

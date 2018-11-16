@@ -25,6 +25,7 @@ import { AddProduct } from '../AdminProducts/AddProduct';
 import { EditUserPage } from '../EditUserPage';
 
 import { ProductPage } from '../ProductPage';
+import { WishlistPage } from '../WishlistPage';
 
 import { ShoppingCart } from '../ShoppingCart/ShoppingCart';
 import { AdminOrder } from '../AdminOrders/AdminOrder/AdminOrder';
@@ -68,12 +69,14 @@ class App extends Component {
                             <PrivateRoute exact path="/" component={HomePage} />
                             <Route path="/home" component={HomePage} />
                             <Route path="/register" component={RegisterPage} />
-                            <Route path="/products" component={ProductPage} />
+                            <Route exact path="/products" component={ProductPage} />
+                            <Route path="/products/:nr" component={ProductPage} />
                             <Route path="/product/:id" component={SingleProductPage} />
                             <Route path="/user/edit/:id" component={EditUserPage} />
                             <Route path="/checkout" component={ShoppingCart} />
                             <Route path="/login" component={LoginPage} />
                             <Route path="/order" component={OrderPage}/>
+                                        <Route path="/wishlist" component={WishlistPage}/>
                         </div>
                     </div>
                 </Router>

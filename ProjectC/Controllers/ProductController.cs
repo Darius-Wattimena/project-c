@@ -20,8 +20,13 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet("{value}")]
-        public IActionResult Search(string value)
+        public IActionResult CustomSearch(string value)
         {
+            if (value == null)
+            {
+                value = string.Empty;
+            }
+
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             List<Product> products = daoManager.ProductDao.SearchProduct(value);
             return Ok(products);
@@ -81,7 +86,7 @@ namespace ProjectC.Controllers
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] Product input)
         {
-            return InnerSave(input);
+            return InnerSave(input, id);
         }
 
         [HttpDelete("{id}")]

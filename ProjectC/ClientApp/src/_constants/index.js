@@ -5,3 +5,4 @@ export * from './shoppingCart.constants';
 export * from './specification.constants';
 export * from './order.constants';
 export * from './orderProducts.constants';
+export * from './wishlist.constants';

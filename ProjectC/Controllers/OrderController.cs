@@ -30,22 +30,18 @@ namespace ProjectC.Controllers
                 return BadRequest("No items to order");
             }
 
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-
             // Obtain user id
-            ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
-            int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+            if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
+            
+            var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
 
             // Create a new order
-            Order newOrder = new Order
+            var newOrder = new Order
             {
                 OrderDate = DateTime.Now,
 
                 TotalPrice = shoppingBasketItems.Sum(
-                    item => {
-                        // Total price is the sum of the price of the product multiplied by the amount for each given item
-                        return daoManager.ProductDao.Find(item.ProductId).Price * item.Amount;
-                    }),
+                    item => GetDaoManager().ProductDao.Find(item.ProductId).Price * item.Amount),
 
                 OrderState = 0,
                 UserId = userId,
@@ -54,23 +50,16 @@ namespace ProjectC.Controllers
                 CouponCodeId = null
             };
 
-            // Create the order and retrieve it
-            shoppingBasketItems.ForEach(item =>
-            {
-                // Total price is the price multiplied by the amount for each ordered product
-                newOrder.TotalPrice += daoManager.ProductDao.Find(item.ProductId).Price * item.Amount;
-            });
-
-            Order createdOrder = daoManager?.OrderDao.Save(newOrder);
+            var createdOrder = GetDaoManager().OrderDao.Save(newOrder);
 
             // Add each product that is associated with the order
             shoppingBasketItems.ForEach(item =>
             {
-                OrderProducts op = new OrderProducts(item)
+                var op = new OrderProducts(item)
                 {
                     OrderId = createdOrder.Id
                 };
-                daoManager?.OrderProductsDao.Save(op);
+                GetDaoManager().OrderProductsDao.Save(op);
             });
 
             return Ok($"Succesfully created a new order for {shoppingBasketItems.Count} products.");
@@ -78,12 +67,12 @@ namespace ProjectC.Controllers
 
         public override IActionResult Create(Order input)
         {
-            return NotFound();
+            return InnerSave(input);
         }
 
         public override IActionResult Delete(int id)
         {
-            return NotFound();
+            return InnerDelete(id);
         }
 
         [HttpGet]
@@ -96,17 +85,17 @@ namespace ProjectC.Controllers
         [HttpGet("{id}")]
         public override IActionResult Get(int id)
         {
-            return NotFound();
+            return InnerGet(id);
         }
 
         public override IActionResult Search(string field, string input)
         {
-            return NotFound();
+            return InnerSearch(field, input);
         }
 
         public override IActionResult Update(int id, Order input)
         {
-            return NotFound();
+            return InnerSave(input, id);
         }
     }
 }
