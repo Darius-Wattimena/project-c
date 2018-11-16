@@ -2,19 +2,19 @@
 import { Link } from 'react-router-dom';
 import './styling/header.css';
 import { connect } from 'react-redux';
+import { userActions } from './_actions';
 
 import logo from './styling/cmobile.jpg';
 
 function UserLoggedIn(props) {
     const isLoggedIn = props.user;
     if (isLoggedIn) {
-        return <UserGreeting user={props.user} />;
-        return <UserGreeting />;
+        return <UserButtons />;
     }
-    return <Buttons />;
+    return <StartButtons />;
 }
 
-function Buttons(props) {
+function StartButtons(props) {
     return (
         <div class="btn-group">
             <a href="/login" class="btn btn-info">Login</a>
@@ -23,20 +23,32 @@ function Buttons(props) {
     );
 }
 
-function UserGreeting(props) {
+function UserButtons(props) {
     return (
         <div>
             <div class="btn-group" role="group" aria-label="Basic example">
                 <Link to={`home`} class="btn btn-info">
                     User <i class="fas fa-user"></i>
                 </Link>
-                <button type="button" class="btn btn-danger">Logout <i class="fas fa-sign-out-alt"></i></button>
+                <button type="button" class="btn btn-danger" onClick={window.component.logout.bind(window.component)}> Logout <i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
     );
 }
 
 class Header extends React.Component {
+    
+    constructor(props) {
+        super(props);
+
+        // Make component accessible
+        window.component = this;
+    }
+
+    logout() {
+        this.props.dispatch(userActions.logout());
+    }
+
     render() {
         const { user } = this.props;
         return (
@@ -52,7 +64,7 @@ class Header extends React.Component {
                                 </div>
                             </div>
                         </form>
-                        <UserLoggedIn isLoggedIn={user} />
+                        <UserLoggedIn user={user} />
                         <Link to={`/checkout`} class="btn btn-info">
                             Shopping Cart <i class="fas fa-shopping-cart"></i>
                         </Link>
@@ -69,10 +81,7 @@ class Header extends React.Component {
                                 <Link to={`/home`} class="nav-link">Home</Link>
                             </li>
                             <li class="nav-item active">
-                                <Link to={`/products`} class="nav-link">Phones</Link>
-                            </li>
-                            <li class="nav-item active">
-                                <Link to={`/products`} class="nav-link">Accessories</Link>
+                                <Link to={`/products`} class="nav-link">Products</Link>
                             </li>
                         </ul>
                     </div>
