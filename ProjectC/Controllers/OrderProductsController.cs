@@ -20,6 +20,12 @@ namespace ProjectC.Controllers
             return InnerGet(id);
         }
 
+        [HttpGet("{orderid}")]
+        public IActionResult GetByOrderId(string orderid)
+        {
+            return InnerSearch("OrderId", orderid);
+        }
+
         [HttpGet]
         public override IActionResult Search(string f, string i)
         {

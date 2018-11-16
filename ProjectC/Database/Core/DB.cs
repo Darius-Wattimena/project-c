@@ -1,12 +1,12 @@
-﻿using System.Data;
+﻿using System.Collections.Generic;
 using MySql.Data.MySqlClient;
+using ProjectC.Database.Core.Interfaces;
 
 namespace ProjectC.Database.Core
 {
     public class DB
     {
         private static DB _instance;
-        private readonly MySqlConnection _connection;
         private readonly DatabaseContext _context;
 
         public static DB Get(DatabaseContext context)
@@ -16,49 +16,64 @@ namespace ProjectC.Database.Core
 
         private DB(DatabaseContext context)
         {
-            _connection = new MySqlConnection(context.ConnectionString);
             _context = context;
         }
 
-        public void OpenConnection()
+        public List<T> ExecuteQuery<T, TU>(TU dao, string query) 
+            where T : IEntity
+            where TU : Dao<T>
         {
-            if (_connection.State == ConnectionState.Closed)
+            using (var connection = new MySqlConnection(_context.ConnectionString))
             {
-                _connection.Open();
+                connection.Open();
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var values = dao.ProcessDataReader(reader);
+                        connection.Close();
+                        return values;
+                    }
+                }
             }
         }
 
-        public void CloseConnection()
+        public int ExecuteCountQuery<T, TU>(TU dao, string query)
+            where T : IEntity
+            where TU : Dao<T>
         {
-            if (_connection.State == ConnectionState.Open)
+            using (var connection = new MySqlConnection(_context.ConnectionString))
             {
-                _connection.Close();
+                connection.Open();
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var result = 0;
+                        while (reader.Read())
+                        {
+                            result = reader.GetInt32(0);
+                        }
+                        connection.Close();
+                        return result;
+                    }
+                }
             }
         }
 
-        public bool TestConnection()
+        public void ExecuteNoResultQuery<T, TU>(TU dao, string query)
+            where T : IEntity
+            where TU : Dao<T>
         {
-            MySqlConnection testConnection = null;
-            try
+            using (var connection = new MySqlConnection(_context.ConnectionString))
             {
-                testConnection = new MySqlConnection(_context.ConnectionString);
-                testConnection.Open();
-                testConnection.Close();
-                return true;
+                connection.Open();
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    command.ExecuteNonQuery();
+                    connection.Close();
+                }
             }
-            catch (MySqlException)
-            {
-                return false;
-            }
-            finally
-            {
-                testConnection?.Close();
-            }
-        }
-
-        public MySqlConnection GetConnection()
-        {
-            return _connection;
         }
     }
 }

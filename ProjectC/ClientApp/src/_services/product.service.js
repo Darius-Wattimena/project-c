@@ -46,14 +46,18 @@ function getAllWithSpecifications() {
 }
 
 // Add a product to the database
-function add(product) {
+function add(product, specifications) {
+    var body = {}
+    body.product = product;
+    body.specifications = specifications
+
     const requestOptions = {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(product)
+        body: JSON.stringify(body)
     };
 
-    return fetch(config.apiUrl + '/product/create', requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/product/createWithSpecifications', requestOptions).then(handleResponse, handleError);
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

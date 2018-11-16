@@ -9,7 +9,7 @@ namespace ProjectC.Database.Core
 {
     public abstract class Dao<T> where T : IEntity
     {
-        private const string LOGGING_SQL_PREFIX = "SQL Executing | ";
+        private const string LoggingSqlPrefix = "SQL Executing | ";
 
         protected readonly DB Database;
         protected readonly Type EntityType;
@@ -51,44 +51,23 @@ namespace ProjectC.Database.Core
 
         protected List<T> Execute(string sql)
         {
-            Console.WriteLine(LOGGING_SQL_PREFIX + sql);
-            using (var query = DatabaseUtil.CreateQuery(sql, Database))
-            {
-                Database.OpenConnection();
-                using (var reader = query.ExecuteReader())
-                {
-                    var values = ProcessDataReader(reader);
-                    Database.CloseConnection();
-                    return values;
-                }
-            }
+            Console.WriteLine(LoggingSqlPrefix + sql);
+            return Database.ExecuteQuery<T, Dao<T>>(this, sql);
         }
 
         protected int ExecuteCount(string sql)
         {
-            Console.WriteLine(LOGGING_SQL_PREFIX + sql);
-            var query = DatabaseUtil.CreateQuery(sql, Database);
-            Database.OpenConnection();
-            var reader = query.ExecuteReader();
-            var result = 0;
-            while (reader.Read())
-            {
-                result = reader.GetInt32(0);
-            }
-            Database.CloseConnection();
-            return result;
+            Console.WriteLine(LoggingSqlPrefix + sql);
+            return Database.ExecuteCountQuery<T, Dao<T>>(this, sql);
         }
 
         protected void ExecuteNoResult(string sql)
         {
-            Console.WriteLine(LOGGING_SQL_PREFIX + sql);
-            var query = DatabaseUtil.CreateQuery(sql, Database);
-            Database.OpenConnection();
-            query.ExecuteNonQuery();
-            Database.CloseConnection();
+            Console.WriteLine(LoggingSqlPrefix + sql);
+            Database.ExecuteNoResultQuery<T, Dao<T>>(this, sql);
         }
 
-        private List<T> ProcessDataReader(IDataReader dataReader)
+        public List<T> ProcessDataReader(IDataReader dataReader)
         {
             var results = new List<T>();
 
@@ -190,7 +169,7 @@ namespace ProjectC.Database.Core
             return Insert(entity);
         }
 
-        public List<T> Save(List<T> entities)
+        public List<T> Save(IEnumerable<T> entities)
         {
             var resultEntities = new List<T>();
             foreach (var entity in entities)
@@ -220,6 +199,14 @@ namespace ProjectC.Database.Core
             var sqlBuilder = new SqlBuilder<T>(TableConfig, entity);
             var query = sqlBuilder.Build(QueryType.Delete);
             ExecuteNoResult(query);
+        }
+
+        public void Delete(IEnumerable<T> entities)
+        {
+            foreach (var entity in entities)
+            {
+                Delete(entity);
+            }
         }
 
         private T Insert(T entity)

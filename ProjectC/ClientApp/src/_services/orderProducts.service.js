@@ -1,28 +1,24 @@
 ﻿import { authHeader, config } from '../_helpers';
 
-export const orderService = {
-    create,
-    getAll
+export const orderProductsService = {
+    getAll,
+    getById
 };
-
-// Create a new order to be added to the database
-// Requires a collection of shopping cart items
-function create(shoppingCartItems) {
-    const requestOptions = {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', ...authHeader() },
-        body: JSON.stringify(shoppingCartItems)
-    };
-
-    return fetch(config.apiUrl + '/order/create', requestOptions).then(handleResponse, handleError);
-}
 
 function getAll() {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
-    return fetch(config.apiUrl + '/order/get', requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/orderProducts/get', requestOptions).then(handleResponse, handleError);
+}
+
+function getById(id) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(config.apiUrl + '/orderProducts/GetByOrderId/' + id, requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {
@@ -30,8 +26,8 @@ function handleResponse(response) {
         if (response.ok) {
             // return json if it was returned in the response
             var contentType = response.headers.get("content-type");
-            if (contentType) {
-                response.text().then(text => resolve(text));
+            if (contentType && contentType.includes("application/json")) {
+                response.json().then(json => resolve(json));
             } else {
                 resolve();
             }

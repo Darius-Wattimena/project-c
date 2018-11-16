@@ -1,10 +1,22 @@
 ﻿import { orderConstants } from '../_constants';
 
-export function order(state = {}, action) {
+const initialState = {
+    items: []
+};
+
+export function order(state = initialState, action) {
     switch (action.type) {
-        case orderConstants.CREATE_ORDER_REQUEST:
+        case orderConstants.GETALL_REQUEST:
             return {
                 loading: true
+            };
+        case orderConstants.GETALL_SUCCESS:
+            return {
+                items: action.order
+            };
+        case orderConstants.GETALL_FAILURE:
+            return {
+                error: action.error
             };
         case orderConstants.CREATE_ORDER_SUCCESS:
             return {
@@ -14,7 +26,8 @@ export function order(state = {}, action) {
             return {
                 error: action.error
             };
+
         default:
-            return state;
+            return state
     }
 }

@@ -14,7 +14,7 @@ namespace ProjectC.Controllers
     [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]/[action]")]
     [ApiController]
-    public class OrderController : DaoController<OrderProductsDao, OrderProducts>
+    public class OrderController : DaoController<OrderDao, Order>
     {
 
         // POST: api/Order/Create
@@ -55,6 +55,12 @@ namespace ProjectC.Controllers
             };
 
             // Create the order and retrieve it
+            shoppingBasketItems.ForEach(item =>
+            {
+                // Total price is the price multiplied by the amount for each ordered product
+                newOrder.TotalPrice += daoManager.ProductDao.Find(item.ProductId).Price * item.Amount;
+            });
+
             Order createdOrder = daoManager?.OrderDao.Save(newOrder);
 
             // Add each product that is associated with the order
@@ -70,7 +76,7 @@ namespace ProjectC.Controllers
             return Ok($"Succesfully created a new order for {shoppingBasketItems.Count} products.");
         }
 
-        public override IActionResult Create(OrderProducts input)
+        public override IActionResult Create(Order input)
         {
             return NotFound();
         }
@@ -80,11 +86,14 @@ namespace ProjectC.Controllers
             return NotFound();
         }
 
+        [HttpGet]
         public override IActionResult Get()
+
         {
-            return NotFound();
+            return InnerGet();
         }
 
+        [HttpGet("{id}")]
         public override IActionResult Get(int id)
         {
             return NotFound();
@@ -95,7 +104,7 @@ namespace ProjectC.Controllers
             return NotFound();
         }
 
-        public override IActionResult Update(int id, OrderProducts input)
+        public override IActionResult Update(int id, Order input)
         {
             return NotFound();
         }

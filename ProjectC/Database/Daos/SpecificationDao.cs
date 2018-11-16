@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
-using ProjectC.Helper;
 
 namespace ProjectC.Database.Daos
 {
