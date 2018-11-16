@@ -87,7 +87,19 @@ class ProductPage extends React.Component {
     }
 
     componentDidMount() {
-        this.props.getAllProducts();
+        var urlParams = new URLSearchParams(window.location.search);
+        urlParams.has('q');
+        console.log(urlParams.has('q'))
+        if (urlParams.has('q')) {
+            // q bestaat...
+            var searchValue = urlParams.get('q');
+            this.props.search(searchValue);
+            history.push("/products");
+        }
+        else {
+            this.props.getAllProducts();
+            history.push("/products");
+        }
 
         // Make component accessible
         window.component = this;
@@ -95,6 +107,7 @@ class ProductPage extends React.Component {
 
     render() {
         const { products } = this.props;
+        console.log(this.props);
         return (
             <div>
             <nav class="path-nav" aria-label="breadcrumb">
@@ -136,6 +149,7 @@ function mapStateToProps(state) {
 // Map actions to props
 const mapDispatchToProps = (dispatch) => {
     return {
+        search: searchValue => dispatch(productActions.search(searchValue)),
         // accessible via this.props.getAllProducts
         getAllProducts: () => dispatch(productActions.getAll()),
 
