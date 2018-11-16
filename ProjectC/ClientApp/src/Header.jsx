@@ -84,6 +84,11 @@ class Header extends React.Component {
                                 />
                             </span>
                         </Link>
+                        <Link to={`/wishlist`}>
+                            <span>
+                                <i class="fas fa-heart" style={{color: 'red'}}></i>
+                            </span>
+                        </Link>
                     </div>
                 </nav>
                 <nav class="navbar">
