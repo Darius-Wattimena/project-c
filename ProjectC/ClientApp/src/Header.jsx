@@ -6,8 +6,9 @@ import { connect } from 'react-redux';
 import logo from './styling/cmobile.jpg';
 
 function UserLoggedIn(props) {
-    const isLoggedIn = props.isLoggedIn;
+    const isLoggedIn = props.user;
     if (isLoggedIn) {
+        return <UserGreeting user={props.user} />;
         return <UserGreeting />;
     }
     return <Buttons />;

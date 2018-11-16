@@ -8,11 +8,9 @@ export const orderService = {
 // Create a new order to be added to the database
 // Requires a collection of shopping cart items
 function create(shoppingCartItems) {
-    console.log(shoppingCartItems);
-    console.log(JSON.stringify(shoppingCartItems));
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify(shoppingCartItems)
     };
 
@@ -32,8 +30,8 @@ function handleResponse(response) {
         if (response.ok) {
             // return json if it was returned in the response
             var contentType = response.headers.get("content-type");
-            if (contentType && contentType.includes("application/json")) {
-                response.json().then(json => resolve(json));
+            if (contentType) {
+                response.text().then(text => resolve(text));
             } else {
                 resolve();
             }

@@ -26,12 +26,18 @@ namespace ProjectC.Controllers
             _appSettings = appSettings.Value;
         }
 
+        /// <summary>
+        /// Get all users
+        /// </summary>
         [HttpGet]
         public override IActionResult Get()
         {
             return InnerGet();
         }
 
+        /// <summary>
+        /// Get single user
+        /// </summary>
         [HttpGet("{id}")]
         public override IActionResult Get(int id)
         {
@@ -71,25 +77,38 @@ namespace ProjectC.Controllers
             {
                 return BadRequest("Username or password is incorrect");
             }
-            
-            var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+            byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+
+            // Obtain the users' role name
+            string roleName = daoManager.RoleDao.Find(databaseUser.RoleId).Name;
+
             var tokenDescriptor = new SecurityTokenDescriptor
             {
                 Subject = new ClaimsIdentity(new[]
                 {
-                    new Claim(ClaimTypes.Name, databaseUser.Id.ToString())
+                    // Store user id as claim
+                    new Claim(ClaimTypes.Sid, databaseUser.Id.ToString()),
+                    // Store user role as claim
+                    new Claim(ClaimTypes.Role, roleName)
                 }),
                 Expires = DateTime.UtcNow.AddDays(7),
                 SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
             };
-            var token = tokenHandler.CreateToken(tokenDescriptor);
-            var tokenString = tokenHandler.WriteToken(token);
+            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+            string tokenString = tokenHandler.WriteToken(token);
 
-            // return basic user info (without password) and token to store client side
-            databaseUser.PasswordHash = null;
+            // return basic user info (without password, id, etc...) and token to store client side
+            object user = new
+            {
+                firstName = databaseUser.Firstname,
+                lastName = databaseUser.Lastname,
+                mailAddress = databaseUser.MailAddress,
+                token = tokenString
+            };
 
-            return Ok(databaseUser);
+            return Ok(user);
         }
 
         //Register a user with the given register info
@@ -133,6 +152,7 @@ namespace ProjectC.Controllers
                 databaseUser.PasswordHash = hashedPassword;
             }
             
+            // TODO: Define and add constraints for these properties
             databaseUser.Firstname = input.Firstname;
             databaseUser.Lastname = input.Lastname;
             databaseUser.MailAddress = input.MailAddress;
