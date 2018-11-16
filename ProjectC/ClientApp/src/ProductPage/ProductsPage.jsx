@@ -9,6 +9,8 @@ import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 import '../styling/ProductListingStyle.css';
 import { history } from '../_helpers';
 
+import { FilterColumn } from '../ProductPage';
+
 var vertical = false;
 
 function onClick(e) {
@@ -27,7 +29,6 @@ function Listing(props) {
 }
 
 function CartButton(props) {
-    console.log(window.component.props);
     return (
         <button class="btn cartbutton" onClick={window.component.props.addProduct.bind(this, props.product)}>
             Add to cart
@@ -68,7 +69,7 @@ function VerticalListing(props) {
                         <h4>{product.name}</h4>
                         <p>stock: {product.stock}</p>
                         <h3>{product.price},-</h3>
-                        <CartButton product={product}/>
+                        <CartButton product={product} />
                     </div>
                 </div>
             )}
@@ -98,9 +99,19 @@ function SwitchViewButton(props) {
 //base class
 class ProductPage extends React.Component {
 
+    constructor(props) {
+        super(props);
+
+        // Make component accessible
+        window.component = this;
+
+        this.state = {
+            filters: {}
+        };
+    }
+
     // Adding quantity (or new product)
     handleAdd(product) {
-        console.log("Adding product " + product.name + " to the shopping basket");
         this.props.addProduct(product);
         this.forceUpdate();
     }
@@ -109,42 +120,61 @@ class ProductPage extends React.Component {
         if (!this.props.match.params.nr) {
             this.props.getAllProducts();
         }
+    }
 
-        // Make component accessible
-        window.component = this;
+    setFilters(filters) {
+        // Set filters in state
+        this.setState({
+            filters: filters
+        });
     }
 
     render() {
         const { products } = this.props;
-        console.log(this.props);
+
         return (
             <div>
-            <nav class="path-nav" aria-label="breadcrumb">
-                <ol class="breadcrumb">
-                    <li class="breadcrumb-item"><Link to="/home">Home</Link></li>
-                    <li class="breadcrumb-item active">Products</li>
-                </ol>
-            </nav>
-            <div className="row">
-                <div class="filters-container col-sm-3">
-                    <nav class="navbar navbar-dark bg-info">
-                        <a class="nav-link">Filters</a>
-                    </nav>
-                </div>
-                <div class="products-container col-sm-9">
-                    <nav class="navbar navbar-dark bg-info">
-                        <ul class="navbar-nav">
-                            <li class="nav-right active">
+                <nav class="path-nav" aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><Link to="/home">Home</Link></li>
+                        <li class="breadcrumb-item active">Products</li>
+                    </ol>
+                </nav>
+                <div className="row">
+                    <div class="filters-container col-sm-3">
+                        <nav class="navbar navbar-dark bg-info">
+                            <a class="nav-link">Filters</a>
+                        </nav>
+                        {
+                            products.items &&
+                            <FilterColumn products={products.items} setFilters={this.setFilters.bind(this)} />
+                        }
+                    </div>
+                    <div class="products-container col-sm-9">
+                        <nav class="navbar navbar-dark bg-info">
+                            <ul class="navbar-nav">
+                                <li class="nav-right active">
                                     <a class="btn btn-light" onClick={onClick}>
-                                    <SwitchViewButton vertical={vertical} />
-                                </a>
-                            </li>
-                        </ul>
-                    </nav>
-                    {products.loading && <em>Loading products...</em>}
-                    {products.error && <span className="text-danger">ERROR: {products.error}</span>}
-                    {products.items && <Listing products={products.items} vertical={vertical} />}
-                </div>
+                                        <SwitchViewButton vertical={vertical} />
+                                    </a>
+                                </li>
+                            </ul>
+                        </nav>
+                        {products.loading && <em>Loading products...</em>}
+                        {products.error && <span className="text-danger">ERROR: {products.error}</span>}
+                        {products.items &&
+                            <Listing products={
+                            // If any filters are enabled
+                            products.items.some(p => p.specifications.some(s => this.state.filters[s.name] && this.state.filters[s.name][s.value] && this.state.filters[s.name][s.value]))
+                            &&
+                            // Pass filtered products
+                            products.items.filter(p => p.specifications.some(s => this.state.filters[s.name] && this.state.filters[s.name][s.value] && this.state.filters[s.name][s.value]))
+                            ||
+                            // Otherwise, pass unfiltered products
+                            products.items
+                            } vertical={vertical} />
+                        }
+                    </div>
                 </div>
             </div>
         );
