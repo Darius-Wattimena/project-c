@@ -53,10 +53,5 @@ namespace ProjectC.Database.Core
 
             return cfg;
         }
-
-        public static MySqlCommand CreateQuery(string sql, DB database)
-        {
-            return new MySqlCommand(sql, database.GetConnection());
-        }
     }
 }

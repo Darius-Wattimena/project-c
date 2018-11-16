@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using ProjectC.Database.Core;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
+using ProjectC.Model;
 
 namespace ProjectC.Controllers
 {
@@ -57,6 +58,21 @@ namespace ProjectC.Controllers
         }
 
         [HttpPost]
+        public IActionResult CreateWithSpecifications([FromBody] ProductSpecificationsModel model)
+        {
+            var dao = GetDao();
+            var specificationDao = GetDaoManager().SpecificationDao;
+            var databaseProduct = dao.Save(model.Product);
+            foreach (var specification in model.Specifications)
+            {
+                specification.ProductId = databaseProduct.Id;
+                specificationDao.Save(specification);
+            }
+
+            return Ok();
+        }
+
+        [HttpPost]
         public override IActionResult Create([FromBody] Product input)
         {
             return InnerSave(input);
@@ -71,7 +87,17 @@ namespace ProjectC.Controllers
         [HttpDelete("{id}")]
         public override IActionResult Delete(int id)
         {
-            return InnerDelete(id);
+            var specDao = GetDaoManager().SpecificationDao;
+            var specs = specDao.FindSpecificationsByProductId(id);
+            specDao.Delete(specs);
+            
+            //TODO delete orders related to the product
+
+            GetDao().Delete(id);
+
+            return Ok();
+
+            //return InnerDelete(id);
         }
     }
 }

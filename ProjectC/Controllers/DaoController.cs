@@ -14,16 +14,16 @@ namespace ProjectC.Controllers
         protected readonly IActionResult NoDaoFound = new BadRequestObjectResult("Dao not found! Check the DaoManager class.");
 
         private T _dao;
+        private DaoManager _daoManager;
+
+        protected DaoManager GetDaoManager()
+        {
+            return _daoManager ?? (_daoManager = HttpContext.RequestServices.GetService<DaoManager>());
+        }
 
         protected T GetDao()
         {
-            if (_dao == null)
-            {
-                var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-                _dao = daoManager.FindDao<T, TU>(typeof(T).Name);
-            }
-            
-            return _dao;
+            return _dao ?? (_dao = GetDaoManager().FindDao<T, TU>(typeof(T).Name));
         }
 
         protected IActionResult ExecuteFunction(Delegate method, params object[] args)
@@ -56,6 +56,8 @@ namespace ProjectC.Controllers
                 : ExecuteFunction(new Func<string, string, List<TU>>(_dao.Search), field, input);
         }
 
+        //TODO needs rework for update
+        //TODO needs check if ID exists
         protected IActionResult InnerSave(TU entity)
         {
             GetDao();
@@ -63,7 +65,8 @@ namespace ProjectC.Controllers
                 ? NoDaoFound 
                 : ExecuteFunction(new Func<TU, TU>(_dao.Save), entity);
         }
-        
+
+        //TODO needs check if ID exists
         protected IActionResult InnerDelete(int id)
         {
             GetDao();

@@ -43,7 +43,7 @@ class AdminProducts extends React.Component {
                                 <td>{
                                     product.deleting ? <em> - Deleting...</em>
                                         : product.deleteError ? <span className="text-danger"> - ERROR: {product.deleteError}</span>
-                                            : <span> <Link to={`addspecifications/${product.id}`}>Add Specifications</Link> - Edit - <a onClick={this.handleDeleteProduct(product.id)}>Delete</a></span>
+                                            : <span> Edit - <a onClick={this.handleDeleteProduct(product.id)}>Delete</a></span>
                                 }</td>
                             </tr>
                                 
