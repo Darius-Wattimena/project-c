@@ -7,10 +7,11 @@ using System.Collections.Generic;
 using ProjectC.Database.Daos;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
+using System.Linq;
 
 namespace ProjectC.Controllers
 {
-    [Authorize(Roles = "User")]
+    [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class OrderController : DaoController<OrderProductsDao, OrderProducts>
@@ -39,20 +40,19 @@ namespace ProjectC.Controllers
             Order newOrder = new Order
             {
                 OrderDate = DateTime.Now,
-                
-                TotalPrice = 0.0,
+
+                TotalPrice = shoppingBasketItems.Sum(
+                    item => {
+                        // Total price is the sum of the price of the product multiplied by the amount for each given item
+                        return daoManager.ProductDao.Find(item.ProductId).Price * item.Amount;
+                    }),
+
                 OrderState = 0,
                 UserId = userId,
 
                 // TODO: Coupon code stuff
                 CouponCodeId = null
             };
-
-            shoppingBasketItems.ForEach(item =>
-            {
-                // Total price is the price multiplied by the amount for each ordered product
-                newOrder.TotalPrice += daoManager.ProductDao.Find(item.ProductId).Price * item.Amount;
-            });
 
             // Create the order and retrieve it
             Order createdOrder = daoManager?.OrderDao.Save(newOrder);

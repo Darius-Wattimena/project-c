@@ -7,6 +7,7 @@ import { orderActions } from '../_actions/order.actions';
 
 import '../styling/OrderStyling.css';
 import { history } from '../_helpers';
+import { shoppingCartActions } from '../_actions';
 
 var string = "none";
 
@@ -18,10 +19,7 @@ class OrderPage extends React.Component {
 
     handleOrder(shoppingCartItems) {
         this.props.createOrder(shoppingCartItems);
-        alert("Order was placed succesfully.");
-        setTimeout(function () { history.push("/products"); }, 3000);
-
-        this.forceUpdate();
+        //setTimeout(function () { history.push("/products"); }, 3000);
     }
 
     checkout(string, items) {
@@ -40,7 +38,7 @@ class OrderPage extends React.Component {
     }
 
     render() {
-        const { user } = this.props;
+        const { user, order } = this.props;
         const items = this.props.items;
         var total = 0;
         for (var i = 0; i < items.length; i++) {
@@ -53,7 +51,8 @@ class OrderPage extends React.Component {
         } else {
             return (
                 <div>
-                    <div class="container">
+                {!order.loading &&
+                        <div class="container">
                         <div class="row">
                             <div class="col-sm-7">
                                 <div className="section orderbox">
@@ -123,7 +122,7 @@ class OrderPage extends React.Component {
 
                                         <div class="row payment">
                                             <div class="col-md-2">
-                                                <input type="radio" name="drone" id="Visa" onChange={() => { onChange("Visa") }}  />
+                                                <input type="radio" name="drone" id="Visa" onChange={() => { onChange("Visa") }} />
                                             </div>
                                             <div class="col-md-10">
                                                 <div class="row">
@@ -133,40 +132,47 @@ class OrderPage extends React.Component {
                                             </div>
                                         </div>
                                     </form>
-                                    <button class="btn btn-info checkout-btn" onClick={() => { this.checkout(string, items) }}>Checkout</button>
+                                    {order.loading &&
+                                        // disabled button (loading)
+                                        <button className="btn btn-info checkout-btn" disabled>Checkout</button>
+                                        ||
+                                        // order button
+                                        <button class="btn btn-info checkout-btn" onClick={() => { this.checkout(string, items) }}>Checkout</button>
+                                    }
                                 </div>
                             </div>
                         </div>
                     </div>
-
+                    || <p>Processing order...</p>}
                 </div>
+            
             );
         }
     }
-
-
-
-
 }
 
 function mapStateToProps(state) {
+    console.log("STate=");
     console.log(state);
     const { authentication } = state;
     const { shoppingCart } = state;
+    const { order } = state;
+    console.log(order);
     const { user } = authentication;
     const { items } = shoppingCart;
     console.log(items);
     return {
         user,
-        items
+        items,
+        order
     };
 }
 
 // Map actions to props
 const mapDispatchToProps = (dispatch) => {
     return {
-        // props.createOrder
-        createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems))
+        createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems)),
+        clearShoppingCart: () => dispatch(shoppingCartActions.removeAll())
     }
 };
 

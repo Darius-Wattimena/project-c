@@ -12,8 +12,8 @@ function create(shoppingCartItems) {
 
         orderService.create(shoppingCartItems)
             .then(
-                response => dispatch(success(response)),
-                error => dispatch(failure(error))
+            response => { console.log(response); dispatch(success(response)); },
+            error => { console.log(error); dispatch(failure(error)); }
             );
     };
 

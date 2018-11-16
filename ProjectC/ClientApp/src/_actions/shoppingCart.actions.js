@@ -2,11 +2,13 @@
 // TODO:
 //import { shoppingCartService } from '../_services';
 import { alertActions } from './';
+import { shoppingCart } from '../_reducers/shoppingCart.reducer';
 
 export const shoppingCartActions = {
     addProduct,
     removeProduct,
-    subtractProduct
+    subtractProduct,
+    removeAll
 };
 
 function addProduct(product) {
@@ -31,4 +33,14 @@ function subtractProduct(product) {
     }
 
     function subtract(product) { return { type: shoppingCartConstants.SUBTRACT_PRODUCT, product } }
+}
+
+function removeAll() {
+    return dispatch => {
+        dispatch(removeAll());
+    }
+
+    function removeAll() {
+        return { type: shoppingCartConstants.REMOVE_ALL }
+    };
 }
