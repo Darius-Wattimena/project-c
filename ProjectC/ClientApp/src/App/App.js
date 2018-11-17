@@ -15,6 +15,7 @@ import { OrderPage } from '../OrderPage';
 import { AdminPanelHeader } from '../AdminPanelHeader';
 import { AdminPanel } from '../AdminPanel';
 import { AdminProducts } from '../AdminProducts';
+import { AdminStock } from '../AdminStock';
 import { AdminStatistics } from '../AdminStatistics';
 import { AdminUsers } from '../AdminUsers';
 import { AdminOrders } from '../AdminOrders';
@@ -52,6 +53,7 @@ class App extends Component {
                         <Route path="/" render={(props) => (props.location.pathname.startsWith("/adminpanel")) && <AdminPanelHeader />} />
                         <Route path="/adminpanel" component={AdminPanel} />
                         <Route path="/adminpanel/statistics" component={AdminStatistics} />
+                        <Route path="/adminpanel/stock" component={AdminStock} />
                         <Route path="/adminpanel/product" component={AdminProducts} />
                         <Route path="/adminpanel/addproduct" component={AddProduct} />
                         <Route path="/adminpanel/users" component={AdminUsers} />
