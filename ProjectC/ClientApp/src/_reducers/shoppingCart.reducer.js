@@ -6,8 +6,24 @@ const initialState = {
 };
 
 export function shoppingCart(state = initialState, action) {
+
     switch (action.type) {
+
         case shoppingCartConstants.ADD_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+            break;
+
+        case shoppingCartConstants.ADD_SUCCESS:
+            return {
+                ...state,
+                items: [...state.items, action.product]
+            };
+            break;
+
+        case shoppingCartConstants.ADD_CLIENT:
 
             // If the item already exists in the shopping cart:
             if (state.items.some(p => p.productId === action.product.id)) {
@@ -36,12 +52,12 @@ export function shoppingCart(state = initialState, action) {
                 items: [...state.items, newItem]
              };
 
-        case shoppingCartConstants.REMOVE_REQUEST:
+        case shoppingCartConstants.REMOVE_CLIENT:
             // Filter the products to exclude items that contain the id of the product to delete
             const filteredItems = state.items.filter((item) => item.productId !== action.product.id);
             return { ...state, items: filteredItems };
 
-        case shoppingCartConstants.SUBTRACT_REQUEST:
+        case shoppingCartConstants.UPDATE_CLIENT:
             // Subtract the amount of products
             state.items.map(i => {
                 if (i.productId === action.product.id)

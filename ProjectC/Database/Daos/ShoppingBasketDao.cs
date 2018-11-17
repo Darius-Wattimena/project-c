@@ -9,5 +9,12 @@ namespace ProjectC.Database.Daos
         {
 
         }
+
+        public ShoppingBasket GetShoppingBasketForUser(int userId)
+        {
+            var shoppingBaskets = Find("UserId", userId.ToString());
+
+            return shoppingBaskets.Count > 0 ? shoppingBaskets[0] : null;
+        }
     }
 }

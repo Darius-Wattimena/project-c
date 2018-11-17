@@ -1,47 +1,86 @@
 ﻿import { shoppingCartConstants } from '../_constants';
-// TODO:
-//import { shoppingCartService } from '../_services';
 import { alertActions } from './';
+import { shoppingCartService } from '../_services/shoppingCart.service';
 
 export const shoppingCartActions = {
     addProduct,
+    updateProduct,
     removeProduct,
-    subtractProduct,
     clear
 };
 
+function convertToBasketItem(product) {
+    return {
+        productId: product.id,
+        amount: product.amount
+    };
+}
+
 function addProduct(product) {
     return dispatch => {
-        dispatch(add(product));
-        dispatch(alertActions.success('Added product to basket.'));
+
+        const user = localStorage.getItem('user');
+
+        const shoppingBasketItem = convertToBasketItem(product);
+
+        if (user) {
+            shoppingCartService.add(shoppingBasketItem)
+                .then(
+                    response => {
+                        // Product was added to the basket.
+                        dispatch(success(product));
+                        dispatch(alertActions.success('Added product to basket. (' + response + ')'));
+                    },
+                    error => {
+                        // Something went wrong
+                        dispatch(failure(error));
+                        dispatch(alertActions.error(error));
+                    }
+                );
+        }
+        else {
+            // User is not logged in, store the item locally
+            dispatch(add_local(product));
+            dispatch(alertActions.success('Added product to basket.'));
+        }
     };
 
-    function add(product) { return { type: shoppingCartConstants.ADD_REQUEST, product } }
+    function request(product) { return { type: shoppingCartConstants.ADD_REQUEST, product } }
+    function success(product) { return { type: shoppingCartConstants.ADD_SUCCESS, product } }
+    function failure(error) { return { type: shoppingCartConstants.ADD_FAILURE, error } }
+
+    function add_local(product) { return { type: shoppingCartConstants.ADD_CLIENT, product } }
 };
+
+function updateProduct(product) {
+    return dispatch => {
+        dispatch(update_local(product));
+    }
+
+    function request(product) { return { type: shoppingCartConstants.UPDATE_REQUEST, product } }
+    function success(product) { return { type: shoppingCartConstants.UPDATE_SUCCESS, product } }
+    function failure(error) { return { type: shoppingCartConstants.UPDATE_FAILURE, error } }
+
+    function update_local(product) { return { type: shoppingCartConstants.UPDATE_CLIENT, product } }
+}
 
 function removeProduct(product) {
     return dispatch => {
-        dispatch(remove(product));
+        dispatch(remove_local(product));
         dispatch(alertActions.error('Removed product from basket.'));
     }
 
-    function remove(product) { return { type: shoppingCartConstants.REMOVE_REQUEST, product } }
-}
+    function request(product) { return { type: shoppingCartConstants.REMOVE_REQUEST, product } }
+    function success(product) { return { type: shoppingCartConstants.REMOVE_SUCCESS, product } }
+    function failure(error) { return { type: shoppingCartConstants.REMOVE_FAILURE, error } }
 
-function subtractProduct(product) {
-    return dispatch => {
-        dispatch(subtract(product));
-    }
-
-    function subtract(product) { return { type: shoppingCartConstants.SUBTRACT_REQUEST, product } }
+    function remove_local(product) { return { type: shoppingCartConstants.REMOVE_CLIENT, product } }
 }
 
 function clear() {
     return dispatch => {
-        dispatch(clear());
+        dispatch(clear_local());
     }
 
-    function clear() {
-        return { type: shoppingCartConstants.CLEAR_REQUEST }
-    };
+    function clear_local() { return { type: shoppingCartConstants.CLEAR_CLIENT } };
 }

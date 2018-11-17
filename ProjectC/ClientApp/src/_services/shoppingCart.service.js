@@ -1,29 +1,29 @@
 ﻿import { authHeader, config } from '../_helpers';
-import { shoppingCart } from '../_reducers/shoppingCart.reducer';
 
 export const shoppingCartService = {
-    create,
+    add,
     update,
     remove
 };
 
-function create(shoppingCartItem) {
+function add(shoppingBasketItem) {
     const requestOptions = {
         method: 'POST',
-        headers: { ...authHeader(), 'Content-Type': 'application/json' }
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(shoppingBasketItem)
     };
 
-    return fetch(config.apiUrl + '/shoppingbasketitem/add/' + shoppingCart.id, requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/shoppingbasketitem/add/', requestOptions).then(handleResponse, handleError);
 }
 
-function update(shoppingCartItem) {
+function update(shoppingBasketItem) {
     const requestOptions = {
         method: 'PUT',
         headers: { ...authHeader(), 'Content-Type': 'application/json' },
-        body: JSON.stringify(shoppingCartItem)
+        body: JSON.stringify(shoppingBasketItem)
     };
 
-    return fetch(config.apiUrl + '/shoppingbasketitem/update/' + shoppingCartItem.id, requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/shoppingbasketitem/update/' + shoppingBasketItem.productId, requestOptions).then(handleResponse, handleError);
 }
 
 function remove(id) {
