@@ -16,6 +16,7 @@ namespace ProjectC.Database.Entities
 
         public User SetupUser(UserRegisterModel model)
         {
+            SetId(0);
             var salt = BCryptHelper.GenerateSalt();
             var hashedPassword = BCryptHelper.HashPassword(model.Password, salt);
             PasswordHash = hashedPassword;
