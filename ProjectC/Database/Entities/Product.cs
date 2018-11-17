@@ -28,7 +28,7 @@ namespace ProjectC.Database.Entities
         [Field] public string Name;
         [Field] public string Description;
         [Field] public double Price;
-        [Field] public int Stock;
+        [Field(CanBeZero = true)] public int Stock;
         [Field] public string ImageUrl;
 
         public List<Specification> Specifications;

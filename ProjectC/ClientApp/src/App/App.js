@@ -49,19 +49,19 @@ class App extends Component {
             <div>
                 <Router history={history}>
                     <div>
-                        <Route path="/" render={(props) => (!props.location.pathname.startsWith("/adminpanel")) && <Header />} />
-                        <Route path="/" render={(props) => (props.location.pathname.startsWith("/adminpanel")) && <AdminPanelHeader />} />
-                        <Route path="/adminpanel" component={AdminPanel} />
-                        <Route path="/adminpanel/statistics" component={AdminStatistics} />
-                        <Route path="/adminpanel/stock" component={AdminStock} />
-                        <Route path="/adminpanel/product" component={AdminProducts} />
-                        <Route path="/adminpanel/addproduct" component={AddProduct} />
-                        <Route path="/adminpanel/users" component={AdminUsers} />
-                        <Route path="/adminpanel/orders" component={AdminOrders} />
-                        <Route path="/adminpanel/order/:orderid" component={AdminOrder} />
-                        <Route path="/adminpanel/sales" component={AdminSales} />
-                        <Route path="/adminpanel/coupons" component={AdminCoupons} />
-                        <Route path="/adminpanel/reviews" component={AdminReviews} />
+                        <Route path="/" render={(props) => (!props.location.pathname.startsWith("/admin")) && <Header />} />
+                        <Route path="/" render={(props) => (props.location.pathname.startsWith("/admin")) && <AdminPanelHeader />} />
+                        <Route path="/admin" component={AdminPanel} />
+                        <Route path="/admin/statistics" component={AdminStatistics} />
+                        <Route path="/admin/stock" component={AdminStock} />
+                        <Route path="/admin/product" component={AdminProducts} />
+                        <Route path="/admin/addproduct" component={AddProduct} />
+                        <Route path="/admin/users" component={AdminUsers} />
+                        <Route path="/admin/orders" component={AdminOrders} />
+                        <Route path="/admin/order/:orderid" component={AdminOrder} />
+                        <Route path="/admin/sales" component={AdminSales} />
+                        <Route path="/admin/coupons" component={AdminCoupons} />
+                        <Route path="/admin/reviews" component={AdminReviews} />
                         <div className="container">
                             <div className="col-sm-8 col-sm-offset-2">
                                 {alert.message &&

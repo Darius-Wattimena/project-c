@@ -7,6 +7,7 @@ namespace ProjectC.Database.Core.Annotations
     {
         public string FieldName { get; set; } = "";
         public bool Primary { get; set; } = false;
+        public bool CanBeZero { get; set; } = false;
 
         public FieldAttribute()
         {

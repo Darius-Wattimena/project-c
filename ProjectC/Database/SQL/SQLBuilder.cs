@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Microsoft.AspNetCore.Rewrite.Internal.UrlMatches;
 using ProjectC.Database.Core;
 using ProjectC.Database.Core.Interfaces;
 
@@ -63,6 +62,8 @@ namespace ProjectC.Database.SQL
                         SelectRange = "COUNT(*)";
                     }
                     return BuildSelectQuery();
+                case QueryType.SelectExists:
+                    return "SELECT EXISTS(" + BuildSelectQuery() + ")";
                 case QueryType.Insert:
                     return BuildInsertQuery();
                 case QueryType.Update:
@@ -136,7 +137,7 @@ namespace ProjectC.Database.SQL
                 case null:
                     break;
                 case int intValue:
-                    if (intValue != 0)
+                    if (intValue != 0 || pair.Value.CanBeZero)
                     {
                         fields.Add(pair.Key, value.ToString());
                     }

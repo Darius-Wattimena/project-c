@@ -57,7 +57,7 @@ export function products(state = {}, action) {
                 })
             };
         default:
-            return state
+            return state;
     }
 }
 
@@ -75,7 +75,16 @@ export function product(state = {}, action) {
             return {
                 error: action.error
             };
+        case productConstants.CHANGE_STOCK_SUCCESS:
+            return {
+                item: action.product,
+                newStock: action.newStock
+            }
+        case productConstants.CHANGE_STOCK_FAILURE:
+            return {
+                error: action.error
+            }
         default:
-            return state
+            return state;
     }
 }

@@ -7,7 +7,8 @@ export const productService = {
     getAllWithSpecifications,
     _delete,
     add,
-    search
+    search,
+    changeStock
 };
 
 // Returns a collection of all products
@@ -77,6 +78,20 @@ function _delete(id) {
     };
 
     return fetch(config.apiUrl + '/product/delete/' + id, requestOptions).then(handleResponse, handleError);
+}
+
+function changeStock(product, newStock) {
+    var body = {}
+    body.product = product;
+    body.newStock = newStock;
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    };
+
+    return fetch(config.apiUrl + '/product/changeStock', requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {

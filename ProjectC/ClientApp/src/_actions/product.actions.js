@@ -8,7 +8,8 @@ export const productActions = {
     getById,
     add,
     _delete,
-    search
+    search,
+    changeStock
 };
 
 function getAll() {
@@ -104,4 +105,24 @@ function _delete(id) {
     function request(id) { return { type: productConstants.DELETE_REQUEST, id } }
     function success(id) { return { type: productConstants.DELETE_SUCCESS, id } }
     function failure(id, error) { return { type: productConstants.DELETE_FAILURE, id, error } }
+}
+
+function changeStock(product, newStock, page) {
+    return dispatch => {
+        dispatch(request(product, newStock));
+        productService.changeStock(product, newStock)
+            .then(
+                () => {
+                    dispatch(success(product, newStock));
+                    page.updateItem(newStock);
+                },
+                error => {
+                    dispatch(failure(error));
+                }
+            );
+    };
+
+    function request(product, newStock) { return { type: productConstants.CHANGE_STOCK_REQUEST, product, newStock } }
+    function success(product, newStock) { return { type: productConstants.CHANGE_STOCK_SUCCESS, product, newStock } }
+    function failure(error) { return { type: productConstants.CHANGE_STOCK_FAILURE, error } }
 }

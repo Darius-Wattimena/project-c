@@ -77,6 +77,30 @@ namespace ProjectC.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        public IActionResult ChangeStock([FromBody]ProductChangeStockModel model)
+        {
+            if (model.NewStock < 0)
+            {
+                return BadRequest("The new stock must be bigger then -1");
+            }
+
+            if (!(model.Product == null || model.Product.Id == 0))
+            {
+                var dao = GetDao();
+
+                if (dao.CheckIfExists(model.Product.Id))
+                {
+                    var product = model.Product;
+                    product.Stock = model.NewStock;
+                    dao.Save(product);
+                    return Ok();
+                }
+            }
+
+            return BadRequest("Product not found");
+        }
+
         [HttpPost]
         public override IActionResult Create([FromBody] Product input)
         {
