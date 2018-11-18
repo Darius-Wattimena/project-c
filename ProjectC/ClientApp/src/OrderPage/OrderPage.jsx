@@ -172,7 +172,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
     return {
         createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems)),
-        clearShoppingCart: () => dispatch(shoppingCartActions.removeAll())
+        clearShoppingCart: () => dispatch(shoppingCartActions.clear())
     }
 };
 
