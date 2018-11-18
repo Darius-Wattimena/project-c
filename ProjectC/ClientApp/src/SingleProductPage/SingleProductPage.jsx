@@ -18,7 +18,6 @@ class SingleProductPage extends React.Component {
     handleAdd(product) {
         console.log("Adding product " + product.name + " to the shopping basket");
         this.props.addProduct(product);
-        this.forceUpdate();
     }
     
     render() {
@@ -89,7 +88,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
     return {
         getProductById: id => { dispatch(productActions.getById(id)); },
-        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); window.alert(product.name + " was added to the shopping cart!"); },
+        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); },
     }
 };
 
