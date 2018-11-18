@@ -34,22 +34,32 @@ export class AdminStockItem extends React.Component {
         }
     }
 
-    addButtonOnClick(event) {
+    onOpenModal(event) {
         event.preventDefault();
         this.setState({
-            modalActive: !this.state.modalActive
+            modalActive: true
+        });
+    }
+
+    onCloseModal(event) {
+        event.preventDefault();
+        this.setState({
+            modalActive: false
         });
     }
 
     updateItem(newStock) {
         this.setState({
             stock: newStock,
-            modalActive: !this.state.modalActive
+            modalActive: false
         });
     }
 
     render() {
         const { stock, product, index, modalActive } = this.state;
+
+        console.log("modal open", modalActive);
+
         return (
             <div class="card admin-stock-item">
                 <div class="card-header" id={`heading${index}`} data-toggle="collapse" data-target={`#collapse${index}`} aria-expanded="false" aria-controls={`collapse${index}`}>

@@ -1,13 +1,5 @@
 ﻿import React from 'react';
 
-function AddButton({ active, index }) {
-    if (!active) {
-        return <button type="button" class="btn btn-success" style={{float: `right`}} onClick={window.component.addButtonOnClick.bind(window.component)} data-toggle="modal" data-target={`#Modal${index}`}>Change Stock</button>;
-    } else {
-        return <button type="button" class="btn btn-success" style={{float: `right`}} disabled>Change Stock</button>;
-    }
-}
-
 export class AdminStockAddStockButton extends React.Component {
     constructor(props) {
         super(props);
@@ -18,15 +10,16 @@ export class AdminStockAddStockButton extends React.Component {
     }
 
     componentDidUpdate(prevProps) {
-        if (prevProps.modalActive !== this.props.modalActive) {
-            this.setState({
+        console.log("modal open for button", this.props.modalActive);
+        if (this.props.modalActive !== prevProps.modalActive) {
+            this.setState((prevState) => ({
+                ...prevState,
                 modalActive: this.props.modalActive
-            });
+            }));
         }
     }
 
     render() {
-        const { modalActive } = this.state;
-        return <AddButton active={modalActive} index={this.props.index} />;
+        return (<button type="button" class="btn btn-success" style={{ float: `right` }} onClick={window.component.onOpenModal.bind(window.component)} data-toggle="modal" data-target={`#Modal${this.props.index}`}>Change Stock</button>);
     }
 }

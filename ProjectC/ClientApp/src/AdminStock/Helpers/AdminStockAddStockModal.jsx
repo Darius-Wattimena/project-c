@@ -9,7 +9,8 @@ class AdminStockAddStockModal extends React.Component {
 
         this.state = {
             startStock: props.product.stock,
-            newStock: props.product.stock
+            newStock: props.product.stock,
+            submitted: false
         }
 
         this.handleChange = this.handleChange.bind(this);
@@ -28,13 +29,15 @@ class AdminStockAddStockModal extends React.Component {
         const { newStock, startStock } = this.state;
         const { dispatch, product, base } = this.props;
 
-        if (newStock && startStock !== newStock) {
+        if (newStock && startStock !== newStock && newStock > -1) {
+            document.getElementById("hideButton").click();
             dispatch(productActions.changeStock(product, newStock, base));
         }
     }
 
     render() {
-        const { index, product } = this.props;
+        const { index, product, base } = this.props;
+        const { submitted } = this.state;
         return (
             <div class="modal fade" id={`Modal${index}`} tabindex="-1" role="dialog" aria-labelledby={`ModalCenterTitle`} aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered" role="document">
@@ -46,11 +49,15 @@ class AdminStockAddStockModal extends React.Component {
                             </button>
                         </div>
                         <div class="modal-body">
-                            <input type="number" value={this.state.newStock} onChange={this.handleChange} />
+                            <input class="form-control" type="number" value={this.state.newStock} onChange={this.handleChange} />
+                            {this.state.newStock < 0 &&
+                                <div class="help-block">Stock count must be 0 or higher</div>
+                            }
                         </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                            <button type="button" class="btn btn-primary" data-dismiss="modal" onClick={this.handleSubmit}>Submit</button>
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={base.onCloseModal.bind(base)}>Close</button>
+                            <button type="button" class="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
+                            <button id="hideButton" type="button" data-dismiss="modal" style={{display: `none`}} />
                         </div>
                     </div>
                 </div>
