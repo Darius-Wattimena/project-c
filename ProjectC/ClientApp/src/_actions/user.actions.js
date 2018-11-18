@@ -21,7 +21,7 @@ function login(user) {
             .then(
                 user => {
                     dispatch(success(user));
-                    history.push('/');
+                    history.goBack();
                 },
                 error => {
                     dispatch(failure(error));

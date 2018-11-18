@@ -48,7 +48,8 @@ namespace ProjectC.Database.Core
             {
                 Field = field,
                 Name = fieldName,
-                Primary = fieldAttr.Primary
+                Primary = fieldAttr.Primary,
+                CanBeZero = fieldAttr.CanBeZero
             };
 
             return cfg;

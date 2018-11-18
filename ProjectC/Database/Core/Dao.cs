@@ -61,6 +61,12 @@ namespace ProjectC.Database.Core
             return Database.ExecuteCountQuery<T, Dao<T>>(this, sql);
         }
 
+        protected bool ExecuteExists(string sql)
+        {
+            Console.WriteLine(LoggingSqlPrefix + sql);
+            return Database.ExecuteExistsQuery<T, Dao<T>>(this, sql);
+        }
+
         protected void ExecuteNoResult(string sql)
         {
             Console.WriteLine(LoggingSqlPrefix + sql);
@@ -85,6 +91,15 @@ namespace ProjectC.Database.Core
                 results.Add(result);
             }
             return results;
+        }
+
+        public bool CheckIfExists(int id)
+        {
+            var sqlBuilder = new SqlBuilder<T>(TableConfig)
+            {
+                Id = id
+            };
+            return ExecuteExists(sqlBuilder.Build(QueryType.SelectExists));
         }
 
         public List<T> Find(string field, string value)

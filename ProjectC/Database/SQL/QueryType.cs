@@ -4,6 +4,7 @@
     {
         Select,
         SelectCount,
+        SelectExists,
         Insert,
         Update,
         Delete

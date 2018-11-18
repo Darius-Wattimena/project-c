@@ -20,8 +20,13 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet("{value}")]
-        public IActionResult Search(string value)
+        public IActionResult CustomSearch(string value)
         {
+            if (value == null)
+            {
+                value = string.Empty;
+            }
+
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             List<Product> products = daoManager.ProductDao.SearchProduct(value);
             return Ok(products);
@@ -72,6 +77,30 @@ namespace ProjectC.Controllers
             return Ok();
         }
 
+        [HttpPut]
+        public IActionResult ChangeStock([FromBody]ProductChangeStockModel model)
+        {
+            if (model.NewStock < 0)
+            {
+                return BadRequest("The new stock must be bigger then -1");
+            }
+
+            if (!(model.Product == null || model.Product.Id == 0))
+            {
+                var dao = GetDao();
+
+                if (dao.CheckIfExists(model.Product.Id))
+                {
+                    var product = model.Product;
+                    product.Stock = model.NewStock;
+                    dao.Save(product);
+                    return Ok();
+                }
+            }
+
+            return BadRequest("Product not found");
+        }
+
         [HttpPost]
         public override IActionResult Create([FromBody] Product input)
         {
@@ -81,7 +110,7 @@ namespace ProjectC.Controllers
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] Product input)
         {
-            return InnerSave(input);
+            return InnerSave(input, id);
         }
 
         [HttpDelete("{id}")]

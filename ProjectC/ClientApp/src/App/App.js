@@ -16,6 +16,7 @@ import { UserPage } from '../UserPage';
 import { AdminPanelHeader } from '../AdminPanelHeader';
 import { AdminPanel } from '../AdminPanel';
 import { AdminProducts } from '../AdminProducts';
+import { AdminStock } from '../AdminStock';
 import { AdminStatistics } from '../AdminStatistics';
 import { AdminUsers } from '../AdminUsers';
 import { AdminOrders } from '../AdminOrders';
@@ -26,6 +27,7 @@ import { AddProduct } from '../AdminProducts/AddProduct';
 import { EditUserPage } from '../EditUserPage';
 
 import { ProductPage } from '../ProductPage';
+import { WishlistPage } from '../WishlistPage';
 
 import { ShoppingCart } from '../ShoppingCart/ShoppingCart';
 import { AdminOrder } from '../AdminOrders/AdminOrder/AdminOrder';
@@ -48,18 +50,19 @@ class App extends Component {
             <div>
                 <Router history={history}>
                     <div>
-                        <Route path="/" render={(props) => (!props.location.pathname.startsWith("/adminpanel")) && <Header />} />
-                        <Route path="/" render={(props) => (props.location.pathname.startsWith("/adminpanel")) && <AdminPanelHeader />} />
-                        <Route path="/adminpanel" component={AdminPanel} />
-                        <Route path="/adminpanel/statistics" component={AdminStatistics} />
-                        <Route path="/adminpanel/product" component={AdminProducts} />
-                        <Route path="/adminpanel/addproduct" component={AddProduct} />
-                        <Route path="/adminpanel/users" component={AdminUsers} />
-                        <Route path="/adminpanel/orders" component={AdminOrders} />
-                        <Route path="/adminpanel/order/:orderid" component={AdminOrder} />
-                        <Route path="/adminpanel/sales" component={AdminSales} />
-                        <Route path="/adminpanel/coupons" component={AdminCoupons} />
-                        <Route path="/adminpanel/reviews" component={AdminReviews} />
+                        <Route path="/" render={(props) => (!props.location.pathname.startsWith("/admin")) && <Header />} />
+                        <Route path="/" render={(props) => (props.location.pathname.startsWith("/admin")) && <AdminPanelHeader />} />
+                        <Route path="/admin" component={AdminPanel} />
+                        <Route path="/admin/statistics" component={AdminStatistics} />
+                        <Route path="/admin/stock" component={AdminStock} />
+                        <Route path="/admin/product" component={AdminProducts} />
+                        <Route path="/admin/addproduct" component={AddProduct} />
+                        <Route path="/admin/users" component={AdminUsers} />
+                        <Route path="/admin/orders" component={AdminOrders} />
+                        <Route path="/admin/order/:orderid" component={AdminOrder} />
+                        <Route path="/admin/sales" component={AdminSales} />
+                        <Route path="/admin/coupons" component={AdminCoupons} />
+                        <Route path="/admin/reviews" component={AdminReviews} />
                         <div className="container">
                             <div className="col-sm-8 col-sm-offset-2">
                                 {alert.message &&
@@ -69,13 +72,19 @@ class App extends Component {
                             <PrivateRoute exact path="/" component={HomePage} />
                             <Route path="/home" component={HomePage} />
                             <Route path="/register" component={RegisterPage} />
-                            <Route path="/products" component={ProductPage} />
+                            <Route exact path="/products" component={ProductPage} />
+                            <Route path="/products/:nr" component={ProductPage} />
                             <Route path="/product/:id" component={SingleProductPage} />
                             <Route path="/user/edit/:id" component={EditUserPage} />
                             <Route path="/checkout" component={ShoppingCart} />
                             <Route path="/login" component={LoginPage} />
+<<<<<<< HEAD
                             <Route path="/order" component={OrderPage} />
                             <Route path="/profile" component={UserPage} />
+=======
+                            <Route path="/order" component={OrderPage}/>
+                                        <Route path="/wishlist" component={WishlistPage}/>
+>>>>>>> d0f3044e88f079721aacb27470ec5a21dea66c56
                         </div>
                     </div>
                 </Router>

@@ -7,7 +7,9 @@ export const productActions = {
     getAll,
     getById,
     add,
-    _delete
+    _delete,
+    search,
+    changeStock
 };
 
 function getAll() {
@@ -42,6 +44,25 @@ function getById(id) {
     function success(product) { return { type: productConstants.GET_SUCCESS, product } }
     function failure(error) { return { type: productConstants.GET_FAILURE, error } }
 }
+
+function search(searchValue) {
+    return dispatch => {
+        dispatch(request(searchValue));
+        productService.search(searchValue)
+            .then(
+                products => {
+                    history.push('/products/nr');
+                    dispatch(succes(products));
+                },
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request(searchValue) { return { type: productConstants.GETSEARCH_REQUEST } }
+    function succes(products) { return { type: productConstants.GETSEARCH_SUCCESS, products } }
+    function failure(error) { return { type: productConstants.GETSEARCH_FAILURE, error } }
+}
+
 function add(product, specifications) {
     return dispatch => {
         dispatch(request(product, specifications));
@@ -84,4 +105,24 @@ function _delete(id) {
     function request(id) { return { type: productConstants.DELETE_REQUEST, id } }
     function success(id) { return { type: productConstants.DELETE_SUCCESS, id } }
     function failure(id, error) { return { type: productConstants.DELETE_FAILURE, id, error } }
+}
+
+function changeStock(product, newStock, page) {
+    return dispatch => {
+        dispatch(request(product, newStock));
+        productService.changeStock(product, newStock)
+            .then(
+                () => {
+                    dispatch(success(product, newStock));
+                    page.updateItem(newStock);
+                },
+                error => {
+                    dispatch(failure(error));
+                }
+            );
+    };
+
+    function request(product, newStock) { return { type: productConstants.CHANGE_STOCK_REQUEST, product, newStock } }
+    function success(product, newStock) { return { type: productConstants.CHANGE_STOCK_SUCCESS, product, newStock } }
+    function failure(error) { return { type: productConstants.CHANGE_STOCK_FAILURE, error } }
 }

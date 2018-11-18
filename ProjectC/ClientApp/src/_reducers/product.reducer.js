@@ -14,6 +14,18 @@ export function products(state = {}, action) {
             return {
                 error: action.error
             };
+        case productConstants.GETSEARCH_REQUEST:
+            return {
+                loading: true
+            };
+        case productConstants.GETSEARCH_SUCCESS:
+            return {
+                items: action.products
+            };
+        case productConstants.GETSEARCH_FAILURE:
+            return {
+                error: action.error
+            };
         case productConstants.DELETE_REQUEST:
             // add 'deleting:true' property to user being deleted
             return {
@@ -45,9 +57,10 @@ export function products(state = {}, action) {
                 })
             };
         default:
-            return state
+            return state;
     }
 }
+
 export function product(state = {}, action) {
     switch (action.type) {
         case productConstants.GET_REQUEST:
@@ -62,7 +75,16 @@ export function product(state = {}, action) {
             return {
                 error: action.error
             };
+        case productConstants.CHANGE_STOCK_SUCCESS:
+            return {
+                item: action.product,
+                newStock: action.newStock
+            }
+        case productConstants.CHANGE_STOCK_FAILURE:
+            return {
+                error: action.error
+            }
         default:
-            return state
+            return state;
     }
 }

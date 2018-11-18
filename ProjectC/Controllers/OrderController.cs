@@ -1,71 +1,78 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
-using ProjectC.Helper;
-using ProjectC.Model;
 using System;
-using System.Linq;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
 using ProjectC.Database.Daos;
-using ProjectC.Database.Entities;
+using Microsoft.AspNetCore.Authorization;
+using System.Security.Claims;
+using System.Linq;
 
 namespace ProjectC.Controllers
 {
+    [Authorize(Roles = "Admin,User")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class OrderController : DaoController<OrderDao, Order>
     {
 
         // POST: api/Order/Create
+        /// <summary>
+        /// Creates a new order for the 
+        /// </summary>
+        /// <param name="shoppingBasketItems">The items from the shopping cart to order</param>
         [HttpPost]
         public IActionResult Create([FromBody] List<ShoppingBasketItem> shoppingBasketItems)
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+            if (shoppingBasketItems.Count < 1)
+            {
+                return BadRequest("No items to order");
+            }
+
+            // Obtain user id
+            if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
+            
+            var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
 
             // Create a new order
-            Order newOrder = new Order
+            var newOrder = new Order
             {
                 OrderDate = DateTime.Now,
 
-                TotalPrice = 0.0,
+                TotalPrice = shoppingBasketItems.Sum(
+                    item => GetDaoManager().ProductDao.Find(item.ProductId).Price * item.Amount),
+
                 OrderState = 0,
-                // TODO: Get user ID through authentication
-                UserId = 5,
+                UserId = userId,
+
+                // TODO: Coupon code stuff
                 CouponCodeId = null
             };
 
+            var createdOrder = GetDaoManager().OrderDao.Save(newOrder);
+
+            // Add each product that is associated with the order
             shoppingBasketItems.ForEach(item =>
             {
-                // Total price is the price multiplied by the amount for each ordered product
-                newOrder.TotalPrice += daoManager.ProductDao.Find(item.ProductId).Price * item.Amount;
-            });
-
-            Order createdOrder = daoManager?.OrderDao.Save(newOrder);
-
-            // Save each product associated with the order
-            foreach (ShoppingBasketItem item in shoppingBasketItems)
-            {
-                OrderProducts op = new OrderProducts(item)
+                var op = new OrderProducts(item)
                 {
                     OrderId = createdOrder.Id
                 };
-                daoManager?.OrderProductsDao.Save(op);
-            }
+                GetDaoManager().OrderProductsDao.Save(op);
+            });
 
             return Ok($"Succesfully created a new order for {shoppingBasketItems.Count} products.");
         }
 
         public override IActionResult Create(Order input)
         {
-            throw new NotImplementedException();
+            return InnerSave(input);
         }
 
         public override IActionResult Delete(int id)
         {
-            throw new NotImplementedException();
+            return InnerDelete(id);
         }
 
         [HttpGet]
@@ -78,17 +85,17 @@ namespace ProjectC.Controllers
         [HttpGet("{id}")]
         public override IActionResult Get(int id)
         {
-            throw new NotImplementedException();
+            return InnerGet(id);
         }
 
         public override IActionResult Search(string field, string input)
         {
-            throw new NotImplementedException();
+            return InnerSearch(field, input);
         }
 
         public override IActionResult Update(int id, Order input)
         {
-            throw new NotImplementedException();
+            return InnerSave(input, id);
         }
     }
 }

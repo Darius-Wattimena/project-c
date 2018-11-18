@@ -55,11 +55,14 @@ namespace ProjectC.Controllers
                 ? NoDaoFound
                 : ExecuteFunction(new Func<string, string, List<TU>>(_dao.Search), field, input);
         }
-
-        //TODO needs rework for update
-        //TODO needs check if ID exists
-        protected IActionResult InnerSave(TU entity)
+        
+        protected IActionResult InnerSave(TU entity, int id = -1)
         {
+            if (id != -1)
+            {
+                entity.SetId(id);
+            }
+
             GetDao();
             return _dao == null 
                 ? NoDaoFound 

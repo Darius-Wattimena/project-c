@@ -61,6 +61,29 @@ namespace ProjectC.Database.Core
             }
         }
 
+        public bool ExecuteExistsQuery<T, TU>(TU dao, string query)
+            where T : IEntity
+            where TU : Dao<T>
+        {
+            using (var connection = new MySqlConnection(_context.ConnectionString))
+            {
+                connection.Open();
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var result = false;
+                        while (reader.Read())
+                        {
+                            result = reader.GetBoolean(0);
+                        }
+                        connection.Close();
+                        return result;
+                    }
+                }
+            }
+        }
+
         public void ExecuteNoResultQuery<T, TU>(TU dao, string query)
             where T : IEntity
             where TU : Dao<T>

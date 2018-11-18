@@ -11,25 +11,28 @@ class AdminPanel extends React.Component {
             <div class="sidebar" style={{ float: "left" }}>
                 <ul>
                     <li>
-                        <Link to="/adminpanel/statistics">Statistics</Link>
+                        <Link to="/admin/statistics">Statistics</Link>
                     </li>
                     <li>
-                        <Link to="/adminpanel/product">Products</Link>
+                        <Link to="/admin/product">Products</Link>
                     </li>
                     <li>
-                        <Link to="/adminpanel/users">Users</Link>
+                        <Link to="/admin/stock">Stock</Link>
                     </li>
                     <li>
-                        <Link to="/adminpanel/orders">Orders</Link>
+                        <Link to="/admin/users">Users</Link>
                     </li>
                     <li>
-                        <Link to="/adminpanel/sales">Sale Management</Link>
+                        <Link to="/admin/orders">Orders</Link>
                     </li>
                     <li>
-                        <Link to="/adminpanel/coupons">Coupons</Link>
+                        <Link to="/admin/sales">Sale Management</Link>
                     </li>
                     <li>
-                        <Link to="/adminpanel/reviews">Reviews</Link>
+                        <Link to="/admin/coupons">Coupons</Link>
+                    </li>
+                    <li>
+                        <Link to="/admin/reviews">Reviews</Link>
                     </li>
                 </ul>
             </div>

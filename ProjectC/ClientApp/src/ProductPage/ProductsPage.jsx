@@ -17,7 +17,7 @@ function onClick(e) {
 }
 function Listing(props) {
     const products = props.products;
-    const vertical = props.vertical
+    const vertical = props.vertical;
     if (vertical) {
         return (<VerticalListing products={products} />);
     }
@@ -68,12 +68,31 @@ function VerticalListing(props) {
                         <h4>{product.name}</h4>
                         <p>stock: {product.stock}</p>
                         <h3>{product.price},-</h3>
-                        <CartButton product={product} />
+                        <CartButton product={product}/>
                     </div>
                 </div>
             )}
         </div>
     );
+}
+
+function VerticalViewButton(props) {
+    return (<div ><i class="fas fa-th"></i> Switch To Horizontal</div>);
+}
+
+function HorizontalViewButton(props) {
+    return (<div ><i class="fas fa-align-justify"></i> Switch To Vertical</div >);
+}
+
+function SwitchViewButton(props) {
+    const vertical = props.vertical;
+
+    if (vertical) {
+        return (<VerticalViewButton />);
+    }
+    else {
+        return (<HorizontalViewButton />);
+    }
 }
 
 //base class
@@ -87,7 +106,9 @@ class ProductPage extends React.Component {
     }
 
     componentDidMount() {
-        this.props.getAllProducts();
+        if (!this.props.match.params.nr) {
+            this.props.getAllProducts();
+        }
 
         // Make component accessible
         window.component = this;
@@ -95,6 +116,7 @@ class ProductPage extends React.Component {
 
     render() {
         const { products } = this.props;
+        console.log(this.props);
         return (
             <div>
             <nav class="path-nav" aria-label="breadcrumb">
@@ -113,7 +135,9 @@ class ProductPage extends React.Component {
                     <nav class="navbar navbar-dark bg-info">
                         <ul class="navbar-nav">
                             <li class="nav-right active">
-                                <a class="nav-link" onClick={onClick}>Switch View</a>
+                                    <a class="btn btn-light" onClick={onClick}>
+                                    <SwitchViewButton vertical={vertical} />
+                                </a>
                             </li>
                         </ul>
                     </nav>
@@ -136,6 +160,7 @@ function mapStateToProps(state) {
 // Map actions to props
 const mapDispatchToProps = (dispatch) => {
     return {
+        search: searchValue => dispatch(productActions.search(searchValue)),
         // accessible via this.props.getAllProducts
         getAllProducts: () => dispatch(productActions.getAll()),
 

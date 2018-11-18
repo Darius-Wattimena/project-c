@@ -6,7 +6,9 @@ export const productService = {
     getWithSpecifications,
     getAllWithSpecifications,
     _delete,
-    add
+    add,
+    search,
+    changeStock
 };
 
 // Returns a collection of all products
@@ -25,6 +27,14 @@ function getById(id) {
         headers: authHeader()
     };
     return fetch(config.apiUrl + '/product/get/' + id, requestOptions).then(handleResponse, handleError);
+}
+
+function search(searchValue) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(config.apiUrl + '/product/customSearch/' + searchValue, requestOptions).then(handleResponse, handleError);
 }
 
 function getWithSpecifications(id) {
@@ -68,6 +78,20 @@ function _delete(id) {
     };
 
     return fetch(config.apiUrl + '/product/delete/' + id, requestOptions).then(handleResponse, handleError);
+}
+
+function changeStock(product, newStock) {
+    var body = {}
+    body.product = product;
+    body.newStock = newStock;
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(body)
+    };
+
+    return fetch(config.apiUrl + '/product/changeStock', requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {
