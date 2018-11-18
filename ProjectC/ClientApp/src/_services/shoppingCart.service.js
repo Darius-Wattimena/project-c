@@ -2,6 +2,7 @@
 
 export const shoppingCartService = {
     add,
+    getBasketItems,
     update,
     remove
 };
@@ -16,6 +17,15 @@ function add(shoppingBasketItem) {
     return fetch(config.apiUrl + '/shoppingbasketitem/add/', requestOptions).then(handleResponse, handleError);
 }
 
+function getBasketItems() {
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' }
+    };
+
+    return fetch(config.apiUrl + '/shoppingbasket/GetBasketItems/', requestOptions).then(handleResponse, handleError);
+}
+
 function update(shoppingBasketItem) {
     const requestOptions = {
         method: 'PUT',
@@ -23,16 +33,16 @@ function update(shoppingBasketItem) {
         body: JSON.stringify(shoppingBasketItem)
     };
 
-    return fetch(config.apiUrl + '/shoppingbasketitem/update/' + shoppingBasketItem.productId, requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/shoppingbasketitem/update/' + shoppingBasketItem.id, requestOptions).then(handleResponse, handleError);
 }
 
-function remove(productId) {
+function remove(shoppingBasketItem) {
     const requestOptions = {
         method: 'DELETE',
         headers: authHeader()
     };
 
-    return fetch(config.apiUrl + '/shoppingbasketitem/remove/' + productId, requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/shoppingbasketitem/delete/' + shoppingBasketItem.id, requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {

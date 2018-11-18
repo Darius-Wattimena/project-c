@@ -12,15 +12,28 @@ namespace ProjectC.Controllers
     [ApiController]
     public class ShoppingBasketController : DaoController<ShoppingBasketDao, ShoppingBasket>
     {
-        [Authorize(Roles = "Admin")]
-        public IActionResult Test()
+        [Authorize(Roles = "User,Admin")]
+        [HttpGet]
+        public IActionResult GetBasketItems()
         {
-            ClaimsIdentity identity = HttpContext.User.Identity as ClaimsIdentity;
-
+            // Get user id
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
             int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
-            string role = identity.FindFirst(ClaimTypes.Role).Value;
 
-            return Ok(role);
+            var shoppingBasket = GetDao().GetShoppingBasketForUser(userId);
+
+            if (shoppingBasket == null) return BadRequest("No shopping cart :/");
+
+            var items = GetDaoManager().ShoppingBasketItemDao.Find("ShoppingBasketId", shoppingBasket.Id.ToString());
+
+            if (items == null) return BadRequest("Something went wrong");
+
+            items.ForEach(item => {
+                // Store corresponding product inside the item
+                item.Product = GetDaoManager().ProductDao.Find(item.ProductId);
+            });
+
+            return Ok(items);
         }
 
         [HttpGet]

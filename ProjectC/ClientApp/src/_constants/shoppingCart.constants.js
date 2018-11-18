@@ -1,5 +1,10 @@
 ﻿export const shoppingCartConstants = {
 
+    // Retrieving shopping cart items
+    GET_REQUEST: 'SHOPPINGCART_GET_REQUEST',
+    GET_SUCCESS: 'SHOPPINGCART_GET_SUCCESS',
+    GET_FAILURE: 'SHOPPINGCART_GET_FAILURE',
+
     // Adding an item to the shopping cart
     ADD_REQUEST: 'SHOPPINGCART_ADD_REQUEST',
     ADD_SUCCESS: 'SHOPPINGCART_ADD_SUCCESS',

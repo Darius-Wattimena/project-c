@@ -2,21 +2,50 @@
 import { alertActions } from './';
 import { shoppingCartService } from '../_services/shoppingCart.service';
 
-///TODO: Implement definition of 'shoppingCartItem'
-// TODO: Store product inside shoppingCartItem ???
-
 export const shoppingCartActions = {
+    getItems,
     addProduct,
-    updateProduct,
-    removeProduct,
+    updateItem,
+    removeItem,
     clear
 };
 
 function convertToBasketItem(product) {
     return {
-        productId: product.id,
-        amount: product.amount // TODO: This is wrong
+        'productId': product.id,
+        'amount': 0,
+        'product': product
     };
+}
+
+function getItems() {
+    return dispatch => {
+
+        const user = localStorage.getItem('user');
+
+        if (!user) {
+            // TODO: Not logged in
+            return;
+        }
+
+        dispatch(request());
+
+        shoppingCartService.getBasketItems()
+            .then(
+                items => {
+                    // Store retrieved items
+                    dispatch(success(items));
+                },
+                error => {
+                    // Could not retrieve items
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+    function request() { return { type: shoppingCartConstants.GET_REQUEST } }
+    function success(items) { return { type: shoppingCartConstants.GET_SUCCESS, items } }
+    function failure(error) { return { type: shoppingCartConstants.GET_FAILURE, error } }
 }
 
 function addProduct(product) {
@@ -24,16 +53,18 @@ function addProduct(product) {
 
         const user = localStorage.getItem('user');
 
-        const shoppingBasketItem = convertToBasketItem(product);
+        const item = convertToBasketItem(product);
 
         if (user) {
             // User is logged in, add the item to their shopping basket
-            shoppingCartService.add(shoppingBasketItem)
+            dispatch(request(item));
+
+            shoppingCartService.add(item)
                 .then(
-                    response => {
+                    item => {
                         // Product was added to the basket.
-                        dispatch(success(product));
-                        dispatch(alertActions.success('Added product to basket. (' + response + ')'));
+                        dispatch(success(item));
+                        //dispatch(alertActions.success('Added product to basket.'));
                     },
                     error => {
                         // Something went wrong
@@ -44,43 +75,60 @@ function addProduct(product) {
         }
         else {
             // User is not logged in, store the item locally
-            dispatch(add_local(product));
-            dispatch(alertActions.success('Added product to basket.'));
+            dispatch(add_local(item));
+            //dispatch(alertActions.success('Added product to basket.'));
         }
     };
 
-    function request(product) { return { type: shoppingCartConstants.ADD_REQUEST, product } }
-    function success(product) { return { type: shoppingCartConstants.ADD_SUCCESS, product } }
+    function request(item) { return { type: shoppingCartConstants.ADD_REQUEST, item } }
+    function success(item) { return { type: shoppingCartConstants.ADD_SUCCESS, item } }
     function failure(error) { return { type: shoppingCartConstants.ADD_FAILURE, error } }
 
-    function add_local(product) { return { type: shoppingCartConstants.ADD_CLIENT, product } }
+    function add_local(item) { return { type: shoppingCartConstants.ADD_CLIENT, item } }
 };
 
-function updateProduct(product) {
+function updateItem(item) {
     return dispatch => {
-        dispatch(update_local(product));
+
+        const user = localStorage.getItem('user');
+
+        if (user) {
+            dispatch(request(item));
+
+            // Perform update
+            shoppingCartService.update(item)
+                .then(
+                    item => dispatch(success(item)),
+                    error => dispatch(failure(error))
+                );
+        }
+        else {
+            dispatch(update_local(item));
+        }
     }
 
-    function request(product) { return { type: shoppingCartConstants.UPDATE_REQUEST, product } }
-    function success(product) { return { type: shoppingCartConstants.UPDATE_SUCCESS, product } }
+    function request(item) { return { type: shoppingCartConstants.UPDATE_REQUEST, item } }
+    function success(item) { return { type: shoppingCartConstants.UPDATE_SUCCESS, item } }
     function failure(error) { return { type: shoppingCartConstants.UPDATE_FAILURE, error } }
 
-    function update_local(product) { return { type: shoppingCartConstants.UPDATE_CLIENT, product } }
+    function update_local(item) { return { type: shoppingCartConstants.UPDATE_CLIENT, item } }
 }
 
-function removeProduct(product) {
+function removeItem(item) {
 
     const user = localStorage.getItem('user');
 
     return dispatch => {
 
         if (user) {
-            // User is logged in, remove the item from their shopping basket
-            shoppingCartService.remove(product.id)
+            // User is logged in, remove the (product) item from their shopping basket
+            dispatch(request(item));
+
+            shoppingCartService.remove(item)
                 .then(
                     response => {
-                        dispatch(success());
-                        dispatch(alertActions.success('Removed the product from the basket. (' + response + ')'));
+                        dispatch(success(item));
+                        //dispatch(alertActions.success('Removed the product from the basket. (' + response + ')'));
                     },
                     error => {
                         dispatch(alertActions.error(error));
@@ -88,16 +136,16 @@ function removeProduct(product) {
                 );
         }
         else {
-            dispatch(remove_local(product));
-            dispatch(alertActions.error('Removed product from basket.'));
+            dispatch(remove_local(item));
+            //dispatch(alertActions.error('Removed product from basket.'));
         }
     }
 
-    function request(product) { return { type: shoppingCartConstants.REMOVE_REQUEST, product } }
-    function success() { return { type: shoppingCartConstants.REMOVE_SUCCESS } }
+    function request(item) { return { type: shoppingCartConstants.REMOVE_REQUEST, item } }
+    function success(item) { return { type: shoppingCartConstants.REMOVE_SUCCESS, item } }
     function failure(error) { return { type: shoppingCartConstants.REMOVE_FAILURE, error } }
 
-    function remove_local(product) { return { type: shoppingCartConstants.REMOVE_CLIENT, product } }
+    function remove_local(item) { return { type: shoppingCartConstants.REMOVE_CLIENT, item } }
 }
 
 function clear() {

@@ -56,6 +56,7 @@ namespace ProjectC.Controllers
             return InnerSave(shoppingBasketItem);
         }
 
+        /*
         /// <summary>
         /// Removes a shopping basket item by providing the product id it is associated with
         /// </summary>
@@ -80,25 +81,7 @@ namespace ProjectC.Controllers
 
             return Ok("Item was succesfully removed from the cart");
         }
-
-        [HttpGet]
-        public IActionResult GetBasketItems()
-        {
-            // Get user id
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
-
-            var shoppingBasket = GetDaoManager().ShoppingBasketDao.GetShoppingBasketForUser(userId);
-
-            if (shoppingBasket == null)
-                return BadRequest("No shopping cart :/");
-
-            var items = GetDao().Find("ShoppingBasketId", shoppingBasket.Id.ToString());
-
-            if (items == null) return BadRequest("Something went wrong");
-
-            return Ok(items);
-        }
+        */
 
         [HttpGet]
         public override IActionResult Get()
@@ -127,7 +110,15 @@ namespace ProjectC.Controllers
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] ShoppingBasketItem input)
         {
-            return InnerSave(input, id);
+            // TODO: CHECK IF USER owns this item
+            if (input.Amount <= 0)
+            {
+                return InnerDelete(id);
+            }
+            else
+            {
+               return InnerSave(input, id);
+            }
         }
 
         [HttpDelete("{id}")]
