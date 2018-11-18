@@ -106,7 +106,7 @@ class ProductPage extends React.Component {
         window.component = this;
 
         this.state = {
-            filters: {}
+            filteredProducts: null
         };
     }
 
@@ -122,10 +122,10 @@ class ProductPage extends React.Component {
         }
     }
 
-    setFilters(filters) {
+    setFilteredProducts(products) {
         // Set filters in state
         this.setState({
-            filters: filters
+            filteredProducts: products
         });
     }
 
@@ -147,7 +147,7 @@ class ProductPage extends React.Component {
                         </nav>
                         {
                             products.items &&
-                            <FilterColumn products={products.items} setFilters={this.setFilters.bind(this)} />
+                            <FilterColumn products={products.items} setFilteredProducts={this.setFilteredProducts.bind(this)} />
                         }
                     </div>
                     <div class="products-container col-sm-9">
@@ -164,11 +164,11 @@ class ProductPage extends React.Component {
                         {products.error && <span className="text-danger">ERROR: {products.error}</span>}
                         {products.items &&
                             <Listing products={
-                            // If any filters are enabled
-                            products.items.some(p => p.specifications.some(s => this.state.filters[s.name] && this.state.filters[s.name][s.value] && this.state.filters[s.name][s.value]))
+                            // If products have been filtered
+                            this.state.filteredProducts != null
                             &&
                             // Pass filtered products
-                            products.items.filter(p => p.specifications.some(s => this.state.filters[s.name] && this.state.filters[s.name][s.value] && this.state.filters[s.name][s.value]))
+                            this.state.filteredProducts
                             ||
                             // Otherwise, pass unfiltered products
                             products.items
