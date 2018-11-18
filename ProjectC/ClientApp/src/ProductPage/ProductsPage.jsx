@@ -30,7 +30,10 @@ function Listing(props) {
 
 function CartButton(props) {
     return (
-        <button class="btn cartbutton" onClick={window.component.props.addProduct.bind(this, props.product)}>
+        <button
+            disabled={(window.component.props.shoppingCart.adding && window.component.props.shoppingCart.adding.productId === props.product.id
+            )}
+            class="btn cartbutton" onClick={window.component.props.addProduct.bind(this, props.product)}>
             Add to cart
         </button>
     );
@@ -132,6 +135,8 @@ class ProductPage extends React.Component {
     render() {
         const { products } = this.props;
 
+        console.log(this.props.shoppingCart);
+
         return (
             <div>
                 <nav class="path-nav" aria-label="breadcrumb">
@@ -181,9 +186,10 @@ class ProductPage extends React.Component {
     }
 }
 function mapStateToProps(state) {
-    const { products } = state;
+    const { products, shoppingCart } = state;
     return {
-        products
+        products,
+        shoppingCart
     };
 }
 

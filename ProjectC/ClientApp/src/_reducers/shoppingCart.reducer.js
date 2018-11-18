@@ -34,19 +34,16 @@ export function shoppingCart(state = initialState, action) {
         case shoppingCartConstants.ADD_REQUEST:
             return {
                 ...state,
-                loading: true
+                adding: action.item
             };
             break;
 
-        /*
         case shoppingCartConstants.ADD_SUCCESS:
             return {
                 ...state,
-                // Add the 'added' item to the collection
-                items: [...state.items, action.item]
-            };
+                adding: null
+            }
             break;
-        */
 
         // UPDATE ITEM
         case shoppingCartConstants.UPDATE_REQUEST:
