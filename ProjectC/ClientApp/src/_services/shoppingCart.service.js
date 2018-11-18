@@ -26,13 +26,13 @@ function update(shoppingBasketItem) {
     return fetch(config.apiUrl + '/shoppingbasketitem/update/' + shoppingBasketItem.productId, requestOptions).then(handleResponse, handleError);
 }
 
-function remove(id) {
+function remove(productId) {
     const requestOptions = {
         method: 'DELETE',
         headers: authHeader()
     };
 
-    return fetch(config.apiUrl + '/shoppingbasketitem/delete/' + id, requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/shoppingbasketitem/remove/' + productId, requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {

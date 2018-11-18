@@ -2,6 +2,9 @@
 import { alertActions } from './';
 import { shoppingCartService } from '../_services/shoppingCart.service';
 
+///TODO: Implement definition of 'shoppingCartItem'
+// TODO: Store product inside shoppingCartItem ???
+
 export const shoppingCartActions = {
     addProduct,
     updateProduct,
@@ -12,7 +15,7 @@ export const shoppingCartActions = {
 function convertToBasketItem(product) {
     return {
         productId: product.id,
-        amount: product.amount
+        amount: product.amount // TODO: This is wrong
     };
 }
 
@@ -24,6 +27,7 @@ function addProduct(product) {
         const shoppingBasketItem = convertToBasketItem(product);
 
         if (user) {
+            // User is logged in, add the item to their shopping basket
             shoppingCartService.add(shoppingBasketItem)
                 .then(
                     response => {
@@ -65,13 +69,32 @@ function updateProduct(product) {
 }
 
 function removeProduct(product) {
+
+    const user = localStorage.getItem('user');
+
     return dispatch => {
-        dispatch(remove_local(product));
-        dispatch(alertActions.error('Removed product from basket.'));
+
+        if (user) {
+            // User is logged in, remove the item from their shopping basket
+            shoppingCartService.remove(product.id)
+                .then(
+                    response => {
+                        dispatch(success());
+                        dispatch(alertActions.success('Removed the product from the basket. (' + response + ')'));
+                    },
+                    error => {
+                        dispatch(alertActions.error(error));
+                    }
+                );
+        }
+        else {
+            dispatch(remove_local(product));
+            dispatch(alertActions.error('Removed product from basket.'));
+        }
     }
 
     function request(product) { return { type: shoppingCartConstants.REMOVE_REQUEST, product } }
-    function success(product) { return { type: shoppingCartConstants.REMOVE_SUCCESS, product } }
+    function success() { return { type: shoppingCartConstants.REMOVE_SUCCESS } }
     function failure(error) { return { type: shoppingCartConstants.REMOVE_FAILURE, error } }
 
     function remove_local(product) { return { type: shoppingCartConstants.REMOVE_CLIENT, product } }

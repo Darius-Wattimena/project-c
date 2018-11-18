@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
 using System.Collections.Generic;
@@ -7,13 +8,21 @@ using System.Security.Claims;
 
 namespace ProjectC.Controllers
 {
+    [Authorize(Roles = "User,Admin")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class ShoppingBasketItemController : DaoController<ShoppingBasketItemDao, ShoppingBasketItem>
     {
+        /// <summary>
+        /// Add an item to the shopping basket of the session user
+        /// </summary>
         [HttpPost]
         public IActionResult Add([FromBody]ShoppingBasketItem input)
         {
+            // TODO: Shopping basket table is unnecessary
+            // TODO: Remove shopping basket table from database, replace 'ShoppingBasketId' in table ShoppingBasketItem with 'UserId'
+
+
             // Get user id
             var identity = HttpContext.User.Identity as ClaimsIdentity;
             int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
@@ -45,6 +54,50 @@ namespace ProjectC.Controllers
             shoppingBasketItem.ShoppingBasketId = shoppingBasket.GetId();
 
             return InnerSave(shoppingBasketItem);
+        }
+
+        /// <summary>
+        /// Removes a shopping basket item by providing the product id it is associated with
+        /// </summary>
+        /// <param name="productId">The product id of the item</param>
+        [HttpDelete("{productId}")]
+        public IActionResult Remove(int productId)
+        {
+            // Get user id
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+
+            var shoppingBasket = GetDaoManager().ShoppingBasketDao.GetShoppingBasketForUser(userId); // Get users' shopping basket
+
+            var item = GetDao().GetShoppingBasketItem(shoppingBasket.Id, productId); // Get shopping basket item to delete
+
+            if (item == null)
+            {
+                return BadRequest("Item does not exist");
+            }
+
+            GetDao().Delete(item.Id); // Delete the item
+
+            return Ok("Item was succesfully removed from the cart");
+        }
+
+        [HttpGet]
+        public IActionResult GetBasketItems()
+        {
+            // Get user id
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+
+            var shoppingBasket = GetDaoManager().ShoppingBasketDao.GetShoppingBasketForUser(userId);
+
+            if (shoppingBasket == null)
+                return BadRequest("No shopping cart :/");
+
+            var items = GetDao().Find("ShoppingBasketId", shoppingBasket.Id.ToString());
+
+            if (items == null) return BadRequest("Something went wrong");
+
+            return Ok(items);
         }
 
         [HttpGet]
