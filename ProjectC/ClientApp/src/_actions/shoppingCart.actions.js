@@ -25,6 +25,8 @@ function getItems() {
 
         if (!user) {
             // TODO: Not logged in
+            // localStorage?
+            // store cart in cookies?
             return;
         }
 
