@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { orderProductsActions } from '../../_actions';
+import { productActions } from '../../_actions';
 
 //base class
 class AdminOrder extends React.Component {
@@ -13,6 +14,7 @@ class AdminOrder extends React.Component {
 
     render() {
         const { orderProducts } = this.props;
+
         return (
             <div class="panel col-md-8">
                 <table class="table">
@@ -45,6 +47,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
     return {
         getOrdersById: id => { dispatch(orderProductsActions.getById(id)); },
+        getProductById: id => { dispatch(productActions.getById(id)); },
     }
 };
 

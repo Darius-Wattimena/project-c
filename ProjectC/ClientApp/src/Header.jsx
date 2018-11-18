@@ -26,7 +26,7 @@ function UserGreeting(props) {
     return (
         <div>
             <div class="btn-group" role="group" aria-label="Basic example">
-                <Link to={`home`} class="btn btn-info">
+                <Link to={`profile`} class="btn btn-info">
                     User <i class="fas fa-user"></i>
                 </Link>
                 <button type="button" class="btn btn-danger">Logout <i class="fas fa-sign-out-alt"></i></button>

@@ -2,10 +2,12 @@
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { orderActions } from '../_actions';
+import { userActions } from '../_actions';
 
 class AdminOrders extends React.Component {
     componentDidMount() {
         this.props.getAllorders();
+
 
         // Make component accessible
         window.component = this;
@@ -47,8 +49,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
     return {
         // accessible via this.props.getAllProducts
-        getAllorders: () => dispatch(orderActions.getAll()),
-        
+        getAllorders: () => dispatch(orderActions.getAll())
     }
 };
 
