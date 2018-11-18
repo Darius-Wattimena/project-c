@@ -59,15 +59,15 @@ class OrderPage extends React.Component {
                                     {items.map((item, index) =>
                                         <div class="row cartitem">
                                             <div class="col-md-3">
-                                                <img src={item.imageUrl} height="80px" width="80px;" />
+                                                <img src={item.product.imageUrl} height="80px" width="80px;" />
                                             </div>
                                             <div class="col-md-4">
                                                 <h6>Name</h6>
-                                                <p>{item.name}</p>
+                                                <p>{item.product.name}</p>
                                             </div>
                                             <div class="col-md-2">
                                                 <h6>Price</h6>
-                                                <p>{item.price}</p>
+                                                <p>{item.product.price}</p>
                                             </div>
                                             <div class="col-md-2">
                                                 <h6>Amount</h6>
