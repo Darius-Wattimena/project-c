@@ -128,7 +128,12 @@ namespace ProjectC.Controllers
             }
 
             var user = input.SetupUser(input);
-            daoManager.UserDao.Save(user);
+
+            // Create user
+            User createdUser = daoManager.UserDao.Save(user);
+
+            // Create shopping basket for user
+            daoManager.ShoppingBasketDao.Save(new ShoppingBasket { UserId = createdUser.Id });
 
             return Ok();
         }

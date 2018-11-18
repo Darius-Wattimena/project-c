@@ -35,6 +35,7 @@ class RegisterPage extends React.Component {
                 ...user,
                 [name]: value
             }
+
         });
     }
 

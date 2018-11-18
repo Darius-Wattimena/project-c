@@ -9,5 +9,15 @@ namespace ProjectC.Database.Daos
         {
 
         }
+
+        /// <summary>
+        /// Get the shopping basket that belongs to a single user by providing their user id
+        /// </summary>
+        public ShoppingBasket GetShoppingBasketForUser(int userId)
+        {
+            var shoppingBaskets = Find("UserId", userId.ToString());
+
+            return shoppingBaskets.Count > 0 ? shoppingBaskets[0] : null;
+        }
     }
 }

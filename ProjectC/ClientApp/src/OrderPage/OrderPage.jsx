@@ -19,6 +19,8 @@ class OrderPage extends React.Component {
 
     handleOrder(shoppingCartItems) {
         this.props.createOrder(shoppingCartItems);
+
+        this.props.clearShoppingCart();
         //setTimeout(function () { history.push("/products"); }, 3000);
     }
 
@@ -42,7 +44,7 @@ class OrderPage extends React.Component {
         const items = this.props.items;
         var total = 0;
         for (var i = 0; i < items.length; i++) {
-            total += items[i].price * items[i].amount;
+            total += items[i].product.price * items[i].amount;
         }
 
         if (user == null) {
@@ -59,15 +61,15 @@ class OrderPage extends React.Component {
                                     {items.map((item, index) =>
                                         <div class="row cartitem">
                                             <div class="col-md-3">
-                                                <img src={item.imageUrl} height="80px" width="80px;" />
+                                                <img src={item.product.imageUrl} height="80px" width="80px;" />
                                             </div>
                                             <div class="col-md-4">
                                                 <h6>Name</h6>
-                                                <p>{item.name}</p>
+                                                <p>{item.product.name}</p>
                                             </div>
                                             <div class="col-md-2">
                                                 <h6>Price</h6>
-                                                <p>{item.price}</p>
+                                                <p>{item.product.price}</p>
                                             </div>
                                             <div class="col-md-2">
                                                 <h6>Amount</h6>
@@ -172,7 +174,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
     return {
         createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems)),
-        clearShoppingCart: () => dispatch(shoppingCartActions.removeAll())
+        clearShoppingCart: () => dispatch(shoppingCartActions.clear())
     }
 };
 

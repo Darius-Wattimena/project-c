@@ -12,6 +12,8 @@ class ShoppingCart extends React.Component {
     constructor(props) {
         super(props);
 
+        this.props.getItems();
+
         // TODO: For later, should we store the shopping cart in local storage?
         localStorage.setItem('shoppingCart', JSON.stringify({
             items: [
@@ -20,14 +22,9 @@ class ShoppingCart extends React.Component {
 
     }
 
-    handleOrder(shoppingCartItems) {
-        this.props.createOrder(shoppingCartItems);
-        console.log("OK");
-    }
-
-    handleRemove(product) {
+    handleRemove(item) {
         // Remove a product from the cart
-        this.props.removeProduct(product);
+        this.props.removeItem(item);
         // re-render
         this.forceUpdate();
     }
@@ -40,11 +37,16 @@ class ShoppingCart extends React.Component {
         this.forceUpdate();
     }
 
-    handleSubtract(product) {
-        // -1
-        this.props.subtractProduct(product);
+    handleIncrement(item) {
+        item.amount += 1;
+        this.props.updateItem(item);
         // re-render
         this.forceUpdate();
+    }
+
+    handleDecrement(item) {
+        item.amount -= 1;
+        this.props.updateItem(item);
     }
 
     render() {
@@ -59,10 +61,14 @@ class ShoppingCart extends React.Component {
 
         return (
             <div>
-                <h2 style={{'padding-top' : '1em'}}>Shopping Cart</h2>
+                <h2 style={{ 'padding-top': '1em' }}>Shopping Cart</h2>
+                {
+                    shoppingCart.loading && <p><small>Loading...</small></p>
+                }
                 {shoppingCart.items &&
                     <div>
-                        {shoppingCart.items.length == 0 &&
+                        {
+                            shoppingCart.items.length == 0 &&
                             <div>
                                 <h3 style={{ 'padding-top': '2em' }}>Your shopping cart is empty. ☹</h3>
                             </div>
@@ -71,32 +77,32 @@ class ShoppingCart extends React.Component {
                             <div className="product row" key={index}>
                                 <div className="imageColumn col-md-4">
                                     <Link to={`/product/${item.id}`}>
-                                        <img src={item.imageUrl} />
+                                        <img src={item.product.imageUrl} />
                                     </Link>
                                 </div>
                                 <div className="productColumn col-md-4">
-                                    <Link to={`/product/${item.id}`}>
-                                        <h4>{item.name}</h4>
+                                    <Link to={`/product/${item.product.id}`}>
+                                        <h4>{item.product.name}</h4>
                                     </Link>
-                                    <h2>{item.price},-</h2>
+                                    <h2>{item.product.price},-</h2>
                                     <p>Quantity:
-                                <button className="btn btn-sm" onClick={this.handleSubtract.bind(this, item)}>-</button>
+                                <button disabled={item.updating || item.deleting} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
                                         {item.amount}
-                                        <button className="btn btn-sm" onClick={this.handleAdd.bind(this, item)}>+</button>
+                                        <button disabled={item.updating || item.deleting} className="btn btn-sm" onClick={this.handleIncrement.bind(this, item)}>+</button>
                                     </p>
                                 </div>
                                 <div className="actionsColumn col-md-4">
-                                    <button className="btn btn-danger" onClick={this.handleRemove.bind(this, item)}>Remove</button>
-                                    <button className="btn btn-primary">Add to wishlist</button>
+                                    <button disabled={item.updating || item.deleting} className="btn btn-danger" onClick={this.handleRemove.bind(this, item)}>Remove</button>
+                                    <button disabled={item.updating || item.deleting} className="btn btn-primary">Add to wishlist</button>
                                 </div>
                             </div>
-                    )}
-                    {
-                        shoppingCart.items &&
-                        <Link className="btn btn-danger" to="/order">
-                            Order
+                        )}
+                        {
+                            shoppingCart.items.length > 0 &&
+                            <Link className="btn btn-danger" to="/order">
+                                Order
                             </Link>
-                    }
+                        }
                     </div>
                 }
             </div>
@@ -115,17 +121,17 @@ function mapStateToProps(state) {
 // Map actions to props
 const mapDispatchToProps = (dispatch) => {
     return {
+        // this.props.getItems
+        getItems: () => dispatch(shoppingCartActions.getItems()),
+
         // this.props.addProduct
         addProduct: product => dispatch(shoppingCartActions.addProduct(product)),
 
-        // this.props.removeProduct
-        removeProduct: product => dispatch(shoppingCartActions.removeProduct(product)),
+        // this.props.updateItem
+        updateItem: item => dispatch(shoppingCartActions.updateItem(item)),
 
-        // this.props.subtractProduct
-        subtractProduct: product => dispatch(shoppingCartActions.subtractProduct(product)),
-
-        // this.props.createOrder
-        createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems))
+        // this.props.removeItem
+        removeItem: item => dispatch(shoppingCartActions.removeItem(item))
     }
 };
 
