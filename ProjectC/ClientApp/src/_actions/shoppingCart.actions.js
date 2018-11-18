@@ -64,7 +64,8 @@ function addProduct(product) {
                     item => {
                         // Product was added to the basket.
                         dispatch(success(item));
-                        //dispatch(alertActions.success('Added product to basket.'));
+                        console.log("Added product to basket");
+                        dispatch(alertActions.success(item.product.name + ' was added to the basket.'));
                     },
                     error => {
                         // Something went wrong
@@ -98,8 +99,11 @@ function updateItem(item) {
             // Perform update
             shoppingCartService.update(item)
                 .then(
-                    item => dispatch(success(item)),
-                    error => dispatch(failure(error))
+                    response => dispatch(success(item)),
+                    error => {
+                        dispatch(failure(error));
+                        dispatch(alertActions.error(error));
+                    }
                 );
         }
         else {
@@ -150,8 +154,29 @@ function removeItem(item) {
 
 function clear() {
     return dispatch => {
-        dispatch(clear_local());
+
+        const user = localStorage.getItem('user');
+
+        if (user) {
+            dispatch(request());
+
+            shoppingCartService.clear().then(
+                response => {
+                    dispatch(success());
+                },
+                error => {
+                    dispatch(failure(error));
+                }
+            )
+        }
+        else {
+            dispatch(clear_local());
+        }
     }
+
+    function request() { return { type: shoppingCartConstants.CLEAR_REQUEST } }
+    function success() { return { type: shoppingCartConstants.CLEAR_SUCCESS } }
+    function failure(error) { return { type: shoppingCartConstants.CLEAR_FAILURE, error } }
 
     function clear_local() { return { type: shoppingCartConstants.CLEAR_CLIENT } };
 }

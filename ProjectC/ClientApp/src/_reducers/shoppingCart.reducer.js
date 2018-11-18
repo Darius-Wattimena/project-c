@@ -63,13 +63,17 @@ export function shoppingCart(state = initialState, action) {
 
         case shoppingCartConstants.UPDATE_SUCCESS:
 
+            console.log("SUCCES");
+
             // Discard any items with an amount of 0 or less
             var remainingItems = state.items.map(item =>
                                     item.productId === action.item.productId
-                                        ? action.item
-                                        : item);
+                                        ? action.item // updated item
+                                        : item);      // untouched item
 
             remainingItems = remainingItems.filter((i) => i.amount >= 1);
+
+            console.log(remainingItems);
 
             return {
                 ...state,
@@ -100,6 +104,16 @@ export function shoppingCart(state = initialState, action) {
             };
             break;
 
+        // CLEAR CART
+        case shoppingCartConstants.CLEAR_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+
+        case shoppingCartConstants.CLEAR_SUCCESS:
+            return initialState;
+
         // CLIENT SIDED
         // ADD
         case shoppingCartConstants.ADD_CLIENT:
@@ -121,7 +135,7 @@ export function shoppingCart(state = initialState, action) {
                 // Whatever was in the state
                 ...state,
                 // The existing items plus the new item
-                items: [...state.items, action.item]
+                items: [...state.items, { ...action.item, amount: 1 }]
             };
 
         // REMOVE
@@ -139,6 +153,9 @@ export function shoppingCart(state = initialState, action) {
                 ...state, items: remainingItems
             };
 
+        // CLEAR
+        case shoppingCartConstants.CLEAR_CLIENT:
+            return initialState;
 
         default:
             return state

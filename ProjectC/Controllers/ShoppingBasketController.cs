@@ -36,6 +36,26 @@ namespace ProjectC.Controllers
             return Ok(items);
         }
 
+        [HttpPut]
+        public IActionResult Clear()
+        {
+            // Get user id
+            var identity = HttpContext.User.Identity as ClaimsIdentity;
+            int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+            
+            var shoppingBasket = GetDao().GetShoppingBasketForUser(userId); // Get basket
+
+            var items = GetDaoManager().ShoppingBasketItemDao.Find("ShoppingBasketId", shoppingBasket.Id.ToString()); // GET items
+
+            // DELETe all items
+            items.ForEach(item =>
+            {
+                GetDaoManager().ShoppingBasketItemDao.Delete(item.Id);
+            });
+
+            return Ok("Cleared the shopping cart.");
+        }
+
         [HttpGet]
         public override IActionResult Get()
         {

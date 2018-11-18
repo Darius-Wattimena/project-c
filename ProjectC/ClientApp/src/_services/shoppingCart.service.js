@@ -4,7 +4,8 @@ export const shoppingCartService = {
     add,
     getBasketItems,
     update,
-    remove
+    remove,
+    clear
 };
 
 function add(shoppingBasketItem) {
@@ -43,6 +44,15 @@ function remove(shoppingBasketItem) {
     };
 
     return fetch(config.apiUrl + '/shoppingbasketitem/delete/' + shoppingBasketItem.id, requestOptions).then(handleResponse, handleError);
+}
+
+function clear() {
+    const requestOptions = {
+        method: 'PUT',
+        headers: authHeader()
+    };
+
+    return fetch(config.apiUrl + '/shoppingbasket/clear/', requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {

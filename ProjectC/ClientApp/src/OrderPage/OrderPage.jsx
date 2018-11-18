@@ -19,6 +19,8 @@ class OrderPage extends React.Component {
 
     handleOrder(shoppingCartItems) {
         this.props.createOrder(shoppingCartItems);
+
+        this.props.clearShoppingCart();
         //setTimeout(function () { history.push("/products"); }, 3000);
     }
 
@@ -42,7 +44,7 @@ class OrderPage extends React.Component {
         const items = this.props.items;
         var total = 0;
         for (var i = 0; i < items.length; i++) {
-            total += items[i].price * items[i].amount;
+            total += items[i].product.price * items[i].amount;
         }
 
         if (user == null) {
