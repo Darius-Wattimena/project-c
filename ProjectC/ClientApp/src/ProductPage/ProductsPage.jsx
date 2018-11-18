@@ -195,7 +195,7 @@ const mapDispatchToProps = (dispatch) => {
         getAllProducts: () => dispatch(productActions.getAll()),
 
         // this.props.addProduct
-        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); window.alert(product.name + " was added to the shopping cart! (TEST)"); console.log("Added product to the basket."); },
+        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); }
     }
 };
 
