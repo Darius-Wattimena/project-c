@@ -36,6 +36,11 @@ namespace ProjectC.Database.Daos
         {
             return Search("name", "%" + searchValue + "%"); // is het zelfde als "SELECT * FROM product WHERE name LIKE '%" + searchValue + "%'"
         }
+
+        public Product FindById(int id)
+        {
+            return Find(id);
+        }
     }
 }
 

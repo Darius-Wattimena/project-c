@@ -88,6 +88,16 @@ namespace ProjectC.Controllers
             return InnerGet(id);
         }
 
+        [HttpGet]
+        public IActionResult GetByUser()
+        {
+            if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
+   
+            var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+            var ui = userId.ToString();
+            return InnerSearch("UserId", ui);
+        }
+
         public override IActionResult Search(string field, string input)
         {
             return InnerSearch(field, input);

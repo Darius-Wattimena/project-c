@@ -3,7 +3,8 @@ import { orderService } from '../_services';
 
 export const orderActions = {
     create,
-    getAll
+    getAll,
+    getByUser
 };
 
 function create(shoppingCartItems) {
@@ -30,7 +31,7 @@ function getAll() {
 
         orderService.getAll()
             .then(
-                orders => dispatch(success(orders)),
+                order => dispatch(success(order)),
                 error => dispatch(failure(error))
         );
     };
@@ -38,4 +39,21 @@ function getAll() {
     function request() { return { type: orderConstants.GETALL_REQUEST } }
     function success(order) { return { type: orderConstants.GETALL_SUCCESS, order} }
     function failure(error) { return { type: orderConstants.GETALL_FAILURE, error } }
+}
+
+function getByUser() {
+    return dispatch => {
+
+        dispatch(request());
+
+        orderService.GetByUser()
+            .then(
+                order => dispatch(success(order)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: orderConstants.GETALL_REQUEST } }
+    function success(order) { return { type: orderConstants.GETBYUSER_SUCCESS, order } }
+    function failure(error) { return { type: orderConstants.GETBYUSER_FAILURE, error } }
 }

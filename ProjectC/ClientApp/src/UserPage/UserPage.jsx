@@ -2,6 +2,8 @@
 import { connect } from 'react-redux';
 import { history } from '../_helpers';
 
+import { userActions } from '../_actions';
+
 import '../styling/UserPageStyling.css'
 
 var page = "Profile";
@@ -14,6 +16,7 @@ function Page(props) {
         return null;
     }
     else if (page === "Order History") {
+        history.push('orderhistory')
         return null;
     }
     else if (page === "Shoppingcart") {
@@ -21,6 +24,7 @@ function Page(props) {
         return null;
     }
     else if (page === "Wishlist") {
+        history.push('wishlist')
         return null;
     }
     else if (page === "Logout") {
@@ -34,7 +38,8 @@ function Page(props) {
 class UserPage extends React.Component {
 
     componentDidMount() {
-        page = "Profile";
+        page = "Profile"
+        this.setState({ p: "Profile" });
     }
 
     onClick(p) {
@@ -69,7 +74,7 @@ class UserPage extends React.Component {
                                 </li>
                             </ul>
                         </nav>
-                        <Page page={page} />
+                        {this.state && <Page page={this.state.p} />}
                     </div>
                 </div>
 

@@ -18,6 +18,18 @@ export function order(state = initialState, action) {
             return {
                 error: action.error
             };
+        case orderConstants.GETBYUSER_REQUEST:
+            return {
+                loading: true
+            };
+        case orderConstants.GETBYUSER_SUCCESS:
+            return {
+                items: action.order
+            };
+        case orderConstants.GETBYUSER_FAILURE:
+            return {
+                error: action.error
+            };
         case orderConstants.CREATE_ORDER_SUCCESS:
             return {
                 response: action.response

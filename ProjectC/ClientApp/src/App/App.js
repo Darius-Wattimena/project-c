@@ -12,6 +12,7 @@ import { LoginPage } from '../LoginPage';
 import { SingleProductPage } from '../SingleProductPage';
 import { OrderPage } from '../OrderPage';
 import { UserPage } from '../UserPage';
+import { OrderHistory } from '../UserPage/OrderHistory';
 
 import { AdminPanelHeader } from '../AdminPanelHeader';
 import { AdminPanel } from '../AdminPanel';
@@ -78,13 +79,12 @@ class App extends Component {
                             <Route path="/user/edit/:id" component={EditUserPage} />
                             <Route path="/checkout" component={ShoppingCart} />
                             <Route path="/login" component={LoginPage} />
-<<<<<<< HEAD
                             <Route path="/order" component={OrderPage} />
                             <Route path="/profile" component={UserPage} />
-=======
                             <Route path="/order" component={OrderPage}/>
-                                        <Route path="/wishlist" component={WishlistPage}/>
->>>>>>> d0f3044e88f079721aacb27470ec5a21dea66c56
+                            <Route path="/wishlist" component={WishlistPage} />
+                            <Route path="/orderhistory" component={OrderHistory} />
+                            <Route path="/orderhistory/:orderid" component={OrderHistory} />
                         </div>
                     </div>
                 </Router>
