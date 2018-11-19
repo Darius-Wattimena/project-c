@@ -16,7 +16,7 @@ namespace ProjectC.Controllers
         [HttpGet]
         public override IActionResult Get()
         {
-            return InnerGet();
+            return GetAllWithSpecifications();
         }
 
         [HttpGet("{value}")]

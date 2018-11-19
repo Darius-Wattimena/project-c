@@ -1,5 +1,6 @@
 ﻿import { orderConstants } from '../_constants'
 import { orderService } from '../_services';
+import { shoppingCartActions } from './shoppingCart.actions';
 
 export const orderActions = {
     create,
@@ -14,8 +15,8 @@ function create(shoppingCartItems) {
 
         orderService.create(shoppingCartItems)
             .then(
-            response => { console.log(response); dispatch(success(response)); },
-            error => { console.log(error); dispatch(failure(error)); }
+            response => { dispatch(success(response)); shoppingCartActions.clear(); },
+            error => { dispatch(failure(error)); }
             );
     };
 

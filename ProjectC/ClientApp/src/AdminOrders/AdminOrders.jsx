@@ -2,7 +2,6 @@
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { orderActions } from '../_actions';
-import { userActions } from '../_actions';
 
 class AdminOrders extends React.Component {
     componentDidMount() {

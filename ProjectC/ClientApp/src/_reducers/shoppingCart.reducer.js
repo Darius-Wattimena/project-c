@@ -5,61 +5,185 @@ const initialState = {
     items: []
 };
 
-export function shoppingCart(state = initialState, action) {
-    switch (action.type) {
-        case shoppingCartConstants.ADD_PRODUCT:
+function setLocalShoppingCart(state) {
+    localStorage.setItem('shoppingCart', JSON.stringify(state));
+}
 
-            // If the item already exists:
-            if (state.items.some(p => p.productId === action.product.id)) {
+export function shoppingCart(state = initialState, action) {
+
+    switch (action.type) {
+
+        // GET ITEMS
+        case shoppingCartConstants.GET_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+            break;
+
+        case shoppingCartConstants.GET_SUCCESS:
+            return {
+                items: action.items
+            };
+            break;
+
+        case shoppingCartConstants.GET_FAILURE:
+            return {
+                ...state,
+                error: action.error
+            };
+            break;
+
+        // ADD ITEM
+        case shoppingCartConstants.ADD_REQUEST:
+            return {
+                ...state,
+                adding: action.item
+            };
+            break;
+
+        case shoppingCartConstants.ADD_SUCCESS:
+            return {
+                ...state,
+                adding: null
+            }
+            break;
+
+        // UPDATE ITEM
+        case shoppingCartConstants.UPDATE_REQUEST:
+            return {
+                ...state,
+                // Set updating property to true for targeted item
+                items: state.items.map(item =>
+                    item.productId === action.item.productId
+                        ? { ...item, updating: true }
+                        : item
+                )
+            };
+            break;
+
+        case shoppingCartConstants.UPDATE_SUCCESS:
+
+            // Discard any items with an amount of 0 or less
+            var remainingItems = state.items.map(item =>
+                                    item.productId === action.item.productId
+                                        ? action.item // updated item
+                                        : item);      // untouched item
+
+            remainingItems = remainingItems.filter((i) => i.amount >= 1);
+
+            console.log(remainingItems);
+
+            return {
+                ...state,
+                // REPLACE old item with updated item
+                items: remainingItems
+            };
+            break;
+
+        // REMOVE ITEM
+        case shoppingCartConstants.REMOVE_REQUEST:
+
+            return {
+                ...state,
+                // Set deleting property to true for targeted item
+                items: state.items.map(item =>
+                    item.productId === action.item.productId
+                        ? { ...item, deleting: true }
+                        : item
+                )
+            };
+            break;
+
+        case shoppingCartConstants.REMOVE_SUCCESS:
+            return {
+                ...state,
+                // Exclude removed item
+                items: state.items.filter(i => i.productId !== action.item.productId)
+            };
+            break;
+
+        // CLEAR CART
+        case shoppingCartConstants.CLEAR_REQUEST:
+            return {
+                ...state,
+                loading: true
+            };
+
+        case shoppingCartConstants.CLEAR_SUCCESS:
+            return initialState;
+            break;
+
+        // CLIENT SIDED
+        //GET
+        case shoppingCartConstants.GET_CLIENT:
+            var cart = JSON.parse(localStorage.getItem('shoppingCart'));
+            if (cart) {
+                console.log(cart);
+                console.log(state);
+                return cart;
+            }
+            return state;
+            break;
+
+        // ADD
+        case shoppingCartConstants.ADD_CLIENT:
+
+            // If the item already exists in the shopping cart:
+            if (state.items.some(i => i.productId === action.item.productId)) {
 
                 // Increment the amount of that product
                 state.items.map(i => {
-                    if (i.productId === action.product.id)
+                    if (i.productId === action.item.id)
                         i.amount += 1;
                 });
 
+                setLocalShoppingCart(state); // store in cookies
                 return state;
             }
 
             // otherwise
-            // create a new shopping basket item with an initial amount of 1
-            var newItem = action.product;
-
-            //TODO: This is all that's needed for shopping basket items (no need to store the entire product) in the future
-            newItem.productId = action.product.id;
-            newItem.amount = 1;
-
-            //TODO: Remove, temporary fix
-            // make sure the item does not have an id to avoid conflict with model
-            //delete newItem.id;
-
-            return {
+            var newState = {
                 // Whatever was in the state
                 ...state,
                 // The existing items plus the new item
-                items: [...state.items, newItem]
-             };
+                items: [...state.items, { ...action.item, amount: 1 }]
+            };
 
-        case shoppingCartConstants.REMOVE_PRODUCT:
+            setLocalShoppingCart(newState); // store in cookies
+            return newState;
+            break;
+
+        // REMOVE
+        case shoppingCartConstants.REMOVE_CLIENT:
             // Filter the products to exclude items that contain the id of the product to delete
-            const filteredItems = state.items.filter((item) => item.productId !== action.product.id);
-            return { ...state, items: filteredItems };
+            var filteredItems = state.items.filter((item) => item.productId !== action.item.productId);
+            var newState = { ...state, items: filteredItems };
 
-        case shoppingCartConstants.SUBTRACT_PRODUCT:
-            // Subtract the amount of products
-            state.items.map(i => {
-                if (i.productId === action.product.id)
-                    i.amount -= 1;
-            });
+            setLocalShoppingCart(newState); // store in cookies
+            return newState;
+            break;
 
+        // UPDATE
+        case shoppingCartConstants.UPDATE_CLIENT:
             // Discard any items with an amount of 0 or less
-            const remainingItems = state.items.filter((i) => i.amount >= 1);
+            var remainingItems = state.items.filter((i) => i.amount >= 1);
 
-            return {
+            var newState = {
                 ...state, items: remainingItems
             };
 
-        
+            setLocalShoppingCart(newState); // store in cookies
+            return newState;
+            break;
+
+        // CLEAR
+        case shoppingCartConstants.CLEAR_CLIENT:
+
+            localStorage.removeItem('shoppingCart');
+            return initialState;
+            break;
+
         default:
             return state
     }

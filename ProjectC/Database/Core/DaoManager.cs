@@ -66,6 +66,8 @@ namespace ProjectC.Database.Core
                     return RoleDao as T;
                 case "ShoppingBasketDao":
                     return ShoppingBasketDao as T;
+                case "ShoppingBasketItemDao":
+                    return ShoppingBasketItemDao as T;
                 case "SpecificationDao":
                     return SpecificationDao as T;
                 case "UserDao":

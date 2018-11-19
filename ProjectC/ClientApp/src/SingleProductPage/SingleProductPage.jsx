@@ -18,7 +18,6 @@ class SingleProductPage extends React.Component {
     handleAdd(product) {
         console.log("Adding product " + product.name + " to the shopping basket");
         this.props.addProduct(product);
-        this.forceUpdate();
     }
     
     render() {
@@ -45,7 +44,9 @@ class SingleProductPage extends React.Component {
                                     <h2>{product.items.name}</h2>
                                     <h3>{product.items.price},-</h3>
                                 <div className="button-group">
-                                    <button className="btn btn-success" onClick={this.handleAdd.bind(this, product.items)}>Add to cart</button>
+                                    <button disabled={(this.props.shoppingCart.adding && this.props.shoppingCart.adding.productId === product.items.id
+                                    )}
+                                        className="btn btn-success" onClick={this.handleAdd.bind(this, product.items)}>Add to cart</button>
                                         <button className="btn btn-info">Add to wishlist</button>
                                     </div>
                                     <p>{product.items.description}</p>
@@ -78,9 +79,10 @@ class SingleProductPage extends React.Component {
     }
 }
 function mapStateToProps(state) {
-    const { product } = state;
+    const { product, shoppingCart } = state;
     return {
-        product
+        product,
+        shoppingCart
     };
 }
 
@@ -88,7 +90,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
     return {
         getProductById: id => { dispatch(productActions.getById(id)); },
-        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); window.alert(product.name + " was added to the shopping cart!"); },
+        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); },
     }
 };
 
