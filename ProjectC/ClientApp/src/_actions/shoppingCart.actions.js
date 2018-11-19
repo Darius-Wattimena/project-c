@@ -24,9 +24,10 @@ function getItems() {
         const user = localStorage.getItem('user');
 
         if (!user) {
-            // TODO: Not logged in
-            // localStorage?
-            // store cart in cookies?
+
+            // get locally stored items
+            dispatch(get_local());
+
             return;
         }
 
@@ -48,6 +49,8 @@ function getItems() {
     function request() { return { type: shoppingCartConstants.GET_REQUEST } }
     function success(items) { return { type: shoppingCartConstants.GET_SUCCESS, items } }
     function failure(error) { return { type: shoppingCartConstants.GET_FAILURE, error } }
+
+    function get_local() { return { type: shoppingCartConstants.GET_CLIENT } }
 }
 
 function addProduct(product) {
@@ -79,7 +82,7 @@ function addProduct(product) {
         else {
             // User is not logged in, store the item locally
             dispatch(add_local(item));
-            //dispatch(alertActions.success('Added product to basket.'));
+            dispatch(alertActions.success(item.product.name + ' was added to the basket.'));
         }
     };
 

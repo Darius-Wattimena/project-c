@@ -5,6 +5,10 @@ const initialState = {
     items: []
 };
 
+function setLocalShoppingCart(state) {
+    localStorage.setItem('shoppingCart', JSON.stringify(state));
+}
+
 export function shoppingCart(state = initialState, action) {
 
     switch (action.type) {
@@ -60,8 +64,6 @@ export function shoppingCart(state = initialState, action) {
 
         case shoppingCartConstants.UPDATE_SUCCESS:
 
-            console.log("SUCCES");
-
             // Discard any items with an amount of 0 or less
             var remainingItems = state.items.map(item =>
                                     item.productId === action.item.productId
@@ -110,8 +112,20 @@ export function shoppingCart(state = initialState, action) {
 
         case shoppingCartConstants.CLEAR_SUCCESS:
             return initialState;
+            break;
 
         // CLIENT SIDED
+        //GET
+        case shoppingCartConstants.GET_CLIENT:
+            var cart = JSON.parse(localStorage.getItem('shoppingCart'));
+            if (cart) {
+                console.log(cart);
+                console.log(state);
+                return cart;
+            }
+            return state;
+            break;
+
         // ADD
         case shoppingCartConstants.ADD_CLIENT:
 
@@ -124,35 +138,51 @@ export function shoppingCart(state = initialState, action) {
                         i.amount += 1;
                 });
 
+                setLocalShoppingCart(state); // store in cookies
                 return state;
             }
 
             // otherwise
-            return {
+            var newState = {
                 // Whatever was in the state
                 ...state,
                 // The existing items plus the new item
                 items: [...state.items, { ...action.item, amount: 1 }]
             };
 
+            setLocalShoppingCart(newState); // store in cookies
+            return newState;
+            break;
+
         // REMOVE
         case shoppingCartConstants.REMOVE_CLIENT:
             // Filter the products to exclude items that contain the id of the product to delete
             var filteredItems = state.items.filter((item) => item.productId !== action.item.productId);
-            return { ...state, items: filteredItems };
+            var newState = { ...state, items: filteredItems };
+
+            setLocalShoppingCart(newState); // store in cookies
+            return newState;
+            break;
 
         // UPDATE
         case shoppingCartConstants.UPDATE_CLIENT:
             // Discard any items with an amount of 0 or less
             var remainingItems = state.items.filter((i) => i.amount >= 1);
 
-            return {
+            var newState = {
                 ...state, items: remainingItems
             };
 
+            setLocalShoppingCart(newState); // store in cookies
+            return newState;
+            break;
+
         // CLEAR
         case shoppingCartConstants.CLEAR_CLIENT:
+
+            localStorage.removeItem('shoppingCart');
             return initialState;
+            break;
 
         default:
             return state
