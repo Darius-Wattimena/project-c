@@ -29,6 +29,12 @@ namespace ProjectC.Controllers
 
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             List<Product> products = daoManager.ProductDao.SearchProduct(value);
+
+            foreach(var item in products)
+            {
+                item.Specifications = GetDaoManager().SpecificationDao.FindSpecificationsByProductId(item.Id);
+            }
+
             return Ok(products);
         }
 
