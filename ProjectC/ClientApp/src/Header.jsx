@@ -30,7 +30,7 @@ function UserButtons(props) {
                 <Link to={`home`} class="btn btn-info">
                     User <i class="fas fa-user"></i>
                 </Link>
-                <button type="button" class="btn btn-danger" onClick={window.component.logout.bind(window.component)}> Logout <i class="fas fa-sign-out-alt"></i></button>
+                <button type="button" class="btn btn-danger" onClick={window.headercomponent.logout}> Logout <i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
     );
@@ -46,10 +46,11 @@ class Header extends React.Component {
         }
 
         // Make component accessible
-        window.component = this;
+        window.headercomponent = this;
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
+        this.logout = this.logout.bind(this);
     }
 
     handleChange(event) {
