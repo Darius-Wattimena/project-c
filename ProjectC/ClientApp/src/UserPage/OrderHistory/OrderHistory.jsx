@@ -8,26 +8,44 @@ class OrderHistory extends React.Component {
         this.props.OrderByUser();
     }
 
+    onClick(orderid) {
+        this.props.ProductsByOrder(orderid);
+        console.log(this.props.orderProducts);
+    }
+
     render() {
         const { order } = this.props;
         const { orderProducts } = this.props;
         return (
-            <div class="panel col-md-8">
-                <table class="table">
-                    <tr>
-                        <th scope="col">ID</th>
-                        <th scope="col">Date</th>
-                        <th scope="col">Price</th>
-                    </tr>
-                    {order.items && order.items.length > 0 && order.items.map((order, index) =>
+            <div class="row">
+                <div class="panel col-md-5">
+                    <table class="table">
                         <tr>
-                            <td scope="row">{order.id}</td>
-                            <td><Link to={`orderhistory/${order.id}`}>{order.orderDate}</Link></td>
-                            <td>{order.totalPrice}</td>
+                            <th scope="col">ID</th>
+                            <th scope="col">Date</th>
+                            <th scope="col">Totalprice</th>
+                        </tr>
+                        {order.items && order.items.map((order, index) =>
+                            <tr>
+                                <td scope="row">{order.id}</td>
+                                <td><a onClick={this.onClick.bind(this, order.id)}>{order.orderDate}</a></td>
+                                <td>{order.totalPrice}</td>
+                            </tr>
+                        )}
+                        {!order.items && <p>Loading...</p>}
+                        {order.items == 0 && <p>You dont have any orders.</p>}
+
+                    </table>
+                </div>
+                <div class="col-md-5">
+                    {orderProducts.items && orderProducts.items.map((order, index) =>
+                        <tr>
+                            <h5 scope="row">{order.orderProducts.id}</h5>
+                            <h5>{order.product.name}</h5>
+                            <img src={order.product.imageUrl} width="80" height="80"></img>
                         </tr>
                     )}
-
-                </table>
+                </div>
             </div>
         );
     }
