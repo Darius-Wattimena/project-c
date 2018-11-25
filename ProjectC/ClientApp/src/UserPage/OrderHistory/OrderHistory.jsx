@@ -3,14 +3,21 @@ import { orderActions, orderProductsActions } from '../../_actions';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 
+import '../../styling/orderHistoryStyling.css';
+
 class OrderHistory extends React.Component {
     componentDidMount() {
         this.props.OrderByUser();
+        this.setState({
+            os: 3
+        });
     }
 
-    onClick(orderid) {
+    onClick(orderid, s) {
         this.props.ProductsByOrder(orderid);
-        console.log(this.props.orderProducts);
+        this.setState({
+            os: s
+        });
     }
 
     render() {
@@ -18,33 +25,47 @@ class OrderHistory extends React.Component {
         const { orderProducts } = this.props;
         return (
             <div class="row">
-                <div class="panel col-md-5">
-                    <table class="table">
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Date</th>
-                            <th scope="col">Totalprice</th>
-                        </tr>
+                <div class="col-md-5 sec">
+                    <h4>Orders</h4>
+                    <div className="orders">
                         {order.items && order.items.map((order, index) =>
-                            <tr>
-                                <td scope="row">{order.id}</td>
-                                <td><a onClick={this.onClick.bind(this, order.id)}>{order.orderDate}</a></td>
-                                <td>{order.totalPrice}</td>
-                            </tr>
+                            <a onClick={this.onClick.bind(this, order.id, order.orderState)}>
+                            <div class="orderh">
+                                <p scope="row">{order.id}</p>
+                                <p>{order.orderDate.replace("T", " ")}</p>
+                                <p>TotalPrice: {order.totalPrice}</p>
+                                </div>
+                            </a>
                         )}
                         {!order.items && <p>Loading...</p>}
                         {order.items == 0 && <p>You dont have any orders.</p>}
 
-                    </table>
+                    </div>
                 </div>
-                <div class="col-md-5">
-                    {orderProducts.items && orderProducts.items.map((order, index) =>
-                        <tr>
-                            <h5 scope="row">{order.orderProducts.id}</h5>
-                            <h5>{order.product.name}</h5>
-                            <img src={order.product.imageUrl} width="80" height="80"></img>
-                        </tr>
-                    )}
+                <div class="col-md-6 sec">
+                    <h4>OrderInfo</h4>
+                    <div className="orderStatus">
+                        {this.state && <ul className="progressbar">
+                            <li className="active">Proccesing Order</li>
+                            {this.state.os > 0 && <li className="active">On the move</li>}
+                            {this.state.os <= 0 && <li >On the move</li>}
+                            {this.state.os > 1 && <li className="active">Delivered</li>}
+                            {this.state.os <= 1 && <li>Delivered</li>}
+                        </ul>}
+                    </div>
+                    <h4>Products</h4>
+                    <div className="orderProducts">  
+                        {!orderProducts.items && <p>Loading...</p>}
+                        {orderProducts.items == 0 && <p>This order doesn't contain any products.</p>}
+                        {orderProducts.items && orderProducts.items.map((order, index) =>
+                            <div className="orderProduct row">
+                                <img src={order.product.imageUrl} width="70" height="70"></img>
+                                <h5>{order.product.name}</h5>
+                                <h6>price: {order.product.price}</h6>
+                                <h6>amount: {order.orderProducts.amount}</h6>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         );
@@ -65,7 +86,6 @@ const mapDispatchToProps = (dispatch) => {
         // accessible via this.props.getAllProducts
         OrderByUser: () => dispatch(orderActions.getByUser()),
         ProductsByOrder: orderId => dispatch(orderProductsActions.getById(orderId))
-
     }
 };
 
