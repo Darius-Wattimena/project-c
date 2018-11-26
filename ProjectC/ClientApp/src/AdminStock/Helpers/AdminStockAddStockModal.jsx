@@ -27,11 +27,11 @@ class AdminStockAddStockModal extends React.Component {
     handleSubmit(event) {
         event.preventDefault();
         const { newStock, startStock } = this.state;
-        const { dispatch, product, base } = this.props;
+        const { dispatch, product, base, index } = this.props;
 
         if (newStock && startStock !== newStock && newStock > -1) {
-            document.getElementById("hideButton").click();
             dispatch(productActions.changeStock(product, newStock, base));
+            document.getElementById("adminStockModalHideButton" + index).click();
         }
     }
 
@@ -57,7 +57,7 @@ class AdminStockAddStockModal extends React.Component {
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={base.onCloseModal.bind(base)}>Close</button>
                             <button type="button" class="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
-                            <button id="hideButton" type="button" data-dismiss="modal" style={{display: `none`}} />
+                            <button id={`adminStockModalHideButton${index}`} type="button" data-dismiss="modal" style={{display: `none`}} />
                         </div>
                     </div>
                 </div>

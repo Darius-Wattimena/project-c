@@ -15,7 +15,6 @@ class AdminUsers extends React.Component {
 
     render() {
         const { users } = this.props;
-        console.log(this.props);
         return (
             <div className="panel col-md-6">
                 <h3>All registered users:</h3>
@@ -36,13 +35,13 @@ class AdminUsers extends React.Component {
                             {users.items.map((user, index) =>
                                 <tr>
                                     <td scope="row">{user.id}</td>
-                                    <td>{user.mailaddress}</td>
+                                    <td>{user.mailAddress}</td>
                                     <td>{user.firstname}</td>
                                     <td>{user.lastname}</td>
                                     <td>{
                                         user.deleting ? <em> - Deleting...</em>
                                             : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
-                                                : <span> <Link to={`user/edit/${user.id}`}>Edit</Link> - <a onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
+                                            : <span> <Link to={`users/edit/${user.id}`}>Edit</Link> - <a href="#" onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
                                     }</td>
                                 </tr>
                             )}

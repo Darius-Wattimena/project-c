@@ -117,10 +117,10 @@ namespace ProjectC.Controllers
         {
             var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
 
-            /*if (!input.Password.Equals(input.ConfirmPassword)) TODO add confirm password field
+            if (!input.Password.Equals(input.ConfirmPassword))
             {
                 return BadRequest("Passwords are not the same");
-            }*/
+            }
             
             if (daoManager.UserDao.FindUserByMailAddress(input.MailAddress) != null)
             {

@@ -18,6 +18,7 @@ import { AdminProducts } from '../AdminProducts';
 import { AdminStock } from '../AdminStock';
 import { AdminStatistics } from '../AdminStatistics';
 import { AdminUsers } from '../AdminUsers';
+import { AdminEditUser } from '../AdminUsers/EditUser';
 import { AdminOrders } from '../AdminOrders';
 import { AdminSales } from '../AdminSales';
 import { AdminCoupons } from '../AdminCoupons';
@@ -56,7 +57,8 @@ class App extends Component {
                         <Route path="/admin/stock" component={AdminStock} />
                         <Route path="/admin/product" component={AdminProducts} />
                         <Route path="/admin/addproduct" component={AddProduct} />
-                        <Route path="/admin/users" component={AdminUsers} />
+                        <Route exact path="/admin/users" component={AdminUsers} />
+                        <Route path="/admin/users/edit/:id" component={AdminEditUser} />
                         <Route path="/admin/orders" component={AdminOrders} />
                         <Route path="/admin/order/:orderid" component={AdminOrder} />
                         <Route path="/admin/sales" component={AdminSales} />

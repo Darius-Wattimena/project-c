@@ -105,8 +105,7 @@ function update(user) {
             .then(
                 () => {
                     dispatch(success());
-                    history.push('/home');
-                    dispatch(alertActions.success('User updated'));
+                    history.goBack();
                 },
                 error => {
                     dispatch(failure(error));
