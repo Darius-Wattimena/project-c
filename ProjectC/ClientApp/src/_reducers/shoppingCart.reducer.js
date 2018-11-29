@@ -19,20 +19,17 @@ export function shoppingCart(state = initialState, action) {
                 ...state,
                 loading: true
             };
-            break;
 
         case shoppingCartConstants.GET_SUCCESS:
             return {
                 items: action.items
             };
-            break;
 
         case shoppingCartConstants.GET_FAILURE:
             return {
                 ...state,
                 error: action.error
             };
-            break;
 
         // ADD ITEM
         case shoppingCartConstants.ADD_REQUEST:
@@ -40,14 +37,12 @@ export function shoppingCart(state = initialState, action) {
                 ...state,
                 adding: action.item
             };
-            break;
 
         case shoppingCartConstants.ADD_SUCCESS:
             return {
                 ...state,
                 adding: null
             }
-            break;
 
         // UPDATE ITEM
         case shoppingCartConstants.UPDATE_REQUEST:
@@ -60,7 +55,6 @@ export function shoppingCart(state = initialState, action) {
                         : item
                 )
             };
-            break;
 
         case shoppingCartConstants.UPDATE_SUCCESS:
 
@@ -79,7 +73,6 @@ export function shoppingCart(state = initialState, action) {
                 // REPLACE old item with updated item
                 items: remainingItems
             };
-            break;
 
         // REMOVE ITEM
         case shoppingCartConstants.REMOVE_REQUEST:
@@ -93,7 +86,6 @@ export function shoppingCart(state = initialState, action) {
                         : item
                 )
             };
-            break;
 
         case shoppingCartConstants.REMOVE_SUCCESS:
             return {
@@ -101,7 +93,6 @@ export function shoppingCart(state = initialState, action) {
                 // Exclude removed item
                 items: state.items.filter(i => i.productId !== action.item.productId)
             };
-            break;
 
         // CLEAR CART
         case shoppingCartConstants.CLEAR_REQUEST:
@@ -112,7 +103,6 @@ export function shoppingCart(state = initialState, action) {
 
         case shoppingCartConstants.CLEAR_SUCCESS:
             return initialState;
-            break;
 
         // CLIENT SIDED
         //GET
@@ -124,7 +114,6 @@ export function shoppingCart(state = initialState, action) {
                 return cart;
             }
             return state;
-            break;
 
         // ADD
         case shoppingCartConstants.ADD_CLIENT:
@@ -152,7 +141,6 @@ export function shoppingCart(state = initialState, action) {
 
             setLocalShoppingCart(newState); // store in cookies
             return newState;
-            break;
 
         // REMOVE
         case shoppingCartConstants.REMOVE_CLIENT:
@@ -162,7 +150,6 @@ export function shoppingCart(state = initialState, action) {
 
             setLocalShoppingCart(newState); // store in cookies
             return newState;
-            break;
 
         // UPDATE
         case shoppingCartConstants.UPDATE_CLIENT:
@@ -175,14 +162,12 @@ export function shoppingCart(state = initialState, action) {
 
             setLocalShoppingCart(newState); // store in cookies
             return newState;
-            break;
 
         // CLEAR
         case shoppingCartConstants.CLEAR_CLIENT:
 
             localStorage.removeItem('shoppingCart');
             return initialState;
-            break;
 
         default:
             return state

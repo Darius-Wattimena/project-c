@@ -140,6 +140,7 @@ function removeItem(item) {
                         //dispatch(alertActions.success('Removed the product from the basket. (' + response + ')'));
                     },
                     error => {
+                        dispatch(failure(error));
                         dispatch(alertActions.error(error));
                     }
                 );
@@ -158,26 +159,32 @@ function removeItem(item) {
 }
 
 function clear() {
-    return dispatch => {
+    return dispatch =>
+        new Promise((resolve, reject) => {
+            {
 
-        const user = localStorage.getItem('user');
+                const user = localStorage.getItem('user');
 
-        if (user) {
-            dispatch(request());
+                if (user) {
+                    dispatch(request());
 
-            shoppingCartService.clear().then(
-                response => {
-                    dispatch(success());
-                },
-                error => {
-                    dispatch(failure(error));
+                    shoppingCartService.clear().then(
+                        response => {
+                            dispatch(success());
+                            resolve();
+                        },
+                        error => {
+                            dispatch(failure(error));
+                            reject();
+                        }
+                    )
                 }
-            )
-        }
-        else {
-            dispatch(clear_local());
-        }
-    }
+                else {
+                    dispatch(clear_local());
+                    resolve();
+                }
+            }
+        });
 
     function request() { return { type: shoppingCartConstants.CLEAR_REQUEST } }
     function success() { return { type: shoppingCartConstants.CLEAR_SUCCESS } }

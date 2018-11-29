@@ -13,35 +13,22 @@ class ShoppingCart extends React.Component {
         super(props);
 
         this.props.getItems();
-
-        // TODO: For later, should we store the shopping cart in local storage?
-        localStorage.setItem('shoppingCart', JSON.stringify({
-            items: [
-            ]
-        }));
-
     }
 
     handleRemove(item) {
         // Remove a product from the cart
         this.props.removeItem(item);
-        // re-render
-        this.forceUpdate();
     }
 
     // Adding quantity
     handleAdd(product) {
         // Add a product to the cart (+1)
         this.props.addProduct(product);
-        // re-render
-        this.forceUpdate();
     }
 
     handleIncrement(item) {
         item.amount += 1;
         this.props.updateItem(item);
-        // re-render
-        this.forceUpdate();
     }
 
     handleDecrement(item) {
@@ -52,12 +39,6 @@ class ShoppingCart extends React.Component {
     render() {
 
         var shoppingCart = this.props.shoppingCart;
-
-        // Retrieve shopping cart products
-        //if (localStorage.getItem('shoppingCart') != null) {
-        //    products = JSON.parse(localStorage.getItem('shoppingCart'));
-        //}
-        // TODO: Maybe we should make the state persistent?
 
         return (
             <div>
