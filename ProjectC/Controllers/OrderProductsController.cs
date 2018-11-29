@@ -1,6 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using ProjectC.Database.Core;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
+using ProjectC.Model;
+
 
 namespace ProjectC.Controllers
 {
@@ -21,10 +27,12 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet("{orderid}")]
-        public IActionResult GetByOrderId(string orderid)
+        public IActionResult GetByOrderId(int orderid)
         {
-            return InnerSearch("OrderId", orderid);
+            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+            return Ok(daoManager.OrderProductsDao.GetOrderWithProductsById(orderid));
         }
+
 
         [HttpGet]
         public override IActionResult Search(string f, string i)

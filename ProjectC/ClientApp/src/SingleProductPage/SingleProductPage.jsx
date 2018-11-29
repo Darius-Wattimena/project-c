@@ -22,7 +22,6 @@ class SingleProductPage extends React.Component {
     
     render() {
         const { product } = this.props;
-        console.log(product.items)
         return (
             <div>
                 {product.items &&

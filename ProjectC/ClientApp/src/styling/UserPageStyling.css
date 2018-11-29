@@ -1,0 +1,13 @@
+﻿body {
+}
+
+.Link{
+    margin: 6px;
+    font-size: 17px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.Link:hover{
+    color: dodgerblue !important;
+}

@@ -2,7 +2,8 @@
 
 export const orderService = {
     create,
-    getAll
+    getAll,
+    GetByUser
 };
 
 // Create a new order to be added to the database
@@ -25,13 +26,22 @@ function getAll() {
     return fetch(config.apiUrl + '/order/get', requestOptions).then(handleResponse, handleError);
 }
 
+function GetByUser() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(config.apiUrl + '/order/getbyuser', requestOptions).then(handleResponse, handleError);
+}
+
+
 function handleResponse(response) {
     return new Promise((resolve, reject) => {
         if (response.ok) {
             // return json if it was returned in the response
             var contentType = response.headers.get("content-type");
-            if (contentType) {
-                response.text().then(text => resolve(text));
+            if (contentType && contentType.includes("application/json")) {
+                response.json().then(json => resolve(json));
             } else {
                 resolve();
             }

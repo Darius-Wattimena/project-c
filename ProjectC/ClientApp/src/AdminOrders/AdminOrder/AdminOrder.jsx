@@ -3,16 +3,18 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { orderProductsActions } from '../../_actions';
+import { productActions } from '../../_actions';
 
 //base class
 class AdminOrder extends React.Component {
 
     componentDidMount() {
-        this.props.getOrdersById(this.props.match.params.orderid.toString());
+        this.props.getOrdersById(this.props.match.params.orderid);
     }
 
     render() {
         const { orderProducts } = this.props;
+        console.log(orderProducts);
         return (
             <div class="panel col-md-8">
                 <table class="table">
@@ -23,9 +25,9 @@ class AdminOrder extends React.Component {
                     </tr>
                     {orderProducts.items && orderProducts.items.map((orderProducts, index) =>
                         <tr>
-                            <td scope="row">{orderProducts.id}</td>
-                            <td>{orderProducts.amount}</td>
-                            <td>{orderProducts.productId}</td>
+                            <td scope="row">{orderProducts.orderProducts.id}</td>
+                            <td>{orderProducts.orderProducts.amount}</td>
+                            <td>{orderProducts.orderProducts.productId}</td>
                         </tr>
                     )}
 
@@ -45,6 +47,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
     return {
         getOrdersById: id => { dispatch(orderProductsActions.getById(id)); },
+        getProductById: id => { dispatch(productActions.getById(id)); },
     }
 };
 
