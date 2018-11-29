@@ -4,17 +4,17 @@ using ProjectC.Database.Core.Interfaces;
 
 namespace ProjectC.Database.Core
 {
-    public class DB
+    public class Database
     {
-        private static DB _instance;
+        private static Database _instance;
         private readonly DatabaseContext _context;
 
-        public static DB Get(DatabaseContext context)
+        public static Database Get(DatabaseContext context)
         {
-            return _instance ?? (_instance = new DB(context));
+            return _instance ?? (_instance = new Database(context));
         }
 
-        private DB(DatabaseContext context)
+        private Database(DatabaseContext context)
         {
             _context = context;
         }

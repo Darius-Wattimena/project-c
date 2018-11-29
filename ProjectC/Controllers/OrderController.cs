@@ -8,6 +8,8 @@ using ProjectC.Database.Daos;
 using Microsoft.AspNetCore.Authorization;
 using System.Security.Claims;
 using System.Linq;
+using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 
 namespace ProjectC.Controllers
 {
@@ -16,6 +18,10 @@ namespace ProjectC.Controllers
     [ApiController]
     public class OrderController : DaoController<OrderDao, Order>
     {
+        public OrderController(ILogger<OrderController> logger) : base(logger)
+        {
+
+        }
 
         // POST: api/Order/Create
         /// <summary>
@@ -91,11 +97,18 @@ namespace ProjectC.Controllers
         [HttpGet]
         public IActionResult GetByUser()
         {
-            if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
-   
-            var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
-            var ui = userId.ToString();
-            return InnerSearch("UserId", ui);
+            try
+            {
+                if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
+
+                var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+                var ui = userId.ToString();
+                return InnerSearch("UserId", ui);
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
 
         public override IActionResult Search(string field, string input)

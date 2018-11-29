@@ -42,9 +42,9 @@ namespace ProjectC.Database.Core
 
         }
 
-        public T FindDao<T, U>(string key) 
-            where T : Dao<U> 
-            where U : IEntity
+        public T FindDao<T, TU>(string key) 
+            where T : Dao<TU> 
+            where TU : IEntity
         {
             switch (key)
             {

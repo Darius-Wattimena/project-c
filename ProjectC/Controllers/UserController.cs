@@ -5,8 +5,10 @@ using System.Text;
 using DevOne.Security.Cryptography.BCrypt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using MySql.Data.MySqlClient;
 using ProjectC.Database.Core;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
@@ -21,7 +23,7 @@ namespace ProjectC.Controllers
     {
         private readonly AppSettings _appSettings;
 
-        public UserController(IOptions<AppSettings> appSettings)
+        public UserController(IOptions<AppSettings> appSettings, ILogger<UserController> logger) : base(logger)
         {
             _appSettings = appSettings.Value;
         }
@@ -68,103 +70,127 @@ namespace ProjectC.Controllers
             return InnerDelete(id);
         }
 
+        // TODO ~needs rework/cleanup
         public IActionResult Login([FromBody] UserLoginModel input)
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var databaseUser = daoManager.UserDao.FindUserByMailAddress(input.MailAddress);
+            GetLogger().Info("Logging in.");
 
-            if (databaseUser == null || !BCryptHelper.CheckPassword(input.Password, databaseUser.PasswordHash))
+            try
             {
-                return BadRequest("Username or password is incorrect");
-            }
+                var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+                var databaseUser = daoManager.UserDao.FindUserByMailAddress(input.MailAddress);
 
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
-            byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
-
-            // Obtain the users' role name
-            string roleName = daoManager.RoleDao.Find(databaseUser.RoleId).Name;
-
-            var tokenDescriptor = new SecurityTokenDescriptor
-            {
-                Subject = new ClaimsIdentity(new[]
+                if (databaseUser == null || !BCryptHelper.CheckPassword(input.Password, databaseUser.PasswordHash))
                 {
-                    // Store user id as claim
-                    new Claim(ClaimTypes.Sid, databaseUser.Id.ToString()),
-                    // Store user role as claim
-                    new Claim(ClaimTypes.Role, roleName)
-                }),
-                Expires = DateTime.UtcNow.AddDays(7),
-                SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
-            };
-            SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
-            string tokenString = tokenHandler.WriteToken(token);
+                    return BadRequest("Username or password is incorrect");
+                }
 
-            // return basic user info (without password, id, etc...) and token to store client side
-            object user = new
+                JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
+                byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
+
+                // Obtain the users' role name
+                string roleName = daoManager.RoleDao.Find(databaseUser.RoleId).Name;
+
+                var tokenDescriptor = new SecurityTokenDescriptor
+                {
+                    Subject = new ClaimsIdentity(new[]
+                    {
+                        // Store user id as claim
+                        new Claim(ClaimTypes.Sid, databaseUser.Id.ToString()),
+                        // Store user role as claim
+                        new Claim(ClaimTypes.Role, roleName)
+                    }),
+                    Expires = DateTime.UtcNow.AddDays(7),
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                };
+                SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
+                string tokenString = tokenHandler.WriteToken(token);
+
+                // return basic user info (without password, id, etc...) and token to store client side
+                object user = new
+                {
+                    firstName = databaseUser.Firstname,
+                    lastName = databaseUser.Lastname,
+                    mailAddress = databaseUser.MailAddress,
+                    token = tokenString
+                };
+
+                return Ok(user);
+            }
+            catch (MySqlException ex)
             {
-                firstName = databaseUser.Firstname,
-                lastName = databaseUser.Lastname,
-                mailAddress = databaseUser.MailAddress,
-                token = tokenString
-            };
-
-            return Ok(user);
+                return LogError(ex);
+            }
         }
 
         //Register a user with the given register info
         [HttpPost]
         public IActionResult Register([FromBody] UserRegisterModel input)
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-
-            if (!input.Password.Equals(input.ConfirmPassword))
+            try
             {
-                return BadRequest("Passwords are not the same");
+                var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+
+                if (!input.Password.Equals(input.ConfirmPassword))
+                {
+                    return BadRequest("Passwords are not the same");
+                }
+
+                if (daoManager.UserDao.FindUserByMailAddress(input.MailAddress) != null)
+                {
+                    return BadRequest("Mail address already been used");
+                }
+
+                var user = input.SetupUser(input);
+
+                // Create user
+                var createdUser = daoManager.UserDao.Save(user);
+
+                // Create shopping basket for user
+                daoManager.ShoppingBasketDao.Save(new ShoppingBasket { UserId = createdUser.Id });
+
+                return Ok();
             }
-            
-            if (daoManager.UserDao.FindUserByMailAddress(input.MailAddress) != null)
+            catch (MySqlException ex)
             {
-                return BadRequest("Mail address already been used");
+                return LogError(ex);
             }
-
-            var user = input.SetupUser(input);
-
-            // Create user
-            User createdUser = daoManager.UserDao.Save(user);
-
-            // Create shopping basket for user
-            daoManager.ShoppingBasketDao.Save(new ShoppingBasket { UserId = createdUser.Id });
-
-            return Ok();
         }
 
         //Update the given user
         [HttpPut("{id}")]
         public IActionResult EditUser(int id, [FromBody] UserUpdateModel input)
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            var databaseUser = daoManager.UserDao.Find(id);
-
-            if (databaseUser == null)
+            try
             {
-                return BadRequest("User not found");
+                var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+                var databaseUser = daoManager.UserDao.Find(id);
+
+                if (databaseUser == null)
+                {
+                    return BadRequest("User not found");
+                }
+
+                if (!BCryptHelper.CheckPassword(input.Password, databaseUser.PasswordHash))
+                {
+                    var salt = BCryptHelper.GenerateSalt();
+                    var hashedPassword = BCryptHelper.HashPassword(input.Password, salt);
+                    databaseUser.PasswordHash = hashedPassword;
+                }
+
+                // TODO: Define and add constraints for these properties
+                databaseUser.Firstname = input.Firstname;
+                databaseUser.Lastname = input.Lastname;
+                databaseUser.MailAddress = input.MailAddress;
+
+                daoManager.UserDao.Save(databaseUser);
+
+                return Ok();
             }
-            
-            if (!BCryptHelper.CheckPassword(input.Password, databaseUser.PasswordHash))
+            catch (MySqlException ex)
             {
-                var salt = BCryptHelper.GenerateSalt();
-                var hashedPassword = BCryptHelper.HashPassword(input.Password, salt);
-                databaseUser.PasswordHash = hashedPassword;
+                return LogError(ex);
             }
-            
-            // TODO: Define and add constraints for these properties
-            databaseUser.Firstname = input.Firstname;
-            databaseUser.Lastname = input.Lastname;
-            databaseUser.MailAddress = input.MailAddress;
-
-            daoManager.UserDao.Save(databaseUser);
-
-            return Ok();
         }
     }
 }

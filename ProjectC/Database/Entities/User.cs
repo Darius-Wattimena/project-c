@@ -1,5 +1,4 @@
 ﻿using DevOne.Security.Cryptography.BCrypt;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using ProjectC.Database.Core.Annotations;
 using ProjectC.Database.Core.Interfaces;
 using ProjectC.Model;

@@ -1,10 +1,10 @@
-﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
-using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 
 namespace ProjectC.Controllers
 {
@@ -12,48 +12,81 @@ namespace ProjectC.Controllers
     [ApiController]
     public class ShoppingBasketController : DaoController<ShoppingBasketDao, ShoppingBasket>
     {
+        public ShoppingBasketController(ILogger<ShoppingBasketController> logger) : base(logger)
+        {
+
+        }
+
         [Authorize(Roles = "User,Admin")]
         [HttpGet]
         public IActionResult GetBasketItems()
         {
-            // Get user id
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+            try
+            {
+                // Get user id
+                if (HttpContext.User.Identity is ClaimsIdentity identity)
+                {
+                    int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
 
-            var shoppingBasket = GetDao().GetShoppingBasketForUser(userId);
+                    var shoppingBasket = GetDao().GetShoppingBasketForUser(userId);
 
-            if (shoppingBasket == null) return BadRequest("No shopping cart :/");
+                    if (shoppingBasket == null) return BadRequest("No shopping cart :/");
 
-            var items = GetDaoManager().ShoppingBasketItemDao.Find("ShoppingBasketId", shoppingBasket.Id.ToString());
+                    var items = GetDaoManager().ShoppingBasketItemDao.Find("ShoppingBasketId", shoppingBasket.Id.ToString());
 
-            if (items == null) return BadRequest("Something went wrong");
+                    if (items == null) return BadRequest("Something went wrong");
 
-            items.ForEach(item => {
-                // Store corresponding product inside the item
-                item.Product = GetDaoManager().ProductDao.Find(item.ProductId);
-            });
+                    items.ForEach(item => {
+                        // Store corresponding product inside the item
+                        item.Product = GetDaoManager().ProductDao.Find(item.ProductId);
+                    });
 
-            return Ok(items);
+                    return Ok(items);
+                }
+                else
+                {
+                    return LogError("Couldn't find the users identity.");
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
 
         [HttpPut]
         public IActionResult Clear()
         {
-            // Get user id
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
-            
-            var shoppingBasket = GetDao().GetShoppingBasketForUser(userId); // Get basket
-
-            var items = GetDaoManager().ShoppingBasketItemDao.Find("ShoppingBasketId", shoppingBasket.Id.ToString()); // GET items
-
-            // DELETe all items
-            items.ForEach(item =>
+            try
             {
-                GetDaoManager().ShoppingBasketItemDao.Delete(item.Id);
-            });
+                // Get user id
+                if (HttpContext.User.Identity is ClaimsIdentity identity)
+                {
+                    int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
 
-            return Ok("Cleared the shopping cart.");
+                    var shoppingBasket = GetDao().GetShoppingBasketForUser(userId); // Get basket
+
+                    var items = GetDaoManager().ShoppingBasketItemDao.Find("ShoppingBasketId", shoppingBasket.Id.ToString()); // GET items
+
+                    // DELETe all items
+                    items.ForEach(item =>
+                    {
+                        GetDaoManager().ShoppingBasketItemDao.Delete(item.Id);
+                    });
+
+                    return Ok("Cleared the shopping cart.");
+                }
+                else
+                {
+                    return LogError("Couldn't find the users identity.");
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
+
+            
         }
 
         [HttpGet]

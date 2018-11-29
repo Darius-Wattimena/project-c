@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 using ProjectC.Database.Core;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
@@ -13,6 +13,11 @@ namespace ProjectC.Controllers
     [ApiController]
     public class ProductController : DaoController<ProductDao, Product>
     {
+        public ProductController(ILogger<ProductController> logger) : base(logger)
+        {
+
+        }
+
         [HttpGet]
         public override IActionResult Get()
         {
@@ -27,33 +32,54 @@ namespace ProjectC.Controllers
                 value = string.Empty;
             }
 
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-            List<Product> products = daoManager.ProductDao.SearchProduct(value);
-
-            foreach(var item in products)
+            try
             {
-                item.Specifications = GetDaoManager().SpecificationDao.FindSpecificationsByProductId(item.Id);
-            }
+                var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+                var products = daoManager.ProductDao.SearchProduct(value);
 
-            return Ok(products);
+                foreach (var item in products)
+                {
+                    item.Specifications = GetDaoManager().SpecificationDao.FindSpecificationsByProductId(item.Id);
+                }
+
+                return Ok(products);
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
 
         [HttpGet("{id}")]
         public IActionResult GetWithSpecifications(int id)
         {
-            var dao = GetDao();
-            return dao == null
-                ? NoDaoFound
-                : ExecuteFunction(new Func<int, Product>(dao.FindWithSpecifications), id);
+            try
+            {
+                var dao = GetDao();
+                return dao == null
+                    ? LogErrorNoDaoFound()
+                    : Ok(dao.FindWithSpecifications(id));
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
 
         [HttpGet]
         public IActionResult GetAllWithSpecifications()
         {
-            var dao = GetDao();
-            return dao == null
-                ? NoDaoFound
-                : ExecuteFunction(new Func<List<Product>>(dao.FindAllWithSpecifications));
+            try
+            {
+                var dao = GetDao();
+                return dao == null
+                    ? LogErrorNoDaoFound()
+                    : Ok(dao.FindAllWithSpecifications());
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
 
         [HttpGet("{id}")]
@@ -71,40 +97,54 @@ namespace ProjectC.Controllers
         [HttpPost]
         public IActionResult CreateWithSpecifications([FromBody] ProductSpecificationsModel model)
         {
-            var dao = GetDao();
-            var specificationDao = GetDaoManager().SpecificationDao;
-            var databaseProduct = dao.Save(model.Product);
-            foreach (var specification in model.Specifications)
+            try
             {
-                specification.ProductId = databaseProduct.Id;
-                specificationDao.Save(specification);
-            }
+                var dao = GetDao();
+                var specificationDao = GetDaoManager().SpecificationDao;
+                var databaseProduct = dao.Save(model.Product);
+                foreach (var specification in model.Specifications)
+                {
+                    specification.ProductId = databaseProduct.Id;
+                    specificationDao.Save(specification);
+                }
 
-            return Ok();
+                return Ok();
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
 
         [HttpPut]
         public IActionResult ChangeStock([FromBody]ProductChangeStockModel model)
         {
-            if (model.NewStock < 0)
+            try
             {
-                return BadRequest("The new stock must be bigger then -1");
-            }
-
-            if (!(model.Product == null || model.Product.Id == 0))
-            {
-                var dao = GetDao();
-
-                if (dao.CheckIfExists(model.Product.Id))
+                if (model.NewStock < 0)
                 {
-                    var product = model.Product;
-                    product.Stock = model.NewStock;
-                    dao.Save(product);
-                    return Ok();
+                    return BadRequest("The new stock must be bigger then -1");
                 }
-            }
 
-            return BadRequest("Product not found");
+                if (!(model.Product == null || model.Product.Id == 0))
+                {
+                    var dao = GetDao();
+
+                    if (dao.CheckIfExists(model.Product.Id))
+                    {
+                        var product = model.Product;
+                        product.Stock = model.NewStock;
+                        dao.Save(product);
+                        return Ok();
+                    }
+                }
+
+                return BadRequest("Product not found");
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
 
         [HttpPost]
@@ -119,20 +159,28 @@ namespace ProjectC.Controllers
             return InnerSave(input, id);
         }
 
+        // TODO ~needs rework
         [HttpDelete("{id}")]
         public override IActionResult Delete(int id)
         {
-            var specDao = GetDaoManager().SpecificationDao;
-            var specs = specDao.FindSpecificationsByProductId(id);
-            specDao.Delete(specs);
-            
-            //TODO delete orders related to the product
+            try
+            {
+                var specDao = GetDaoManager().SpecificationDao;
+                var specs = specDao.FindSpecificationsByProductId(id);
+                specDao.Delete(specs);
 
-            GetDao().Delete(id);
+                //TODO delete orders related to the product
 
-            return Ok();
+                GetDao().Delete(id);
 
-            //return InnerDelete(id);
+                return Ok();
+
+                //return InnerDelete(id);
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
     }
 }

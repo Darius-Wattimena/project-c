@@ -81,7 +81,7 @@ namespace ProjectC.Database.SQL
                 .Append(SelectRange)
                 .Append(" FROM ")
                 .Append("`")
-                .Append(_tableConfig.name.ToLower()) // Always use lower case table names
+                .Append(_tableConfig.Name.ToLower()) // Always use lower case table names
                 .Append("`")
                 .Append(" WHERE 1=1 ");
 
@@ -123,7 +123,7 @@ namespace ProjectC.Database.SQL
             {
                 _query.Append(NewLine);
                 _query.Append(" AND ")
-                    .Append(_tableConfig.primaryFieldConfig.Name)
+                    .Append(_tableConfig.PrimaryFieldConfig.Name)
                     .Append(" = '").Append(Id).Append("'");
             }
 
@@ -156,7 +156,7 @@ namespace ProjectC.Database.SQL
         {
             _query.Append("INSERT INTO ")
                 .Append("`")
-                .Append(_tableConfig.name)
+                .Append(_tableConfig.Name)
                 .Append("` ")
                 .Append(NewLine);
 
@@ -164,7 +164,7 @@ namespace ProjectC.Database.SQL
             var fieldNames = new StringBuilder("(");
             var fieldValues = new StringBuilder("VALUES (");
 
-            foreach (var pair in _tableConfig.fields)
+            foreach (var pair in _tableConfig.Fields)
             {
                 if (pair.Value.Primary) continue;
                 var value = pair.Value.Field.GetValue(_entity);
@@ -202,7 +202,7 @@ namespace ProjectC.Database.SQL
         {
             var fields = new Dictionary<string, string>();
             var where = "";
-            foreach (var pair in _tableConfig.fields)
+            foreach (var pair in _tableConfig.Fields)
             {
                 if (!pair.Value.Primary)
                 {
@@ -218,7 +218,7 @@ namespace ProjectC.Database.SQL
 
             _query.Append("UPDATE ")
                 .Append("`")
-                .Append(_tableConfig.name)
+                .Append(_tableConfig.Name)
                 .Append("` ")
                 .Append(NewLine);
 
@@ -248,7 +248,7 @@ namespace ProjectC.Database.SQL
         {
             _query.Append("DELETE FROM ")
                 .Append("`")
-                .Append(_tableConfig.name)
+                .Append(_tableConfig.Name)
                 .Append("`");
 
             var first = true;
@@ -257,7 +257,7 @@ namespace ProjectC.Database.SQL
             {
                 _query.Append(NewLine);
                 _query.Append(" WHERE ")
-                    .Append(_tableConfig.primaryFieldConfig.Name)
+                    .Append(_tableConfig.PrimaryFieldConfig.Name)
                     .Append(" = '").Append(Id).Append("'");
                 first = false;
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using MySql.Data.MySqlClient;
 using ProjectC.Database.Core.Annotations;
 using ProjectC.Database.Core.Interfaces;
 
@@ -25,8 +24,8 @@ namespace ProjectC.Database.Core
 
             return new TableConfig<T>
             {
-                name = tableName,
-                fields = new Dictionary<string, FieldConfig<T>>()
+                Name = tableName,
+                Fields = new Dictionary<string, FieldConfig<T>>()
             };
         }
 

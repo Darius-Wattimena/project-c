@@ -1,6 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
 
@@ -10,6 +10,11 @@ namespace ProjectC.Controllers
     [ApiController]
     public class SpecificationController : DaoController<SpecificationDao, Specification>
     {
+        public SpecificationController(ILogger<SpecificationController> logger) : base(logger)
+        {
+
+        }
+
         [HttpGet]
         public override IActionResult Get()
         {
@@ -27,8 +32,8 @@ namespace ProjectC.Controllers
         {
             var dao = GetDao();
             return dao == null
-                ? NoDaoFound
-                : ExecuteFunction(new Func<int, List<Specification>>(dao.FindSpecificationsByProductId), pid);
+                ? LogErrorNoDaoFound()
+                : Ok(dao.FindSpecificationsByProductId(pid));
         }
 
         [HttpGet]
@@ -42,8 +47,8 @@ namespace ProjectC.Controllers
         {
             var dao = GetDao();
             return dao == null
-                ? NoDaoFound
-                : ExecuteFunction(new Func<List<Specification>, List<Specification>>(dao.Save), specifications);
+                ? LogErrorNoDaoFound()
+                : Ok(dao.Save(specifications));
         }
 
 

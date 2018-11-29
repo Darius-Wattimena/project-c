@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using ProjectC.Database;
 using ProjectC.Database.Core;
@@ -15,9 +16,12 @@ namespace ProjectC
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private readonly ILogger _logger;
+
+        public Startup(IConfiguration configuration, ILogger<Startup> logger)
         {
             Configuration = configuration;
+            _logger = logger;
         }
 
         public IConfiguration Configuration { get; }
@@ -32,10 +36,10 @@ namespace ProjectC
             {
                 configuration.RootPath = "ClientApp/build";
             });
+            _logger.LogInformation("Setting up custom services");
             var databaseContext = new DatabaseContext(Configuration.GetConnectionString("DefaultConnection"));
             services.Add(new ServiceDescriptor(typeof(DatabaseContext), databaseContext));
             services.Add(new ServiceDescriptor(typeof(DaoManager), DaoManager.Get(databaseContext)));
-
 
             // configure strongly typed settings objects
             var appSettingsSection = Configuration.GetSection("AppSettings");

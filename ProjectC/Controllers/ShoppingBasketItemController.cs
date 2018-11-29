@@ -5,6 +5,8 @@ using ProjectC.Database.Entities;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
+using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 
 namespace ProjectC.Controllers
 {
@@ -13,6 +15,11 @@ namespace ProjectC.Controllers
     [ApiController]
     public class ShoppingBasketItemController : DaoController<ShoppingBasketItemDao, ShoppingBasketItem>
     {
+        public ShoppingBasketItemController(ILogger<ShoppingBasketItemController> logger) : base(logger)
+        {
+
+        }
+
         /// <summary>
         /// Add an item to the shopping basket of the session user
         /// </summary>
@@ -22,38 +29,53 @@ namespace ProjectC.Controllers
             // TODO: Shopping basket table is unnecessary
             // TODO: Remove shopping basket table from database, replace 'ShoppingBasketId' in table ShoppingBasketItem with 'UserId'
 
+            try
+            {
+                // Get user id
+                if (HttpContext.User.Identity is ClaimsIdentity identity)
+                {
+                    int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
 
-            // Get user id
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+                    // Obtain users' shopping basket
+                    var shoppingBasket = GetDaoManager().ShoppingBasketDao.GetShoppingBasketForUser(userId);
 
-            // Obtain users' shopping basket
-            var shoppingBasket = GetDaoManager().ShoppingBasketDao.GetShoppingBasketForUser(userId);
+                    // Shopping basket for user does not exist
+                    if (shoppingBasket == null)
+                        return NotFound("404 - Shopping Basket not found");
 
-            // Shopping basket for user does not exist
-            if (shoppingBasket == null)
-                return NotFound("404 - Shopping Basket not found");
+                    // Obtain shopping basket item (in case it already exists)
+                    var shoppingBasketItem = GetDao().GetShoppingBasketItem(shoppingBasket.Id, input.ProductId);
 
-            // Obtain shopping basket item (in case it already exists)
-            var shoppingBasketItem = GetDao().GetShoppingBasketItem(shoppingBasket.Id, input.ProductId);
+                    if (shoppingBasketItem != null)
+                    {
+                        // Item already exists
+                        // Increment the amount
+                        shoppingBasketItem.Amount++;
+                    }
+                    else
+                    {
+                        // Item does not exist, create from input
+                        shoppingBasketItem = input;
+                        shoppingBasketItem.Amount = 1;
+                    }
+
+                    // Pair the item with the users' shopping basket
+                    shoppingBasketItem.ShoppingBasketId = shoppingBasket.GetId();
+
+                    return InnerSave(shoppingBasketItem);
+                }
+                else
+                {
+                    return LogError("Couldn't find the users identity.");
+                }
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
+
+
             
-            if (shoppingBasketItem != null)
-            {
-                // Item already exists
-                // Increment the amount
-                shoppingBasketItem.Amount++;
-            }
-            else
-            {
-                // Item does not exist, create from input
-                shoppingBasketItem = input;
-                shoppingBasketItem.Amount = 1;
-            }
-
-            // Pair the item with the users' shopping basket
-            shoppingBasketItem.ShoppingBasketId = shoppingBasket.GetId();
-
-            return InnerSave(shoppingBasketItem);
         }
 
         /*

@@ -6,8 +6,8 @@ namespace ProjectC.Database.Core
     public class TableConfig<T>
         where T : IEntity
     {
-        public string name;
-        public FieldConfig<T> primaryFieldConfig;
-        public Dictionary<string, FieldConfig<T>> fields;
+        public string Name;
+        public FieldConfig<T> PrimaryFieldConfig;
+        public Dictionary<string, FieldConfig<T>> Fields;
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
 
@@ -8,6 +9,11 @@ namespace ProjectC.Controllers
     [ApiController]
     public class WishlistItemController : DaoController<WishlistItemDao, WishlistItem>
     {
+        public WishlistItemController(ILogger<WishlistItemController> logger) : base(logger)
+        {
+
+        }
+
         [HttpGet]
         public override IActionResult Get()
         {

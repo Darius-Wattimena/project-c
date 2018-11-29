@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 using ProjectC.Database.Core;
 using ProjectC.Database.Core.Interfaces;
 
@@ -11,10 +11,37 @@ namespace ProjectC.Controllers
         where T : Dao<TU>
         where TU : IEntity
     {
-        protected readonly IActionResult NoDaoFound = new BadRequestObjectResult("Dao not found! Check the DaoManager class.");
-
         private T _dao;
         private DaoManager _daoManager;
+        private readonly Helper.Logger<DaoController<T, TU>> _logger;
+
+        protected DaoController(ILogger<DaoController<T, TU>> logger)
+        {
+            _logger = Helper.Logger<DaoController<T, TU>>.Get(logger);
+        }
+
+        protected IActionResult LogErrorNoDaoFound()
+        {
+            GetLogger().Error("Dao not found! Check the DaoManager class.");
+            return BadRequest();
+        }
+
+        protected IActionResult LogError(string message)
+        {
+            GetLogger().Error(message);
+            return BadRequest();
+        }
+
+        protected IActionResult LogError(MySqlException ex)
+        {
+            GetLogger().Error("MySqlError {2} | {0} | Exception : {1}", ex.Message, ex.StackTrace, ex.SqlState);
+            return BadRequest();
+        }
+
+        protected Helper.Logger<DaoController<T, TU>> GetLogger()
+        {
+            return _logger;
+        } 
 
         protected DaoManager GetDaoManager()
         {
@@ -26,56 +53,92 @@ namespace ProjectC.Controllers
             return _dao ?? (_dao = GetDaoManager().FindDao<T, TU>(typeof(T).Name));
         }
 
-        protected IActionResult ExecuteFunction(Delegate method, params object[] args)
-        {
-            var result = method.DynamicInvoke(args);
-            return Ok(result);
-        }
-
         protected IActionResult InnerGet()
         {
-            GetDao();
-            return _dao == null 
-                ? NoDaoFound 
-                : ExecuteFunction(new Func<List<TU>>(_dao.FindAll));
+            try
+            {
+                GetDao();
+                return _dao == null
+                    ? LogErrorNoDaoFound()
+                    : Ok(_dao.FindAll());
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
 
         protected IActionResult InnerGet(int id)
         {
-            GetDao();
-            return _dao == null 
-                ? NoDaoFound 
-                : ExecuteFunction(new Func<int, TU>(_dao.Find), id);
+            try
+            {
+                GetDao();
+                return _dao == null 
+                    ? LogErrorNoDaoFound()
+                    : Ok(_dao.Find(id));
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
 
         protected IActionResult InnerSearch(string field, string input)
         {
-            GetDao();
-            return _dao == null
-                ? NoDaoFound
-                : ExecuteFunction(new Func<string, string, List<TU>>(_dao.Search), field, input);
+            try
+            {
+                GetDao();
+                return _dao == null
+                    ? LogErrorNoDaoFound()
+                    : Ok(_dao.Search(field, input));
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
         
         protected IActionResult InnerSave(TU entity, int id = -1)
         {
-            if (id != -1)
+            try
             {
-                entity.SetId(id);
+                if (id != -1)
+                {
+                    entity.SetId(id);
+                }
+
+                GetDao();
+                return _dao == null
+                    ? LogErrorNoDaoFound()
+                    : Ok(_dao.Save(entity));
             }
-
-            GetDao();
-            return _dao == null 
-                ? NoDaoFound 
-                : ExecuteFunction(new Func<TU, TU>(_dao.Save), entity);
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
-
-        //TODO needs check if ID exists
+        
         protected IActionResult InnerDelete(int id)
         {
-            GetDao();
-            return _dao == null 
-                ? NoDaoFound 
-                : ExecuteFunction(new Action<int>(_dao.Delete), id);
+            try
+            {
+                GetDao();
+                if (_dao == null)
+                {
+                    return LogErrorNoDaoFound();
+                }
+
+                if (_dao.CheckIfExists(id))
+                {
+                    _dao.Delete(id);
+                }
+
+                return BadRequest();
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
 
         public abstract IActionResult Get();

@@ -5,7 +5,7 @@
         public string Name;
         public int Stock;
         public double Price;
-        public string ImageURL;
+        public string ImageUrl;
         public string Description;
     }
 }

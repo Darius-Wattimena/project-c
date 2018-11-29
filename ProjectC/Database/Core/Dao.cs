@@ -11,7 +11,7 @@ namespace ProjectC.Database.Core
     {
         private const string LoggingSqlPrefix = "SQL Executing | ";
 
-        protected readonly DB Database;
+        protected readonly Database Database;
         protected readonly Type EntityType;
         protected FieldInfo[] Fields;
         protected readonly TableConfig<T> TableConfig;
@@ -21,7 +21,7 @@ namespace ProjectC.Database.Core
         protected Dao(DatabaseContext context, DaoManager manager)
         {
             DaoManager = manager;
-            Database = DB.Get(context);
+            Database = Database.Get(context);
             EntityType = typeof(T);
 
             TableConfig = DatabaseUtil.CreateTableConfig<T>(EntityType);
@@ -43,9 +43,9 @@ namespace ProjectC.Database.Core
 
                 if (cfg.Primary)
                 {
-                    TableConfig.primaryFieldConfig = cfg;
+                    TableConfig.PrimaryFieldConfig = cfg;
                 }
-                TableConfig.fields.Add(cfg.Name, cfg);
+                TableConfig.Fields.Add(cfg.Name, cfg);
             }
         }
 
@@ -80,7 +80,7 @@ namespace ProjectC.Database.Core
             while(dataReader.Read())
             {
                 var result = Activator.CreateInstance<T>();
-                foreach (var fieldConfig in TableConfig.fields.Values)
+                foreach (var fieldConfig in TableConfig.Fields.Values)
                 {
                     var fieldValue = dataReader[fieldConfig.Name];
                     if (fieldValue.GetType() != typeof(DBNull))
@@ -117,8 +117,7 @@ namespace ProjectC.Database.Core
             var query = sqlBuilder.Build(QueryType.Select);
             return Execute(query);
         }
-
-        //TODO add exception if nothing is found
+        
         public T Find(int id)
         {
             var sqlBuilder = new SqlBuilder<T>(TableConfig)

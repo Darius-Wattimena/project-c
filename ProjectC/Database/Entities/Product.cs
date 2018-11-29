@@ -18,7 +18,7 @@ namespace ProjectC.Database.Entities
             Name = p.Name;
             Stock = p.Stock;
             Price = p.Price;
-            ImageUrl = p.ImageURL;
+            ImageUrl = p.ImageUrl;
             Description = p.Description;
         }
 
