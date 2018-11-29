@@ -22,7 +22,7 @@ namespace ProjectC.Controllers
 
         protected IActionResult LogErrorNoDaoFound()
         {
-            GetLogger().Error("Dao not found! Check the DaoManager class.");
+            GetLogger().Error("{0} not found! Check the DaoManager class.", typeof(T).Name);
             return BadRequest();
         }
 
