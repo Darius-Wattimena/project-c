@@ -227,8 +227,8 @@ namespace ProjectC.Database.Core
         {
             var sqlBuilder = new SqlBuilder<T>(TableConfig, entity);
             var query = sqlBuilder.Build(QueryType.Insert);
-            ExecuteNoResult(query);
-            var lastId = GetLastInsertedId();
+            // Perform insert and select inserted id
+            var lastId = ExecuteCount($"{query}; SELECT LAST_INSERT_ID()");
             entity.SetId(lastId);
             return entity;
         }
