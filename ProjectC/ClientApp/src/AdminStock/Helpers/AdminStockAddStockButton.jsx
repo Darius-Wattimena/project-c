@@ -20,6 +20,6 @@ export class AdminStockAddStockButton extends React.Component {
     }
 
     render() {
-        return (<button type="button" class="btn btn-success" style={{ float: `right` }} onClick={window.component.onOpenModal.bind(window.component)} data-toggle="modal" data-target={`#Modal${this.props.index}`}>Change Stock</button>);
+        return (<button type="button" className="btn btn-success" style={{ float: `right` }} onClick={window.component.onOpenModal.bind(window.component)} data-toggle="modal" data-target={`#Modal${this.props.index}`}>Change Stock</button>);
     }
 }

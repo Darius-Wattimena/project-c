@@ -39,8 +39,8 @@ export class AdminStockProgressBar extends React.Component {
     render() {
         const { stock, color } = this.state;
         return (
-            <div class="admin-stock-progress-bar progress">
-                <div class={`progress-bar bg-${color}`} role="progressbar" style={{ width: stock + '%' }} aria-valuenow={`${stock}`} aria-valuemin="0" aria-valuemax="100">
+            <div className="admin-stock-progress-bar progress">
+                <div className={`progress-bar bg-${color}`} role="progressbar" style={{ width: stock + '%' }} aria-valuenow={`${stock}`} aria-valuemin="0" aria-valuemax="100">
                     {stock}
                 </div>
             </div>

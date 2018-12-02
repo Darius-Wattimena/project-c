@@ -1,6 +1,4 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.DependencyInjection;
-using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
 using System;
 using System.Collections.Generic;
@@ -10,6 +8,7 @@ using System.Security.Claims;
 using System.Linq;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
+using ProjectC.Database.SQL;
 
 namespace ProjectC.Controllers
 {
@@ -92,6 +91,27 @@ namespace ProjectC.Controllers
         public override IActionResult Get(int id)
         {
             return InnerGet(id);
+        }
+
+        [HttpGet]
+        public IActionResult GetPendingOrders()
+        {
+            var dao = GetDao();
+            return Ok(dao.GetPendingOrders());
+        }
+
+        [HttpGet]
+        public IActionResult GetConfirmedOrders()
+        {
+            var dao = GetDao();
+            return Ok(dao.GetConfirmedOrders());
+        }
+
+        [HttpGet]
+        public IActionResult GetSendOrders()
+        {
+            var dao = GetDao();
+            return Ok(dao.GetSendOrders());
         }
 
         [HttpGet]

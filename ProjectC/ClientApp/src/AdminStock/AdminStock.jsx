@@ -19,13 +19,13 @@ class AdminStock extends React.Component {
     render() {
         const { products } = this.props;
         return (
-            <div class="panel col-md-8 admin-stock">
+            <div className="panel col-md-8 admin-stock">
                 <h3>Products Stock</h3>
                 {products.loading && <em>Loading products...</em>}
                 {products.error && <span className="text-danger">ERROR: {products.error}</span>}
                 {products.items &&
                     <div>
-                        <div class="accordion" id="stockAccordion">
+                    <div className="accordion" id="stockAccordion">
                             {products.items.map((product, index) =>
                                 <AdminStockItem product={product} index={index} stock={product.stock} />
                             )}

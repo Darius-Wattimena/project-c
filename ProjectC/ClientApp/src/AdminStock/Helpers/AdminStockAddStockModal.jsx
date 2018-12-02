@@ -39,24 +39,24 @@ class AdminStockAddStockModal extends React.Component {
         const { index, product, base } = this.props;
         const { submitted } = this.state;
         return (
-            <div class="modal fade" id={`Modal${index}`} tabindex="-1" role="dialog" aria-labelledby={`ModalCenterTitle`} aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id={`ModalCenterTitle`}>{product.name} Change Stock</h5>
+            <div className="modal fade" id={`Modal${index}`} tabindex="-1" role="dialog" aria-labelledby={`ModalCenterTitle`} aria-hidden="true">
+                <div className="modal-dialog modal-dialog-centered" role="document">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id={`ModalCenterTitle`}>{product.name} Change Stock</h5>
                             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                                 <span aria-hidden="true">&times;</span>
                             </button>
                         </div>
-                        <div class="modal-body">
-                            <input class="form-control" type="number" value={this.state.newStock} onChange={this.handleChange} />
+                        <div className="modal-body">
+                            <input className="form-control" type="number" value={this.state.newStock} onChange={this.handleChange} />
                             {this.state.newStock < 0 &&
-                                <div class="help-block">Stock count must be 0 or higher</div>
+                                <div className="help-block">Stock count must be 0 or higher</div>
                             }
                         </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-dismiss="modal" onClick={base.onCloseModal.bind(base)}>Close</button>
-                            <button type="button" class="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-dismiss="modal" onClick={base.onCloseModal.bind(base)}>Close</button>
+                            <button type="button" className="btn btn-primary" onClick={this.handleSubmit}>Submit</button>
                             <button id={`adminStockModalHideButton${index}`} type="button" data-dismiss="modal" style={{display: `none`}} />
                         </div>
                     </div>

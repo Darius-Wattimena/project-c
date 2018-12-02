@@ -7,6 +7,10 @@ namespace ProjectC.Database.Entities
     [Entity]
     public class Order : IEntity
     {
+        public static readonly int OrderStatusPending = 0;
+        public static readonly int OrderStatusConfirmed = 1;
+        public static readonly int OrderStatusSend = 2;
+
         public Order()
         {
 

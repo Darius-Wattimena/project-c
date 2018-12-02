@@ -22,6 +22,7 @@ import { AdminStatistics } from '../AdminStatistics';
 import { AdminUsers } from '../AdminUsers';
 import { AdminEditUser } from '../AdminUsers/EditUser';
 import { AdminOrders } from '../AdminOrders';
+import { AdminOrderMangement } from '../AdminOrderMangement';
 import { AdminSales } from '../AdminSales';
 import { AdminCoupons } from '../AdminCoupons';
 import { AdminReviews } from '../AdminReviews';
@@ -61,6 +62,7 @@ class App extends Component {
                         <Route path="/admin/addproduct" component={AddProduct} />
                         <Route exact path="/admin/users" component={AdminUsers} />
                         <Route path="/admin/users/edit/:id" component={AdminEditUser} />
+                        <Route exact path="/admin/ordermangement" component={AdminOrderMangement} />
                         <Route path="/admin/orders" component={AdminOrders} />
                         <Route path="/admin/order/:orderid" component={AdminOrder} />
                         <Route path="/admin/sales" component={AdminSales} />
