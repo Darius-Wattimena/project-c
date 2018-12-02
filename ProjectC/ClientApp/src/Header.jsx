@@ -9,7 +9,7 @@ import logo from './styling/cmobile.jpg';
 function UserLoggedIn(props) {
     const isLoggedIn = props.user;
     if (isLoggedIn) {
-        return <UserButtons />;
+        return <UserButtons user={props.user} />;
     }
     return <StartButtons />;
 }
@@ -27,9 +27,17 @@ function UserButtons(props) {
     return (
         <div>
             <div class="btn-group" role="group" aria-label="Basic example">
-                <Link to={`profile`} class="btn btn-info">
-                    User <i class="fas fa-user"></i>
-                </Link>
+                {
+                    <Link to={`profile`} class="btn btn-info">
+                        {props.user.firstName}
+                        &nbsp;
+                        {props.user.isAdmin
+                            // Show a different icon for admins
+                            ? <i class="fas fa-user-tie"></i>
+                            : <i class="fas fa-user"></i>
+                        }
+                    </Link>
+                }
                 <button type="button" class="btn btn-danger" onClick={window.headercomponent.logout}> Logout <i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
@@ -37,7 +45,7 @@ function UserButtons(props) {
 }
 
 class Header extends React.Component {
-    
+
     constructor(props) {
         super(props);
 
@@ -80,10 +88,20 @@ class Header extends React.Component {
             <div>
                 <nav class="navbar navbar-light bg-light fixed-top">
                     <div class="container">
-                        <img src={logo} width="auto" height="60" alt=""/>
+                        <img src={logo} width="auto" height="60" alt="" />
+                        {
+                            // Show admin panel button
+                            user &&
+                            user.isAdmin &&
+                            <div class="btn-group" role="group" aria-label="Basic example">
+                                <Link to={`admin`} class="btn btn-dark">
+                                    <i class="fas fa-hammer"></i><br />Admin Panel
+                                </Link>
+                            </div>
+                        }
                         <form class="form-inline" onSubmit={this.handleSubmit}>
                             <div class="input-group">
-                                <input type="text" class="form-control" value={searchValue} onChange={this.handleChange} placeholder="Search..."/>
+                                <input type="text" class="form-control" value={searchValue} onChange={this.handleChange} placeholder="Search..." />
                                 <div class="input-group-append">
                                     <button onClick={this.handleSubmit} class="btn btn-outline-info" type="button">Search</button>
                                 </div>
@@ -94,12 +112,12 @@ class Header extends React.Component {
                             Shopping Cart <i class="fas fa-shopping-cart"></i>
                         </Link>
                         <Link to={`/wishlist`} class="btn btn-info">
-                            Wishlist <i class="fas fa-heart" style={{color: 'red'}}></i>
+                            Wishlist <i class="fas fa-heart" style={{ color: 'red' }}></i>
                         </Link>
                     </div>
                 </nav>
                 <nav class="navbar">
-                    <img src={logo} width="auto" height="60" alt=""/>
+                    <img src={logo} width="auto" height="60" alt="" />
                 </nav>
 
                 <nav class="navbar" style={{ backgroundColor: "#223843", color: "white" }}>

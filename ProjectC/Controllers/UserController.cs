@@ -112,7 +112,8 @@ namespace ProjectC.Controllers
                     firstName = databaseUser.Firstname,
                     lastName = databaseUser.Lastname,
                     mailAddress = databaseUser.MailAddress,
-                    token = tokenString
+                    token = tokenString,
+                    isAdmin = (roleName.Equals("Admin"))
                 };
 
                 return Ok(user);
