@@ -101,20 +101,6 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetConfirmedOrders()
-        {
-            var dao = GetDao();
-            return Ok(dao.GetConfirmedOrders());
-        }
-
-        [HttpGet]
-        public IActionResult GetSendOrders()
-        {
-            var dao = GetDao();
-            return Ok(dao.GetSendOrders());
-        }
-
-        [HttpGet]
         public IActionResult GetByUser()
         {
             try

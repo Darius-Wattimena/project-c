@@ -15,8 +15,12 @@ namespace ProjectC.Database.SQL
         private readonly T _entity;
         private readonly TableConfig<T> _tableConfig;
         private readonly Dictionary<string, QueryPart> _parameters;
+        private readonly Dictionary<string, MultiQueryPart> _parametersMulti;
         private readonly Dictionary<string, List<string>> _parameterLists;
         private readonly StringBuilder _query;
+
+        private readonly List<string> _orderBy;
+        private readonly List<string> _groupBy;
 
         public int Id;
         public string SelectRange = BasicSelectRange;
@@ -31,13 +35,21 @@ namespace ProjectC.Database.SQL
             _tableConfig = tableConfig;
             _entity = entity;
             _parameters = new Dictionary<string, QueryPart>();
+            _parametersMulti = new Dictionary<string, MultiQueryPart>();
             _parameterLists = new Dictionary<string, List<string>>();
+            _orderBy = new List<string>();
+            _groupBy = new List<string>();
             _query = new StringBuilder();
         }
 
         public void AddParameter(string key, string value, QueryPartType type = QueryPartType.Equal)
         {
             _parameters.Add(key, new QueryPart(key, value, type));
+        }
+
+        public void AddParameters(MultiQueryPart queryPart)
+        {
+            _parametersMulti.Add(queryPart.Key, queryPart);
         }
 
         public void AddParameters(string key, List<string> values)
@@ -48,6 +60,16 @@ namespace ProjectC.Database.SQL
         public void AddParameters(Dictionary<string, string> parameters)
         {
             parameters.ToList().ForEach(x => _parameters[x.Key] = new QueryPart(x.Key, x.Value));
+        }
+
+        public void AddOrderBy(string field)
+        {
+            _orderBy.Add(field);
+        }
+
+        public void AddGroupBy(string field)
+        {
+            _groupBy.Add(field);
         }
 
         public string Build(QueryType queryType)
@@ -85,7 +107,7 @@ namespace ProjectC.Database.SQL
                 .Append("`")
                 .Append(" WHERE 1=1 ");
 
-            if (_parameters.Count != 0 || _parameterLists.Count != 0)
+            if (_parameters.Count != 0 || _parametersMulti.Count != 0 || _parameterLists.Count != 0)
             {
                 foreach (var parameter in _parameters)
                 {
@@ -94,6 +116,31 @@ namespace ProjectC.Database.SQL
                         .Append(parameter.Key)
                         .Append(" " + parameter.Value.Type.GetString() + " ")
                         .Append("'").Append(parameter.Value.Value).Append("'");
+                }
+
+                foreach (var multiQueryPart in _parametersMulti)
+                {
+                    _query.Append(NewLine);
+
+                    var first = true;
+                    _query.Append(" AND (");
+                    foreach (var queryPart in multiQueryPart.Value.QueryParts)
+                    {
+                        if (first)
+                        {
+                            first = false;
+                        }
+                        else
+                        {
+                            _query.Append(" OR ");
+                        }
+
+                        _query.Append(queryPart.Key)
+                            .Append(" ").Append(queryPart.Type.GetString()).Append(" ")
+                            .Append("'").Append(queryPart.Value).Append("'");
+                    }
+
+                    _query.Append(") ");
                 }
 
                 foreach (var parameterList in _parameterLists)
@@ -125,6 +172,48 @@ namespace ProjectC.Database.SQL
                 _query.Append(" AND ")
                     .Append(_tableConfig.PrimaryFieldConfig.Name)
                     .Append(" = '").Append(Id).Append("'");
+            }
+
+            if (_orderBy.Count != 0)
+            {
+                _query.Append(NewLine);
+                _query.Append(" ORDER BY ");
+                var first = true;
+
+                foreach (var field in _orderBy)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        _query.Append(",");
+                    }
+
+                    _query.Append(field);
+                }
+            }
+
+            if (_groupBy.Count != 0)
+            {
+                _query.Append(NewLine);
+                _query.Append(" GROUP BY ");
+                var first = true;
+
+                foreach (var field in _groupBy)
+                {
+                    if (first)
+                    {
+                        first = false;
+                    }
+                    else
+                    {
+                        _query.Append(",");
+                    }
+
+                    _query.Append(field);
+                }
             }
 
             return _query.ToString();

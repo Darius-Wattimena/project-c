@@ -7,11 +7,7 @@ import { orderActions } from '../_actions';
 class AdminOrderMangement extends React.Component {
     componentDidMount() {
 
-        this.state = {
-            pendingOrders: this.props.dispatch(orderActions.getPending()),
-            confirmedOrders: this.props.dispatch(orderActions.getConfirmed()),
-            sendOrders: this.props.dispatch(orderActions.getSend())
-        };
+        this.props.dispatch(orderActions.getPendingOrders());
 
         // Make component accessible
         window.component = this;

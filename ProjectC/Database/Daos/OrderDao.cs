@@ -15,7 +15,15 @@ namespace ProjectC.Database.Daos
         public List<Order> GetPendingOrders()
         {
             var sqlBuilder = new SqlBuilder<Order>(TableConfig);
-            sqlBuilder.AddParameter("OrderState", Order.OrderStatusPending.ToString());
+
+            var queryPart = new MultiQueryPart("OrderState");
+            queryPart.AddValue(Order.OrderStatusPending.ToString());
+            queryPart.AddValue(Order.OrderStatusConfirmed.ToString());
+            queryPart.AddValue(Order.OrderStatusSend.ToString());
+
+            sqlBuilder.AddParameters(queryPart);
+            sqlBuilder.AddOrderBy("OrderState");
+
             return Execute(sqlBuilder.Build(QueryType.Select));
         }
 

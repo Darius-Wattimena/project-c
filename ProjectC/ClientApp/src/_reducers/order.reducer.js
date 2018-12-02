@@ -30,30 +30,6 @@ export function order(state = initialState, action) {
             return {
                 error: action.error
             };
-        case orderConstants.GET_CONFIRMED_REQUEST:
-            return {
-                loading: true
-            };
-        case orderConstants.GET_CONFIRMED_SUCCESS:
-            return {
-                confirmedItems: action.order
-            };
-        case orderConstants.GET_CONFIRMED_FAILURE:
-            return {
-                error: action.error
-            };
-        case orderConstants.GET_SEND_REQUEST:
-            return {
-                loading: true
-            };
-        case orderConstants.GET_SEND_SUCCESS:
-            return {
-                sendItems: action.order
-            };
-        case orderConstants.GET_SEND_FAILURE:
-            return {
-                error: action.error
-            };
         case orderConstants.GETBYUSER_REQUEST:
             return {
                 loading: true
