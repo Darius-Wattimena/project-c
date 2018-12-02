@@ -9,7 +9,7 @@ import logo from './styling/cmobile.jpg';
 function UserLoggedIn(props) {
     const isLoggedIn = props.user;
     if (isLoggedIn) {
-        return <UserButtons />;
+        return <UserButtons user={props.user} />;
     }
     return <StartButtons />;
 }
@@ -23,6 +23,14 @@ function StartButtons(props) {
     );
 }
 
+function AdminButtons(props) {
+    if (props.role === "Admin") {
+        return <Link to={`admin`} class="btn btn-warning">Admin <i class="fas fa-user-shield"></i></Link>;
+    } else {
+        return "";
+    }
+}
+
 function UserButtons(props) {
     return (
         <div>
@@ -30,6 +38,7 @@ function UserButtons(props) {
                 <Link to={`profile`} class="btn btn-info">
                     User <i class="fas fa-user"></i>
                 </Link>
+                <AdminButtons role={props.user.role}/>
                 <button type="button" class="btn btn-danger" onClick={window.headercomponent.logout}> Logout <i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
