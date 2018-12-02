@@ -4,7 +4,9 @@ export const orderService = {
     create,
     getAll,
     GetByUser,
-    getPending
+    getPending,
+    setOrderStatusConfirmed,
+    setOrderStatusSend
 };
 
 // Create a new order to be added to the database
@@ -32,7 +34,25 @@ function getPending() {
         method: 'GET',
         headers: authHeader()
     };
-    return fetch(config.apiUrl + '/order/getpendingorders', requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/order/getPendingOrders', requestOptions).then(handleResponse, handleError);
+}
+
+function setOrderStatusConfirmed(id) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...authHeader() }
+    };
+
+    return fetch(config.apiUrl + '/order/setOrderAsConfirmed/' + id, requestOptions).then(handleResponse, handleError);
+}
+
+function setOrderStatusSend(id) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...authHeader() }
+    };
+
+    return fetch(config.apiUrl + '/order/setOrderAsSend/' + id, requestOptions).then(handleResponse, handleError);
 }
 
 function GetByUser() {

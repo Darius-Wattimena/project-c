@@ -6,7 +6,9 @@ export const orderActions = {
     create,
     getAll,
     getByUser,
-    getPendingOrders
+    getPendingOrders,
+    setOrderStatusConfirmed,
+    setOrderStatusSend
 };
 
 function create(shoppingCartItems) {
@@ -75,4 +77,42 @@ function getPendingOrders() {
     function request() { return { type: orderConstants.GET_PENDING_REQUEST } }
     function success(order) { return { type: orderConstants.GET_PENDING_SUCCESS, order } }
     function failure(error) { return { type: orderConstants.GET_PENDING_FAILURE, error } }
+}
+
+function setOrderStatusConfirmed(button, id) {
+    return dispatch => {
+
+        dispatch(request());
+        orderService.setOrderStatusConfirmed(id)
+            .then(
+                () => {
+                    dispatch(success());
+                    button.disableConfirmButton();
+                },
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: orderConstants.SET_ORDERSTATUS_CONFIRMED_REQUEST } }
+    function success() { return { type: orderConstants.SET_ORDERSTATUS_CONFIRMED_SUCCESS } }
+    function failure(error) { return { type: orderConstants.SET_ORDERSTATUS_CONFIRMED_FAILURE, error } }
+}
+
+function setOrderStatusSend(button, id) {
+    return dispatch => {
+
+        dispatch(request());
+        orderService.setOrderStatusSend(id)
+            .then(
+                () => {
+                    dispatch(success());
+                    button.disableSendButton();
+                },
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: orderConstants.SET_ORDERSTATUS_SEND_REQUEST } }
+    function success() { return { type: orderConstants.SET_ORDERSTATUS_SEND_SUCCESS } }
+    function failure(error) { return { type: orderConstants.SET_ORDERSTATUS_SEND_FAILURE, error } }
 }

@@ -19,26 +19,20 @@ namespace ProjectC.Database.Daos
             var queryPart = new MultiQueryPart("OrderState");
             queryPart.AddValue(Order.OrderStatusPending.ToString());
             queryPart.AddValue(Order.OrderStatusConfirmed.ToString());
-            queryPart.AddValue(Order.OrderStatusSend.ToString());
 
             sqlBuilder.AddParameters(queryPart);
-            sqlBuilder.AddOrderBy("OrderState");
+            //sqlBuilder.AddOrderBy("OrderState");
 
             return Execute(sqlBuilder.Build(QueryType.Select));
         }
 
-        public List<Order> GetConfirmedOrders()
+        public void SetOrderStateAndSave(int id, int orderState)
         {
-            var sqlBuilder = new SqlBuilder<Order>(TableConfig);
-            sqlBuilder.AddParameter("OrderState", Order.OrderStatusConfirmed.ToString());
-            return Execute(sqlBuilder.Build(QueryType.Select));
-        }
+            var order = Find(id);
+            if (order == null) return;
 
-        public List<Order> GetSendOrders()
-        {
-            var sqlBuilder = new SqlBuilder<Order>(TableConfig);
-            sqlBuilder.AddParameter("OrderState", Order.OrderStatusSend.ToString());
-            return Execute(sqlBuilder.Build(QueryType.Select));
+            order.OrderState = orderState;
+            Save(order);
         }
     }
 }

@@ -24,7 +24,7 @@ export function order(state = initialState, action) {
             };
         case orderConstants.GET_PENDING_SUCCESS:
             return {
-                pendingItems: action.order
+                items: action.order
             };
         case orderConstants.GET_PENDING_FAILURE:
             return {
@@ -50,8 +50,15 @@ export function order(state = initialState, action) {
             return {
                 error: action.error
             };
-
+        case orderConstants.SET_ORDERSTATUS_CONFIRMED_FAILURE:
+            return {
+                error: action.error
+            };
+        case orderConstants.SET_ORDERSTATUS_SEND_FAILURE:
+            return {
+                error: action.error
+            };
         default:
-            return state
+            return state;
     }
 }

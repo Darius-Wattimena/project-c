@@ -100,6 +100,22 @@ namespace ProjectC.Controllers
             return Ok(dao.GetPendingOrders());
         }
 
+        [HttpPut("{id}")]
+        public IActionResult SetOrderAsConfirmed(int id)
+        {
+            var dao = GetDao();
+            dao.SetOrderStateAndSave(id, Order.OrderStatusConfirmed);
+            return Ok();
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult SetOrderAsSend(int id)
+        {
+            var dao = GetDao();
+            dao.SetOrderStateAndSave(id, Order.OrderStatusSend);
+            return Ok();
+        }
+
         [HttpGet]
         public IActionResult GetByUser()
         {

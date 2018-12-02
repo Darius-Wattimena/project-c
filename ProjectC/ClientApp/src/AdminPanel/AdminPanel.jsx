@@ -26,6 +26,9 @@ class AdminPanel extends React.Component {
                         <Link to="/admin/orders">Orders</Link>
                     </li>
                     <li>
+                        <Link to="/admin/ordermanagement">Order Mangement</Link>
+                    </li>
+                    <li>
                         <Link to="/admin/sales">Sale Management</Link>
                     </li>
                     <li>
