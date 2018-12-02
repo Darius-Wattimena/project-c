@@ -61,10 +61,7 @@ namespace ProjectC.Controllers
             // Add each product that is associated with the order
             shoppingBasketItems.ForEach(item =>
             {
-                var op = new OrderProducts(item)
-                {
-                    OrderId = createdOrder.Id
-                };
+                var op = OrderProducts.CreateOrderProduct(item, createdOrder.GetId());
                 GetDaoManager().OrderProductsDao.Save(op);
             });
 
