@@ -42,7 +42,11 @@ function handleResponse(response) {
             var contentType = response.headers.get("content-type");
             if (contentType && contentType.includes("application/json")) {
                 response.json().then(json => resolve(json));
-            } else {
+            }
+            else if (contentType && contentType.includes("text/plain")) {
+                response.text().then(text => resolve(text));
+            }
+            else {
                 resolve();
             }
         } else {
