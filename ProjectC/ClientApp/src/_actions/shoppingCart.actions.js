@@ -66,11 +66,12 @@ function addProduct(product) {
 
             shoppingCartService.add(item)
                 .then(
-                    item => {
+                    newItem => {
+                        newItem.product = item.product;
                         // Product was added to the basket.
-                        dispatch(success(item));
+                        dispatch(success(newItem));
                         console.log("Added product to basket");
-                        dispatch(alertActions.success(item.product.name + ' was added to the basket.'));
+                        dispatch(alertActions.success(newItem.product.name + ' was added to the basket.'));
                     },
                     error => {
                         // Something went wrong
