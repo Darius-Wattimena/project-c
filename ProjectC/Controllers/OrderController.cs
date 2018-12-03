@@ -32,40 +32,51 @@ namespace ProjectC.Controllers
         {
             if (shoppingBasketItems.Count < 1)
             {
-                return BadRequest("No items to order");
+                return BadRequest("No items to order.");
             }
 
             // Obtain user id
             if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
-            
             var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+
+            double totalPrice = 0.0; // Is used for calculating the sum of the price of each product
+
+            foreach(ShoppingBasketItem item in shoppingBasketItems)
+            {
+                // Retrieve associated product
+                Product product = GetDaoManager().ProductDao.Find(item.ProductId);
+                
+                // Make sure each product is in stock
+                if (product.Stock <= 0)
+                {
+                    return BadRequest($"Could not process order. The product '{product.Name}' is not in stock!");
+                }
+
+                // Product is in stock, add price to total
+                totalPrice += product.Price * item.Amount;
+            }
 
             // Create a new order
             var newOrder = new Order
             {
                 OrderDate = DateTime.Now,
-
-                TotalPrice = shoppingBasketItems.Sum(
-                    item => GetDaoManager().ProductDao.Find(item.ProductId).Price * item.Amount),
-
+                TotalPrice = totalPrice,
                 OrderState = 0,
                 UserId = userId,
-
-                // TODO: Coupon code stuff
+                
+                // TODO: Store submitted coupon code
                 CouponCodeId = null
             };
 
+            // Create the order (insert new record into database)
             var createdOrder = GetDaoManager().OrderDao.Save(newOrder);
 
             // Add each product that is associated with the order
-            shoppingBasketItems.ForEach(item =>
+            foreach (ShoppingBasketItem item in shoppingBasketItems)
             {
-                var op = new OrderProducts(item)
-                {
-                    OrderId = createdOrder.Id
-                };
+                var op = OrderProducts.CreateOrderProduct(item, createdOrder.GetId());
                 GetDaoManager().OrderProductsDao.Save(op);
-            });
+            }
 
             return Ok($"Succesfully created a new order for {shoppingBasketItems.Count} products.");
         }

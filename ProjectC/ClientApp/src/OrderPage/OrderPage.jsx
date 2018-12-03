@@ -19,8 +19,7 @@ class OrderPage extends React.Component {
 
     handleOrder(shoppingCartItems) {
         this.props.createOrder(shoppingCartItems);
-
-        this.props.clearShoppingCart();
+        //this.props.clearShoppingCart();
         //setTimeout(function () { history.push("/products"); }, 3000);
     }
 
@@ -154,15 +153,11 @@ class OrderPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    console.log("STate=");
-    console.log(state);
     const { authentication } = state;
     const { shoppingCart } = state;
     const { order } = state;
-    console.log(order);
     const { user } = authentication;
     const { items } = shoppingCart;
-    console.log(items);
     return {
         user,
         items,
@@ -173,8 +168,7 @@ function mapStateToProps(state) {
 // Map actions to props
 const mapDispatchToProps = (dispatch) => {
     return {
-        createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems)),
-        clearShoppingCart: () => dispatch(shoppingCartActions.clear())
+        createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems))
     }
 };
 

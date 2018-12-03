@@ -159,10 +159,12 @@ function removeItem(item) {
 }
 
 function clear() {
+
+    console.log("Preparing to clear shopping cart...");
+    
     return dispatch =>
         new Promise((resolve, reject) => {
             {
-
                 const user = localStorage.getItem('user');
 
                 if (user) {
@@ -170,6 +172,7 @@ function clear() {
 
                     shoppingCartService.clear().then(
                         response => {
+                            console.log("Cleared shopping cart (server-side).");
                             dispatch(success());
                             resolve();
                         },

@@ -10,11 +10,6 @@ namespace ProjectC.Database.Entities
         {
 
         }
-        public OrderProducts(ShoppingBasketItem shoppingBasketItem)
-        {
-            this.Amount = shoppingBasketItem.Amount;
-            this.ProductId = shoppingBasketItem.ProductId;
-        }
 
         [Field("OrderProductsId", Primary = true)]
         public int Id;
@@ -31,6 +26,21 @@ namespace ProjectC.Database.Entities
         public void SetId(int id)
         {
             this.Id = id;
+        }
+
+        /// <summary>
+        /// Create a new 'orderproduct' from a basket item and bind it to an existing order
+        /// </summary>
+        /// <param name="shoppingBasketItem">The item to order</param>
+        /// <param name="orderId">The ID of an existing order</param>
+        public static OrderProducts CreateOrderProduct(ShoppingBasketItem shoppingBasketItem, int orderId)
+        {
+            return new OrderProducts()
+            {
+                Amount = shoppingBasketItem.Amount,
+                ProductId = shoppingBasketItem.ProductId,
+                OrderId = orderId
+            };
         }
     }
 }
