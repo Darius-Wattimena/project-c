@@ -1,8 +1,10 @@
-﻿.sec {
+﻿.ohf{margin-left: 5px;}
+
+.sec {
     border: 2px solid #223843;
     border-radius: 15px;
     padding: 10px;
-    margin: 5px;
+    margin: 3px;
 }
 
 .orderProduct {
@@ -16,11 +18,13 @@
 }
 
 .orderProduct h5{
-    margin: auto 20px;
+    margin: auto 10px;
+    font-size: 16px;
 }
 
 .orderProduct h6{
-    margin: auto 10px;
+    margin: auto 7px;
+    font-size: 14px;
 }
 
 .progressbar{
@@ -33,6 +37,7 @@
     width: 33.3%;
     position: relative;
     text-align: center;
+    font-size: 14px;
 }
 
 .progressbar li::before{
@@ -76,7 +81,7 @@
 
 .orderh {
     width: 99%;
-    height: 60px;
+    height: 55px;
     border: 0.5px solid #223843;
     border-radius: 5px;
     margin: 2px;
@@ -89,7 +94,7 @@
 }
 
 .orderh p {
-    font-size: 18px;
+    font-size: 15px;
     float: left;
     margin: 15px 20px;
 }

@@ -85,7 +85,6 @@ class App extends Component {
                             <Route path="/login" component={LoginPage} />
                             <Route path="/order" component={OrderPage} />
                             <Route path="/profile" component={UserPage} />
-                            <Route path="/order" component={OrderPage}/>
                             <Route path="/wishlist" component={WishlistPage} />
                             <Route path="/orderhistory" component={OrderHistory} />
                             <Route path="/orderhistory/:orderid" component={OrderHistory} />

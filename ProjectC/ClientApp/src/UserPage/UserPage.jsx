@@ -4,7 +4,8 @@ import { history } from '../_helpers';
 
 import { userActions } from '../_actions';
 
-import '../styling/UserPageStyling.css'
+import '../styling/UserPageStyling.css';
+import { OrderHistory } from './OrderHistory';
 
 var page = "Profile";
 
@@ -16,16 +17,7 @@ function Page(props) {
         return null;
     }
     else if (page === "Order History") {
-        history.push('orderhistory')
-        return null;
-    }
-    else if (page === "Shoppingcart") {
-        history.push('checkout')
-        return null;
-    }
-    else if (page === "Wishlist") {
-        history.push('wishlist')
-        return null;
+        return <OrderHistory />;
     }
     else if (page === "Logout") {
         return null;
@@ -62,8 +54,6 @@ class UserPage extends React.Component {
                         </nav>
                         <a className="Link" onClick={this.onClick.bind(this,"Profile")}>Profile</a><br />
                         <a className="Link" onClick={this.onClick.bind(this,"Order History")}>Order History</a><br/>
-                        <a className="Link" onClick={this.onClick.bind(this, "Wishlist")}>Wishlist</a><br />
-                        <a className="Link" onClick={this.onClick.bind(this, "Shoppingcart")}>Shoppingcart</a><br />
                         <a className="Link" onClick={this.onClick.bind(this,"Logout")}>Logout</a><br/>
                     </div>
                     <div class="products-container col-sm-9">
