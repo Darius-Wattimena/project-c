@@ -2,17 +2,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { history } from '../_helpers';
-
 import '../styling/ShoppingCartListingStyle.css';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
-import { orderActions } from '../_actions/order.actions';
 
 class ShoppingCart extends React.Component {
     constructor(props) {
         super(props);
 
         this.props.getItems();
+
+        if (localStorage.getItem("user")) {
+            this.props.loadCart();
+        }
     }
 
     handleRemove(item) {
@@ -44,18 +45,26 @@ class ShoppingCart extends React.Component {
             <div>
                 <h2 style={{ 'padding-top': '1em' }}>Shopping Cart</h2>
                 {
-                    shoppingCart.loading && <p><small>Loading...</small></p>
+                    // Show indicator if shopping cart is being synced
+                    shoppingCart.syncing
+                    && <i class="fas fa-sm fa-circle-notch"></i>
+                    || <i class="fas fa-sm"></i>
                 }
                 {shoppingCart.items &&
                     <div>
                         {
-                            shoppingCart.items.length == 0 &&
+                            shoppingCart.items.length == 0
+                            &&
+                            !shoppingCart.syncing
+                            &&
                             <div>
-                                <h3 style={{ 'padding-top': '2em' }}>Your shopping cart is empty. ☹</h3>
+                                <h3 style={{ paddingTop: '2em' }}>Your shopping cart is empty. ☹</h3>
                             </div>
                         }
-                        {shoppingCart.items.map((item, index) =>
-                            <div className="product row" key={index}>
+                        {shoppingCart.items.map((item, index) => {
+                            const isDisabled = shoppingCart.syncing || item.updating || item.deleting;
+
+                            return <div className="product row" key={index}>
                                 <div className="imageColumn col-md-4">
                                     <Link to={`/product/${item.id}`}>
                                         <img src={item.product.imageUrl} />
@@ -67,16 +76,17 @@ class ShoppingCart extends React.Component {
                                     </Link>
                                     <h2>{item.product.price},-</h2>
                                     <p>Quantity:
-                                <button disabled={item.updating || item.deleting} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
+                                <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
                                         {item.amount}
-                                        <button disabled={item.updating || item.deleting} className="btn btn-sm" onClick={this.handleIncrement.bind(this, item)}>+</button>
+                                        <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleIncrement.bind(this, item)}>+</button>
                                     </p>
                                 </div>
                                 <div className="actionsColumn col-md-4">
-                                    <button disabled={item.updating || item.deleting} className="btn btn-danger" onClick={this.handleRemove.bind(this, item)}>Remove</button>
-                                    <button disabled={item.updating || item.deleting} className="btn btn-primary">Add to wishlist</button>
+                                    <button disabled={isDisabled} className="btn btn-danger" onClick={this.handleRemove.bind(this, item)}>Remove</button>
+                                    <button disabled={isDisabled} className="btn btn-primary">Add to wishlist</button>
                                 </div>
                             </div>
+                        }
                         )}
                         {
                             shoppingCart.items.length > 0 &&
@@ -102,6 +112,9 @@ function mapStateToProps(state) {
 // Map actions to props
 const mapDispatchToProps = (dispatch) => {
     return {
+        // this.props.loadCart
+        loadCart: () => dispatch(shoppingCartActions.loadCart()),
+
         // this.props.getItems
         getItems: () => dispatch(shoppingCartActions.getItems()),
 

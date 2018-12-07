@@ -32,13 +32,21 @@ function Listing(props) {
 
 function CartButton(props) {
     var base = props.base;
+    var isAddingThis = (base.props.shoppingCart.adding &&
+        base.props.shoppingCart.adding.productId === props.product.id);
 
     return (
         <button
-            disabled={(base.props.shoppingCart.adding && base.props.shoppingCart.adding.productId === props.product.id
-            )}
-            class="btn cartbutton" onClick={base.props.addProduct.bind(this, props.product)}>
+            className="btn btn-success cartbutton" onClick={base.props.addProduct.bind(this, props.product)}>
             Add to cart
+            {
+                isAddingThis
+                &&
+                <span>
+                    &nbsp;
+                    <i className="fas fa-circle-notch"></i>
+                </span>
+            }
         </button>
     );
 }

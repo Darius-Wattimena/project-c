@@ -11,7 +11,22 @@ namespace ProjectC.Database.Daos
 
         }
 
-        public ShoppingBasketItem GetShoppingBasketItem(int shoppingBasketId, int productId)
+        public ShoppingBasketItem GetItemByProductForUser(int userId, int productId)
+        {
+            int shoppingBasketId = DaoManager.ShoppingBasketDao.GetShoppingBasketForUser(userId).GetId();
+
+            var searchFields = new Dictionary<string, string>()
+            {
+                { "ShoppingBasketId", shoppingBasketId.ToString() },
+                { "ProductId", productId.ToString() }
+            };
+
+            var shoppingBasketItems = Find(searchFields);
+
+            return shoppingBasketItems.Count > 0 ? shoppingBasketItems[0] : null;
+        }
+
+        public ShoppingBasketItem GetItemByProduct(int shoppingBasketId, int productId)
         {
             var searchFields = new Dictionary<string, string>()
             {
