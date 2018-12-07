@@ -70,9 +70,18 @@ function VerticalListing(props) {
                     </div>
                     <div className="col-sm-7">
                         <h4>{product.name}</h4>
-                        <p>stock: {product.stock}</p>
+                        <br />
                         <h3>{product.price},-</h3>
                         <CartButton product={product} />
+                        <br />
+                        <br />
+                        <h5>Specifications</h5>
+                        {product.specifications.map((spec, index) =>
+                            <div className="row" key={index}>
+                                <div className="col-sm-4">{spec.name}</div>
+                                <div className="col-sm-7">{spec.value}</div>
+                            </div>
+                        )}
                     </div>
                 </div>
             )}
@@ -169,14 +178,14 @@ class ProductPage extends React.Component {
                         {products.error && <span className="text-danger">ERROR: {products.error}</span>}
                         {products.items &&
                             <Listing products={
-                            // If products have been filtered
-                            this.state.filteredProducts != null
-                            &&
-                            // Pass filtered products
-                            this.state.filteredProducts
-                            ||
-                            // Otherwise, pass unfiltered products
-                            products.items
+                                // If products have been filtered
+                                this.state.filteredProducts != null
+                                &&
+                                // Pass filtered products
+                                this.state.filteredProducts
+                                ||
+                                // Otherwise, pass unfiltered products
+                                products.items
                             } vertical={vertical} />
                         }
                     </div>
