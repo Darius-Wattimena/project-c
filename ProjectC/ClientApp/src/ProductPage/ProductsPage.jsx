@@ -20,20 +20,24 @@ function onClick(e) {
 function Listing(props) {
     const products = props.products;
     const vertical = props.vertical;
+    const base = props.base;
+
     if (vertical) {
-        return (<VerticalListing products={products} />);
+        return (<VerticalListing base={base} products={products} />);
     }
     else {
-        return (<HorizontalListing products={products} />);
+        return (<HorizontalListing base={base} products={products} />);
     }
 }
 
 function CartButton(props) {
+    var base = props.base;
+
     return (
         <button
-            disabled={(window.component.props.shoppingCart.adding && window.component.props.shoppingCart.adding.productId === props.product.id
+            disabled={(base.props.shoppingCart.adding && base.props.shoppingCart.adding.productId === props.product.id
             )}
-            class="btn cartbutton" onClick={window.component.props.addProduct.bind(this, props.product)}>
+            class="btn cartbutton" onClick={base.props.addProduct.bind(this, props.product)}>
             Add to cart
         </button>
     );
@@ -41,6 +45,7 @@ function CartButton(props) {
 
 function HorizontalListing(props) {
     const products = props.products;
+    const base = props.base;
     return (
         <div>
             {products.map((product, index) =>
@@ -50,7 +55,7 @@ function HorizontalListing(props) {
                         <h4>{product.name}</h4>
                     </Link>
                     <h3>{product.price},-</h3>
-                    <CartButton product={product} />
+                    <CartButton base={base} product={product} />
                 </div>
             )}
         </div>
@@ -59,6 +64,7 @@ function HorizontalListing(props) {
 
 function VerticalListing(props) {
     const products = props.products;
+    const base = props.base;
     return (
         <div>
             {products.map((product, index) =>
@@ -72,7 +78,7 @@ function VerticalListing(props) {
                         <h4>{product.name}</h4>
                         <br />
                         <h3>{product.price},-</h3>
-                        <CartButton product={product} />
+                        <CartButton base={base} product={product} />
                         <br />
                         <br />
                         <h5>Specifications</h5>
@@ -114,9 +120,6 @@ class ProductPage extends React.Component {
     constructor(props) {
         super(props);
 
-        // Make component accessible
-        window.component = this;
-
         this.state = {
             filteredProducts: null
         };
@@ -143,8 +146,6 @@ class ProductPage extends React.Component {
 
     render() {
         const { products } = this.props;
-
-        console.log(this.props.shoppingCart);
 
         return (
             <div>
@@ -177,7 +178,7 @@ class ProductPage extends React.Component {
                         {products.loading && <em>Loading products...</em>}
                         {products.error && <span className="text-danger">ERROR: {products.error}</span>}
                         {products.items &&
-                            <Listing products={
+                            <Listing base={this} products={
                                 // If products have been filtered
                                 this.state.filteredProducts != null
                                 &&
