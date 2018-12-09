@@ -61,6 +61,12 @@ namespace ProjectC.Database.Core
             return Database.ExecuteCountQuery<T, Dao<T>>(this, sql);
         }
 
+        protected List<int> ExecuteMultiResultCount(string sql)
+        {
+            Console.WriteLine(LoggingSqlPrefix + sql);
+            return Database.ExecuteMultiResultCountQuery<T, Dao<T>>(this, sql);
+        }
+
         protected bool ExecuteExists(string sql)
         {
             Console.WriteLine(LoggingSqlPrefix + sql);
@@ -239,11 +245,6 @@ namespace ProjectC.Database.Core
             var query = sqlBuilder.Build(QueryType.Update);
             ExecuteNoResult(query);
             return entity;
-        }
-
-        private int GetLastInsertedId()
-        {
-            return ExecuteCount("SELECT LAST_INSERT_ID()");
         }
     }
 }

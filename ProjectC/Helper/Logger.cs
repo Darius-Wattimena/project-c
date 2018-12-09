@@ -5,7 +5,6 @@ namespace ProjectC.Helper
     public class Logger<T>
     {
         private readonly ILogger _logger;
-        private static Logger<T> _instance;
 
         private Logger(ILogger baseLogger)
         {

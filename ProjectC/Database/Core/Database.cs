@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.InteropServices.ComTypes;
 using MySql.Data.MySqlClient;
 using ProjectC.Database.Core.Interfaces;
 
@@ -7,7 +8,7 @@ namespace ProjectC.Database.Core
     public class Database
     {
         private static Database _instance;
-        private readonly DatabaseContext _context;
+        public readonly DatabaseContext Context;
 
         public static Database Get(DatabaseContext context)
         {
@@ -16,14 +17,14 @@ namespace ProjectC.Database.Core
 
         private Database(DatabaseContext context)
         {
-            _context = context;
+            Context = context;
         }
 
         public List<T> ExecuteQuery<T, TU>(TU dao, string query) 
             where T : IEntity
             where TU : Dao<T>
         {
-            using (var connection = new MySqlConnection(_context.ConnectionString))
+            using (var connection = new MySqlConnection(Context.ConnectionString))
             {
                 connection.Open();
                 using (var command = new MySqlCommand(query, connection))
@@ -42,7 +43,7 @@ namespace ProjectC.Database.Core
             where T : IEntity
             where TU : Dao<T>
         {
-            using (var connection = new MySqlConnection(_context.ConnectionString))
+            using (var connection = new MySqlConnection(Context.ConnectionString))
             {
                 connection.Open();
                 using (var command = new MySqlCommand(query, connection))
@@ -61,11 +62,37 @@ namespace ProjectC.Database.Core
             }
         }
 
+        public List<int> ExecuteMultiResultCountQuery<T, TU>(TU dao, string query)
+            where T : IEntity
+            where TU : Dao<T>
+        {
+            using (var connection = new MySqlConnection(Context.ConnectionString))
+            {
+                connection.Open();
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var results = new List<int>();
+
+                        while (reader.Read())
+                        {
+                            var result = reader.GetInt32(0);
+                            results.Add(result);
+                        }
+
+                        connection.Close();
+                        return results;
+                    }
+                }
+            }
+        }
+
         public bool ExecuteExistsQuery<T, TU>(TU dao, string query)
             where T : IEntity
             where TU : Dao<T>
         {
-            using (var connection = new MySqlConnection(_context.ConnectionString))
+            using (var connection = new MySqlConnection(Context.ConnectionString))
             {
                 connection.Open();
                 using (var command = new MySqlCommand(query, connection))
@@ -88,7 +115,7 @@ namespace ProjectC.Database.Core
             where T : IEntity
             where TU : Dao<T>
         {
-            using (var connection = new MySqlConnection(_context.ConnectionString))
+            using (var connection = new MySqlConnection(Context.ConnectionString))
             {
                 connection.Open();
                 using (var command = new MySqlCommand(query, connection))
