@@ -141,7 +141,12 @@ class ProductPage extends React.Component {
 
     componentDidMount() {
         if (!this.props.match.params.nr) {
-            this.props.getAllProducts();
+
+            // Only load if no products in state
+            if (this.props.products && !this.props.products.loaded) {
+                this.props.getAllProducts();
+            }
+
         }
     }
 

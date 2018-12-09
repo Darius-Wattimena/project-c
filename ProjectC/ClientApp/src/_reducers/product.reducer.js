@@ -8,7 +8,8 @@ export function products(state = {}, action) {
             };
         case productConstants.GETALL_SUCCESS:
             return {
-                items: action.products
+                items: action.products,
+                loaded: true
             };
         case productConstants.GETALL_FAILURE:
             return {
