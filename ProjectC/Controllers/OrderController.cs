@@ -46,12 +46,6 @@ namespace ProjectC.Controllers
                 // Retrieve associated product
                 Product product = GetDaoManager().ProductDao.Find(item.ProductId);
                 
-                // Make sure each product is in stock
-                if (product.Stock <= 0)
-                {
-                    return BadRequest($"Could not process order. The product '{product.Name}' is not in stock!");
-                }
-
                 // Product is in stock, add price to total
                 totalPrice += product.Price * item.Amount;
             }
