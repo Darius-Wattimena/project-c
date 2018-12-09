@@ -66,11 +66,13 @@ function addProduct(product) {
 
             shoppingCartService.add(item)
                 .then(
-                    item => {
+                    newItem => {
+                        newItem.product = item.product;
                         // Product was added to the basket.
-                        dispatch(success(item));
+                        dispatch(success(newItem));
                         console.log("Added product to basket");
                         dispatch(alertActions.success('Item was added to the basket.'));
+                        dispatch(alertActions.success(newItem.product.name + ' was added to the basket.'));
                     },
                     error => {
                         // Something went wrong
@@ -159,10 +161,12 @@ function removeItem(item) {
 }
 
 function clear() {
+
+    console.log("Preparing to clear shopping cart...");
+    
     return dispatch =>
         new Promise((resolve, reject) => {
             {
-
                 const user = localStorage.getItem('user');
 
                 if (user) {
@@ -170,6 +174,7 @@ function clear() {
 
                     shoppingCartService.clear().then(
                         response => {
+                            console.log("Cleared shopping cart (server-side).");
                             dispatch(success());
                             resolve();
                         },
