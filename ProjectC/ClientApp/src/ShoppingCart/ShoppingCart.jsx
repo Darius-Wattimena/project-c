@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import '../styling/ShoppingCartListingStyle.css';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
+import { StockBlock } from '../ProductPage/StockBlock';
 
 class ShoppingCart extends React.Component {
     constructor(props) {
@@ -75,6 +76,7 @@ class ShoppingCart extends React.Component {
                                         <h4>{item.product.name}</h4>
                                     </Link>
                                     <h2>{item.product.price},-</h2>
+                                    <StockBlock stock={item.product.stock} />
                                     <p>Quantity:
                                 <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
                                         {item.amount}

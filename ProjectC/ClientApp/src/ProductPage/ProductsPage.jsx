@@ -59,7 +59,7 @@ function HorizontalListing(props) {
             {products.map((product, index) =>
                 <div className="product-item" key={index}>
                     <Link to={`/product/${product.id}`}>
-                        <img src={product.imageUrl}></img>
+                        <img src={product.imageUrl ? product.imageUrl : 'https://www.elite-electronics.com.au/images/yamaha/imagenotavailable.png'} />
                         <h4>{product.name}</h4>
                     </Link>
                     <h3>{product.price},-</h3>
@@ -79,7 +79,7 @@ function VerticalListing(props) {
                 <div className="product-itemv row">
                     <div className="col-sm-5">
                         <Link to={`/product/${product.id}`}>
-                            <img src={product.imageUrl}></img>
+                            <img src={product.imageUrl ? product.imageUrl : 'https://www.elite-electronics.com.au/images/yamaha/imagenotavailable.png'} />
                         </Link>
                     </div>
                     <div className="col-sm-7">

@@ -6,6 +6,7 @@ import { productActions } from '../_actions';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 
 import '../styling/SingleProductStyle.css';
+import { StockBlock } from '../ProductPage/StockBlock';
 
 //base class
 class SingleProductPage extends React.Component {
@@ -24,66 +25,39 @@ class SingleProductPage extends React.Component {
         const { product } = this.props;
         return (
             <div>
-                {product.items &&
+                {product.item &&
                     <div>
                         <nav class="path-nav" aria-label="breadcrumb">
                             <ol class="breadcrumb">
                                 <li class="breadcrumb-item"><Link to="/home">Home</Link></li>
                                 <li class="breadcrumb-item"><Link to="/products">Products</Link></li>
-                                <li class="breadcrumb-item active" aria-current="page">{product.items.name}</li>
+                                <li class="breadcrumb-item active" aria-current="page">{product.item.name}</li>
                             </ol>
                         </nav>
                         <div className="SingleProduct">
                             <div className="row">
                                 <div className="col-md-5">
                                     <div className="img-container">
-                                        <img src={product.items.imageUrl} alt="" />
+                                        <img src={product.item.imageUrl ? product.item.imageUrl : 'https://www.elite-electronics.com.au/images/yamaha/imagenotavailable.png'} />
                                     </div>
                                 </div>
                                 <div className="col-md-7">
-                                    <h2>{product.items.name}</h2>
-                                    <h3>{product.items.price},-</h3>
-                                    {
-                                        product.items.stock > 0
-                                            ?
-                                            product.items.stock > 5 // In stock and not low
-                                                ?
-                                                <div className="product-stock text-success">
-                                                    In stock &nbsp;
-                                                <i class="fas fa-dolly"></i>
-                                                </div>
-                                                : // In stock but low stock
-                                                <div>
-                                                    <div className="product-stock text-warning">
-                                                        Limited stock &nbsp;
-                                                     <i class="fas fa-people-carry"></i>
-                                                    </div>
-                                                    <br />
-                                                    <small>Only {product.items.stock} left. Order now!</small>
-                                                </div>
-                                            : // Not in stock
-                                            <div>
-                                            <div className="product-stock text-danger">
-                                                Currently not in stock &nbsp;
-                                                     <i class="fas fa-skull-crossbones"></i>
-                                                </div>
-                                                <br />
-                                                <small>You can still order this product but please take extra delivery time into account.</small>
-                                            </div>
-                                    }
+                                    <h2>{product.item.name}</h2>
+                                    <h3>{product.item.price},-</h3>
+                                    <StockBlock stock={product.item.stock} />
                                     <div className="button-group">
-                                        <button disabled={(this.props.shoppingCart.adding && this.props.shoppingCart.adding.productId === product.items.id
+                                        <button disabled={(this.props.shoppingCart.adding && this.props.shoppingCart.adding.productId === product.item.id
                                         )}
-                                            className="btn btn-success" onClick={this.handleAdd.bind(this, product.items)}>Add to cart</button>
+                                            className="btn btn-success" onClick={this.handleAdd.bind(this, product.item)}>Add to cart</button>
                                         <button className="btn btn-info">Add to wishlist</button>
                                     </div>
-                                    <p>{product.items.description}</p>
+                                    <p>{product.item.description}</p>
                                 </div>
 
 
                                 {
                                     // Specifications
-                                    product.items.specifications &&
+                                    product.item.specifications &&
                                     <table class="table table-hover" style={{ margin: 1 + "em" }}>
                                         <thead class="thead-dark">
                                             <tr>
@@ -92,7 +66,7 @@ class SingleProductPage extends React.Component {
                                             </tr>
                                         </thead>
                                         <tbody>
-                                            {product.items.specifications.map((spec, index) =>
+                                            {product.item.specifications.map((spec, index) =>
                                                 <tr>
                                                     <td scope="row">{spec.name}</td>
                                                     <td>{spec.value}</td>

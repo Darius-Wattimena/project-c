@@ -70,7 +70,7 @@ export function product(state = {}, action) {
             };
         case productConstants.GET_SUCCESS:
             return {
-                items: action.product
+                item: action.product
             };
         case productConstants.GET_FAILURE:
             return {
