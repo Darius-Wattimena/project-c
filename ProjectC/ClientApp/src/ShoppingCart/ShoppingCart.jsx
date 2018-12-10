@@ -76,7 +76,7 @@ class ShoppingCart extends React.Component {
                                         <h4>{item.product.name}</h4>
                                     </Link>
                                     <h2>{item.product.price},-</h2>
-                                    <StockBlock stock={item.product.stock} />
+                                    <StockBlock stock={item.product.stock} amount={item.amount} />
                                     <p>Quantity:
                                 <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
                                         {item.amount}

@@ -7,7 +7,13 @@ export class StockBlock extends React.Component {
     }
 
     render() {
-        const stock = this.props.stock;
+        var stock = this.props.stock;
+        var initialStock = stock;
+        var amount = this.props.amount; // <- Note: amount is not required, can be null
+
+        if (amount) {
+            stock -= (amount - 1); // Subtract from stock if any amount is given
+        }
 
         return (
             <div>
@@ -33,10 +39,19 @@ export class StockBlock extends React.Component {
                         <div>
                             <div className="product-stock text-danger">
                                 Currently not in stock &nbsp;
-                        <i class="fas fa-skull-crossbones"></i>
+                                <i class="fas fa-skull-crossbones"></i>
                             </div>
                             <br />
-                            <small>You can still order this product but please take extra delivery time into account.</small>
+                            {
+                                amount
+                                &&
+                                initialStock > 0
+                                &&
+                                <small>Only {amount - (amount - initialStock)} out of {amount} selected {amount != 1 ? `items are` : `item is`} currently in stock.</small>
+                            }
+                            <br/>
+                            <small class="text-danger">You can still order {amount && amount > 1 ? `these products` : `this product`} but please take extra delivery time into account.</small>
+
                         </div>
                 }
             </div>
