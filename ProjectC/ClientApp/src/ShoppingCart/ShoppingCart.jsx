@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import '../styling/ShoppingCartListingStyle.css';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 import { StockBlock } from '../ProductPage/StockBlock';
+import { formatCurrency } from '../_helpers';
 
 class ShoppingCart extends React.Component {
     constructor(props) {
@@ -85,27 +86,27 @@ class ShoppingCart extends React.Component {
                                 <div className="stockColumn col-md-3">
                                     <StockBlock stock={item.product.stock} amount={item.amount} />
                                 </div>
-                                <div className="actionsColumn col-md-3">
+                                <div className="actionsColumn col-md-2">
                                     <div class="quantity row">
-                                        <div class="col-xs-3">
-                                            Quantity:
-                                        </div>
-                                        <div class="col-xs-3">
+                                        Quantity:
+                                        <div class="btn-group" role="group">
                                             <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
-                                        </div>
-                                        <div class="col-xs-3">
                                             {item.amount}
-                                        </div>
-                                        <div class="col-xs-3">
                                             <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleIncrement.bind(this, item)}>+</button>
                                         </div>
                                     </div>
                                     <br />
-                                    <button disabled={isDisabled} className="btn btn-danger" onClick={this.handleRemove.bind(this, item)}>Remove</button>
-                                    <button disabled={isDisabled} className="btn btn-primary">Add to wishlist</button>
+                                    <div class="btn-group" role="group">
+                                        <button type="button" class="btn btn-default" onClick={this.handleRemove.bind(this, item)}>
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                        <button type="button" class="btn btn-default">
+                                            <i class="fas fa-heart" style={{ color: 'red' }}></i>
+                                        </button>
+                                    </div>
                                 </div>
-                                <div className="priceColumn col-md-1">
-                                    <h2>{item.product.price * item.amount},-</h2>
+                                <div className="priceColumn col-md-2">
+                                    <h2>{formatCurrency(item.product.price * item.amount)}</h2>
                                 </div>
                             </div>
                         }
@@ -115,16 +116,19 @@ class ShoppingCart extends React.Component {
                             <div class="orderDetails">
                                 {
                                     this.totalDiscount > 0 &&
-                                    <h2 class="discount">Total Discount: {this.totalDiscount}</h2>
+                                    <h2 class="discount">Total Discount: {formatCurrency(this.totalDiscount)}</h2>
                                 }
-                                <h2>Total Price: {this.totalPrice},-</h2>
+                                <h2>Total Price: {formatCurrency(this.totalPrice)}</h2>
                                 <br />
+                                <Link className="continueShopping" to="/products">
+                                    <i className="fas fa-chevron-left" />
+                                    &nbsp;Continue shopping
+                                </Link>
+                                &nbsp;
                                 <Link to="/order">
                                     <button className="btn btn-primary orderButton">
                                         <i className="fas fa-chevron-right"></i>
-                                        &nbsp;
-                                            Order
-                                        &nbsp;
+                                        &nbsp;Order&nbsp;
                                 <i className="fas fa-truck"></i>
                                     </button>
                                 </Link>
