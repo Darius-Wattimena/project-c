@@ -42,6 +42,9 @@ class ShoppingCart extends React.Component {
 
         var shoppingCart = this.props.shoppingCart;
 
+        this.totalPrice = 0;    // Variable used to calculate the total price for order details
+        this.totalDiscount = 0; // Variable used to calculate the total discount price for order details
+
         return (
             <div>
                 <h2 style={{ 'padding-top': '1em' }}>Shopping Cart</h2>
@@ -65,36 +68,67 @@ class ShoppingCart extends React.Component {
                         {shoppingCart.items.map((item, index) => {
                             const isDisabled = shoppingCart.syncing || item.updating || item.deleting;
 
+                            // Add up to price
+                            this.totalPrice += item.product.price * item.amount;
+
                             return <div className="product row" key={index}>
-                                <div className="imageColumn col-md-4">
+                                <div className="imageColumn col-md-2">
                                     <Link to={`/product/${item.id}`}>
                                         <img src={item.product.imageUrl} />
                                     </Link>
                                 </div>
-                                <div className="productColumn col-md-4">
+                                <div className="nameColumn col-md-3">
                                     <Link to={`/product/${item.product.id}`}>
                                         <h4>{item.product.name}</h4>
                                     </Link>
-                                    <h2>{item.product.price},-</h2>
-                                    <StockBlock stock={item.product.stock} amount={item.amount} />
-                                    <p>Quantity:
-                                <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
-                                        {item.amount}
-                                        <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleIncrement.bind(this, item)}>+</button>
-                                    </p>
                                 </div>
-                                <div className="actionsColumn col-md-4">
+                                <div className="stockColumn col-md-3">
+                                    <StockBlock stock={item.product.stock} amount={item.amount} />
+                                </div>
+                                <div className="actionsColumn col-md-3">
+                                    <div class="quantity row">
+                                        <div class="col-xs-3">
+                                            Quantity:
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
+                                        </div>
+                                        <div class="col-xs-3">
+                                            {item.amount}
+                                        </div>
+                                        <div class="col-xs-3">
+                                            <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleIncrement.bind(this, item)}>+</button>
+                                        </div>
+                                    </div>
+                                    <br />
                                     <button disabled={isDisabled} className="btn btn-danger" onClick={this.handleRemove.bind(this, item)}>Remove</button>
                                     <button disabled={isDisabled} className="btn btn-primary">Add to wishlist</button>
+                                </div>
+                                <div className="priceColumn col-md-1">
+                                    <h2>{item.product.price * item.amount},-</h2>
                                 </div>
                             </div>
                         }
                         )}
                         {
                             shoppingCart.items.length > 0 &&
-                            <Link className="btn btn-danger" to="/order">
-                                Order
-                            </Link>
+                            <div class="orderDetails">
+                                {
+                                    this.totalDiscount > 0 &&
+                                    <h2 class="discount">Total Discount: {this.totalDiscount}</h2>
+                                }
+                                <h2>Total Price: {this.totalPrice},-</h2>
+                                <br />
+                                <Link to="/order">
+                                    <button className="btn btn-primary orderButton">
+                                        <i className="fas fa-chevron-right"></i>
+                                        &nbsp;
+                                            Order
+                                        &nbsp;
+                                <i className="fas fa-truck"></i>
+                                    </button>
+                                </Link>
+                            </div>
                         }
                     </div>
                 }

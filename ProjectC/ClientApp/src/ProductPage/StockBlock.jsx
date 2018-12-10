@@ -47,11 +47,12 @@ export class StockBlock extends React.Component {
                                 &&
                                 initialStock > 0
                                 &&
-                                <small>Only {amount - (amount - initialStock)} out of {amount} selected {amount != 1 ? `items are` : `item is`} currently in stock.</small>
+                                <span>
+                                    <small>Only {amount - (amount - initialStock)} out of {amount} selected {amount != 1 ? `items are` : `item is`} currently in stock.</small>
+                                    <br />
+                                </span>
                             }
-                            <br/>
                             <small class="text-danger">You can still order {amount && amount > 1 ? `these products` : `this product`} but please take extra delivery time into account.</small>
-
                         </div>
                 }
             </div>
