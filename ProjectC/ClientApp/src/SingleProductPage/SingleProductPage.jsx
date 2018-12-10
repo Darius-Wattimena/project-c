@@ -64,7 +64,7 @@ class SingleProductPage extends React.Component {
                                             : // Not in stock
                                             <div>
                                             <div className="product-stock text-danger">
-                                                Currently not in stock
+                                                Currently not in stock &nbsp;
                                                      <i class="fas fa-skull-crossbones"></i>
                                                 </div>
                                                 <br />
