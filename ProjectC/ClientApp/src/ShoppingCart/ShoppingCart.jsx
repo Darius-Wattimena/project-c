@@ -78,7 +78,7 @@ class ShoppingCart extends React.Component {
                                         <img src={item.product.imageUrl} />
                                     </Link>
                                 </div>
-                                <div className="nameColumn col-md-3">
+                                <div className="nameColumn col-md-2">
                                     <Link to={`/product/${item.product.id}`}>
                                         <h4>{item.product.name}</h4>
                                     </Link>
@@ -86,7 +86,7 @@ class ShoppingCart extends React.Component {
                                 <div className="stockColumn col-md-3">
                                     <StockBlock stock={item.product.stock} amount={item.amount} />
                                 </div>
-                                <div className="actionsColumn col-md-2">
+                                <div className="actionsColumn col-md-3">
                                     <div class="quantity row">
                                         Quantity:
                                         <div class="btn-group" role="group">
@@ -96,12 +96,14 @@ class ShoppingCart extends React.Component {
                                         </div>
                                     </div>
                                     <br />
-                                    <div class="btn-group" role="group">
-                                        <button type="button" class="btn btn-default" onClick={this.handleRemove.bind(this, item)}>
-                                            <i class="fas fa-trash"></i>
-                                        </button>
+                                    <div class="btn-group-vertical" role="group">
                                         <button type="button" class="btn btn-default">
-                                            <i class="fas fa-heart" style={{ color: 'red' }}></i>
+                                            <i class="actionIcon fas fa-heart" style={{ color: 'red' }}></i>
+                                            &nbsp;Add to wishlist
+                                        </button>
+                                        <button type="button" class="btn btn-default" onClick={this.handleRemove.bind(this, item)}>
+                                            <i class="actionIcon fas fa-trash align-middle"></i>
+                                            Remove
                                         </button>
                                     </div>
                                 </div>

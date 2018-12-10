@@ -38,7 +38,7 @@ function UserButtons(props) {
                 <Link to={`profile`} class="btn btn-info">
                     User <i class="fas fa-user"></i>
                 </Link>
-                <AdminButtons role={props.user.role}/>
+                <AdminButtons role={props.user.role} />
                 <button type="button" class="btn btn-danger" onClick={window.headercomponent.logout}> Logout <i class="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
@@ -46,7 +46,7 @@ function UserButtons(props) {
 }
 
 class Header extends React.Component {
-    
+
     constructor(props) {
         super(props);
 
@@ -89,10 +89,12 @@ class Header extends React.Component {
             <div>
                 <nav class="navbar navbar-light bg-light fixed-top">
                     <div class="container">
-                        <img src={logo} width="auto" height="60" alt=""/>
+                        <Link to="/">
+                            <img src={logo} width="auto" height="60" alt="" />
+                        </Link>
                         <form class="form-inline" onSubmit={this.handleSubmit}>
                             <div class="input-group">
-                                <input type="text" class="form-control" value={searchValue} onChange={this.handleChange} placeholder="Search..."/>
+                                <input type="text" class="form-control" value={searchValue} onChange={this.handleChange} placeholder="Search..." />
                                 <div class="input-group-append">
                                     <button onClick={this.handleSubmit} class="btn btn-outline-info" type="button">Search</button>
                                 </div>
@@ -103,12 +105,12 @@ class Header extends React.Component {
                             Shopping Cart <i class="fas fa-shopping-cart"></i>
                         </Link>
                         <Link to={`/wishlist`} class="btn btn-info">
-                            Wishlist <i class="fas fa-heart" style={{color: 'red'}}></i>
+                            Wishlist <i class="fas fa-heart" style={{ color: 'red' }}></i>
                         </Link>
                     </div>
                 </nav>
                 <nav class="navbar">
-                    <img src={logo} width="auto" height="60" alt=""/>
+                    <img src={logo} width="auto" height="60" alt="" />
                 </nav>
 
                 <nav class="navbar" style={{ backgroundColor: "#223843", color: "white" }}>

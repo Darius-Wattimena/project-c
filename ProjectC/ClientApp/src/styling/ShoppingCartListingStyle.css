@@ -55,8 +55,6 @@
 
     .product .actionsColumn .quantity {
         font-weight: bold;
-        justify-content: center;
-        align-items: center;
     }
 
     .product .actionsColumn .quantity button {
@@ -91,6 +89,11 @@
 
 .orderDetails .orderButton {
     float: right;
+}
+
+.actionsColumn .actionIcon {
+    float: left;
+    padding-top: .25rem;
 }
 
 .fa-circle-notch {
