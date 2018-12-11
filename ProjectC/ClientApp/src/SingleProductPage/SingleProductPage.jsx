@@ -7,6 +7,7 @@ import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 
 import '../styling/SingleProductStyle.css';
 import { StockBlock } from '../ProductPage/StockBlock';
+import { formatCurrency } from '../_helpers/currency-format';
 
 //base class
 class SingleProductPage extends React.Component {
@@ -43,7 +44,7 @@ class SingleProductPage extends React.Component {
                                 </div>
                                 <div className="col-md-7">
                                     <h2>{product.item.name}</h2>
-                                    <h3>{product.item.price},-</h3>
+                                    <h3>{formatCurrency(product.item.price)}</h3>
                                     <StockBlock stock={product.item.stock} />
                                     <div className="button-group">
                                         <button disabled={(this.props.shoppingCart.adding && this.props.shoppingCart.adding.productId === product.item.id

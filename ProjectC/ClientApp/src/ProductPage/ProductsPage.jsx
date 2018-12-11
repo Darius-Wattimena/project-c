@@ -10,6 +10,7 @@ import '../styling/ProductListingStyle.css';
 import { history } from '../_helpers';
 
 import { FilterColumn } from '../ProductPage';
+import { formatCurrency } from '../_helpers/currency-format';
 
 var vertical = false;
 
@@ -62,7 +63,7 @@ function HorizontalListing(props) {
                         <img src={product.imageUrl ? product.imageUrl : 'https://www.elite-electronics.com.au/images/yamaha/imagenotavailable.png'} />
                         <h4>{product.name}</h4>
                     </Link>
-                    <h3>{product.price},-</h3>
+                    <h3>{formatCurrency(product.price)}</h3>
                     <CartButton base={base} product={product} />
                 </div>
             )}
@@ -85,7 +86,7 @@ function VerticalListing(props) {
                     <div className="col-sm-7">
                         <h4>{product.name}</h4>
                         <br />
-                        <h3>{product.price},-</h3>
+                        <h3>{formatCurrency(product.price)}</h3>
                         <CartButton base={base} product={product} />
                         <br />
                         <br />

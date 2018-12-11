@@ -62,7 +62,7 @@ class ShoppingCart extends React.Component {
                             &&
                             !shoppingCart.syncing
                             &&
-                            <div>
+                            <div className="text-center">
                                 <h3 style={{ paddingTop: '2em' }}>Your shopping cart is empty. ☹</h3>
                             </div>
                         }
