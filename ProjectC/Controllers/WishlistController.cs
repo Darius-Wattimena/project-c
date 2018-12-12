@@ -1,12 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
+using ProjectC.Helper;
 using System;
 using System.Security.Claims;
 
 namespace ProjectC.Controllers
 {
+    [Authorize(Roles = "User, Admin")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class WishlistController : DaoController<WishlistDao, Wishlist>
@@ -16,28 +19,20 @@ namespace ProjectC.Controllers
 
         }
 
-        [HttpGet]
-        public IActionResult GetWishlistItems(int wishlistId)
+        [HttpGet("{id}")]
+        public IActionResult GetItems(int wishlistId)
         {
-            // Get user id
-            if (HttpContext.User.Identity is ClaimsIdentity identity)
+            int userId = UserSession.GetUserId(HttpContext);
+
+            var items = GetDaoManager().WishlistItemDao.GetWishlistItems(userId, wishlistId);
+
+            items.ForEach(item =>
             {
-                int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+                // store corresponding product inside the item
+                item.Product = GetDaoManager().ProductDao.Find(item.ProductId);
+            });
 
-                //items.ForEach(item =>
-                //{
-                //    // Store corresponding product inside the item
-                //    item.Product = GetDaoManager().ProductDao.Find(item.ProductId);
-                //});
-
-                //return Ok(items);
-            }
-            else
-            {
-                return LogError("Couldn't find the users identity.");
-            }
-
-            throw new NotImplementedException();
+            return Ok(items);
         }
 
         [HttpGet]
@@ -61,7 +56,13 @@ namespace ProjectC.Controllers
         [HttpPost]
         public override IActionResult Create([FromBody] Wishlist input)
         {
-            return InnerSave(input);
+            // Make sure id is not set (0)
+            input.SetId(0);
+
+            // Set user id
+            input.UserId = UserSession.GetUserId(HttpContext);
+
+            return InnerSave(input); // Perform insert
         }
 
         [HttpPut("{id}")]

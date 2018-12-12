@@ -40,7 +40,6 @@ class WishlistPage extends React.Component {
         const { products } = this.props;
 
         return (
-
             <div>
                 <div className="row">
                     <div className="col-md-2">
@@ -65,7 +64,9 @@ class WishlistPage extends React.Component {
                                     <h4>{product.name}</h4>
                                     <h3>{product.price},-</h3>
                                     <CartButton product={product} base={this} />
-                                    <button className="btn btn-danger" onClick={this.handleRemove.bind(this, product)}>Remove</button>
+                                    <button className="btn btn-danger" onClick={this.handleRemove.bind(this, product)}>
+                                        Remove
+                                    </button>
                                 </div>
 
                             </div>
@@ -74,8 +75,6 @@ class WishlistPage extends React.Component {
                 </div>
             </div>
         );
-
-
     }
 }
 
