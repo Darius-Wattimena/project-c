@@ -5,6 +5,7 @@ export const productService = {
     getById,
     getWithSpecifications,
     getAllWithSpecifications,
+    getAllWithoutSpecifications,
     _delete,
     add,
     search,
@@ -20,6 +21,14 @@ function getAll() {
     return fetch(config.apiUrl + '/product/get', requestOptions).then(handleResponse, handleError);
 }
 
+function getAllWithoutSpecifications() {
+    const requestOptions = {
+        method: "GET",
+        headers: authHeader()
+    };
+
+    return fetch(config.apiUrl + "/product/GetAllWithoutSpecifications", requestOptions).then(handleResponse, handleError);
+}
 
 function getById(id) {
     const requestOptions = {

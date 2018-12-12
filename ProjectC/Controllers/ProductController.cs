@@ -67,6 +67,12 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetAllWithoutSpecifications()
+        {
+            return Ok(GetDao().FindAll());
+        }
+
+        [HttpGet]
         public IActionResult GetAllWithSpecifications()
         {
             try
