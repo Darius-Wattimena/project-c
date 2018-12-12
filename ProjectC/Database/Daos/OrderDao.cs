@@ -29,7 +29,7 @@ namespace ProjectC.Database.Daos
             return Execute(sqlBuilder.Build(QueryType.Select));
         }
 
-        public List<Statistics> GetTotalOrdersForLastSevenDays(DateTime minDate, DateTime maxDate)
+        public List<Statistics> GetTotalOrdersForMinMaxDays(DateTime minDate, DateTime maxDate)
         {
             var sqlQuery = "SELECT \n" +
                 "Date(OrderDate) as order_date,\n" +
@@ -55,6 +55,40 @@ namespace ProjectC.Database.Daos
                             var orderDate = reader.GetDateTime(0);
                             var totalOrder = reader.GetInt32(1);
                             results.Add(new Statistics(orderDate.ToString("yyyy-MM-dd"), totalOrder));
+                        }
+
+                        connection.Close();
+                        return results;
+                    }
+                }
+            }
+        }
+
+        public List<Statistics> GetTotalIncomeForLastMinMaxDays(DateTime minDate, DateTime maxDate)
+        {
+            var sqlQuery = "SELECT \n" +
+                           "Date(OrderDate) as order_date, \n" +
+                           "SUM(TotalPrice) as total_income \n" +
+                           "FROM `order`\n" +
+                           "WHERE OrderDate >= \'" + minDate.ToString("yyyy-MM-dd") + "\'\n" +
+                           "AND OrderDate < \'" + maxDate.ToString("yyyy-MM-dd") + "\'\n" +
+                           "GROUP BY DAY(OrderDate) \n" +
+                           "ORDER BY OrderDate ASC";
+
+            using (var connection = new MySqlConnection(Database.Context.ConnectionString))
+            {
+                connection.Open();
+                using (var command = new MySqlCommand(sqlQuery, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var results = new List<Statistics>();
+
+                        while (reader.Read())
+                        {
+                            var orderDate = reader.GetDateTime(0);
+                            var totalIncome = reader.GetInt32(1);
+                            results.Add(new Statistics(orderDate.ToString("yyyy-MM-dd"), totalIncome));
                         }
 
                         connection.Close();

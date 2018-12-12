@@ -30,7 +30,7 @@ namespace ProjectC.Controllers
             var today = DateTime.Today.AddDays(1);
             var sevenDaysAgo = today.AddDays(-7);
 
-            var data = GetDaoManager().OrderDao.GetTotalOrdersForLastSevenDays(sevenDaysAgo, today);
+            var data = GetDaoManager().OrderDao.GetTotalOrdersForMinMaxDays(sevenDaysAgo, today);
             var resultData = new List<Statistics>();
 
             var dataI = 0;

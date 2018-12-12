@@ -37,7 +37,7 @@ namespace ProjectC.Database.Daos
             var sqlQuery = "SELECT \n" +
                       "ProductId as product_id, \n" +
                       "(SELECT `name` FROM `product` WHERE ProductId = product_id) as product_name, \n" +
-                      "COUNT(Amount) as total_sold \n" +
+                      "SUM(Amount) as total_sold \n" +
                       "FROM `orderproducts` \n" +
                       "GROUP BY ProductId";
 
