@@ -90,34 +90,39 @@ function VerticalListing(props) {
                         <br />
                         <h3>{formatCurrency(product.price)}</h3>
                         <CartButton base={base} product={product} />
-                        <br/>
-                        <br/>
-                        <h5>Specifications</h5>
-                        <table className="table table-sm">
-                            {product.specifications.map((spec, index) =>
-                                index < 3
-                                &&
-                                <tr key={index}>
-                                    <td><b>{spec.name}</b></td>
-                                    <td>{spec.value}</td>
-                                </tr>
-                                ||
-                                <tr className={`collapse colspec${product.id}`}>
-                                    <td><b>{spec.name}</b></td>
-                                    <td>{spec.value}</td>
-                                </tr>
-                            )}
-                        </table>
-                        <button className="btn colspecBtn collapsed" data-target={`.colspec${product.id}`} data-toggle="collapse" type="button">
-                            <span className="ifCollapsed">
-                                <i className="fas fa-eye" />
-                                &nbsp;Show all specifications
-                                        </span>
-                            <span className="else">
-                                <i className="fas fa-eye-slash" />
-                                &nbsp;Show less specifications
-                                        </span>
-                        </button>
+                        {
+                            product.specifications.length != 0
+                            &&
+                            <div className="vspecs">
+                                <h5>Specifications</h5>
+                                <table className="table table-sm">
+                                    {product.specifications.map((spec, index) =>
+                                        index < 3
+                                        &&
+                                        <tr key={index}>
+                                            <td><b>{spec.name}</b></td>
+                                            <td>{spec.value}</td>
+                                        </tr>
+                                        ||
+                                        <tr className={`collapse colspec${product.id}`}>
+                                            <td><b>{spec.name}</b></td>
+                                            <td>{spec.value}</td>
+                                        </tr>
+                                    )}
+                                </table>
+
+                                <button className="btn colspecBtn collapsed" data-target={`.colspec${product.id}`} data-toggle="collapse" type="button">
+                                    <span className="ifCollapsed">
+                                        <i className="fas fa-eye" />
+                                        &nbsp;Show all specifications
+                                    </span>
+                                    <span className="else">
+                                        <i className="fas fa-eye-slash" />
+                                        &nbsp;Show less specifications
+                                    </span>
+                                </button>
+                            </div>
+                        }
                     </div>
                 </div>
             )}
