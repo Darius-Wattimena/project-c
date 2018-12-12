@@ -63,6 +63,10 @@
     color: white;
 }
 
+.colspecBtn {
+    margin-bottom: 1em;
+}
+
 /* Collapsable specification button text */
 .colspecBtn > .ifCollapsed,
 .colspecBtn.collapsed > .else {
