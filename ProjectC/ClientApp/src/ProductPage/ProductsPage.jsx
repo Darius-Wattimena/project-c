@@ -84,19 +84,44 @@ function VerticalListing(props) {
                         </Link>
                     </div>
                     <div className="col-sm-7">
-                        <h4>{product.name}</h4>
+                        <Link to={`/product/${product.id}`}>
+                            <h4>{product.name}</h4>
+                        </Link>
                         <br />
                         <h3>{formatCurrency(product.price)}</h3>
                         <CartButton base={base} product={product} />
-                        <br />
-                        <br />
+                        <br/>
+                        <br/>
                         <h5>Specifications</h5>
-                        {product.specifications.map((spec, index) =>
-                            <div className="row" key={index}>
-                                <div className="col-sm-4">{spec.name}</div>
-                                <div className="col-sm-7">{spec.value}</div>
-                            </div>
-                        )}
+                        <table className="table table-sm">
+                            {product.specifications.map((spec, index) =>
+                                index < 3
+                                &&
+                                <tr key={index}>
+                                    <td><b>{spec.name}</b></td>
+                                    <td>{spec.value}</td>
+                                </tr>
+                                ||
+                                <tr className={`collapse colspec${product.id}`}>
+                                    <td><b>{spec.name}</b></td>
+                                    <td>{spec.value}</td>
+                                </tr>
+                            )}
+                            <tr>
+                                <td>
+                                    <button className="btn colspecBtn collapsed" data-target={`.colspec${product.id}`} data-toggle="collapse" type="button">
+                                        <span className="ifCollapsed">
+                                            <i className="fas fa-eye" />
+                                            &nbsp;Show all specifications
+                                        </span>
+                                        <span className="else">
+                                            <i className="fas fa-eye-slash" />
+                                            &nbsp;Show less specifications
+                                        </span>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             )}

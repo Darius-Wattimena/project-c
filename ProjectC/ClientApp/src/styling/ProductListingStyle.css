@@ -39,12 +39,12 @@
     width: 85%;
     float: left;
     width: 100%;
-    height: 16em;
+    height: 24em;
     padding: 25px;
     margin-top: 5px;
     margin-left: 0px;
     background-color: white;
-    overflow-y: scroll;
+    overflow-y: auto;
     border: 0.5px gray solid;
 }
 
@@ -61,4 +61,16 @@
 .cartbutton {
     /* background-color: #223843; */
     color: white;
+}
+
+/* Collapsable specification button text */
+.colspecBtn > .ifCollapsed,
+.colspecBtn.collapsed > .else {
+    display: none;
+}
+
+.colspecBtn.collapsed > .ifCollapsed,
+.colspecBtn > .else 
+{
+    display: block;
 }
