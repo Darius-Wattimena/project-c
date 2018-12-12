@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { productActions } from '../_actions';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 
+import '../styling/progress-indicator.css';
 import '../styling/ProductListingStyle.css';
 import { history } from '../_helpers';
 
@@ -203,6 +204,10 @@ class ProductPage extends React.Component {
                         {
                             products.items &&
                             <FilterColumn products={products.items} setFilteredProducts={this.setFilteredProducts.bind(this)} />
+                            ||
+                            <div class="progress">
+                                <div class="indeterminate"></div>
+                            </div>
                         }
                     </div>
                     <div class="products-container col-sm-9">
@@ -215,7 +220,11 @@ class ProductPage extends React.Component {
                                 </li>
                             </ul>
                         </nav>
-                        {products.loading && <em>Loading products...</em>}
+                        {products.loading &&
+                            <div class="progress">
+                                <div class="indeterminate"></div>
+                            </div>
+                        }
                         {products.error && <span className="text-danger">ERROR: {products.error}</span>}
                         {products.items &&
                             <Listing base={this} products={

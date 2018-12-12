@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { productActions } from '../_actions';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 
+import '../styling/progress-indicator.css';
 import '../styling/SingleProductStyle.css';
 import { StockBlock } from '../ProductPage/StockBlock';
 import { formatCurrency } from '../_helpers/currency-format';
@@ -26,7 +27,22 @@ class SingleProductPage extends React.Component {
         const { product } = this.props;
         return (
             <div>
-                {product.item &&
+                {!product.item
+                    &&
+                    <div className="SingleProduct row">
+                        <div className="col-md-12">
+                            <nav class="path-nav" aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><Link to="/home">Home</Link></li>
+                                    <li class="breadcrumb-item"><Link to="/products">Products</Link></li>
+                                </ol>
+                            </nav>
+                            <div class="progress">
+                                <div class="indeterminate"></div>
+                            </div>
+                        </div>
+                    </div>
+                    ||
                     <div>
                         <nav class="path-nav" aria-label="breadcrumb">
                             <ol class="breadcrumb">

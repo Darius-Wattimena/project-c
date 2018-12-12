@@ -2,6 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import '../styling/progress-indicator.css';
 import '../styling/ShoppingCartListingStyle.css';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 import { StockBlock } from '../ProductPage/StockBlock';
@@ -52,8 +53,12 @@ class ShoppingCart extends React.Component {
                 {
                     // Show indicator if shopping cart is being synced
                     shoppingCart.syncing
-                    && <i class="fas fa-sm fa-circle-notch"></i>
-                    || <i class="fas fa-sm"></i>
+                    &&
+                    <div className="progress">
+                        <div class="indeterminate"></div>
+                    </div>
+                    ||
+                    <div className="progress invisible"></div>
                 }
                 {shoppingCart.items &&
                     <div>
