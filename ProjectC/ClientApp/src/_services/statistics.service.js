@@ -10,7 +10,7 @@ function getOrders() {
         headers: authHeader()
     };
 
-    return fetch(config.apiUrl + '/statistics/getSevenLastOrdersCount/', requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/statistics/getTotalOrdersForTheLastSevenDays/', requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {

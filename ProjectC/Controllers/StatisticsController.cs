@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,8 @@ namespace ProjectC.Controllers
     [ApiController]
     public class StatisticsController : ControllerBase
     {
+        private const string DateTimeStringFormat = "yyyy-MM-dd";
+
         public StatisticsController(ILogger<StatisticsController> logger)
         {
             
@@ -25,38 +28,13 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetSevenLastOrdersCount()
+        public IActionResult GetTotalOrdersForTheLastSevenDays()
         {
             var today = DateTime.Today.AddDays(1);
             var sevenDaysAgo = today.AddDays(-7);
 
             var data = GetDaoManager().OrderDao.GetTotalOrdersForMinMaxDays(sevenDaysAgo, today);
-            var resultData = new List<Statistics>();
-
-            var dataI = 0;
-            for (int i = 0; i < 7; i++)
-            {
-                var checkedDay = sevenDaysAgo.AddDays(i);
-
-                if (data.Count < dataI + 1)
-                {
-                    resultData.Add(new Statistics(checkedDay.ToString("yyyy-MM-dd"), 0));
-                    continue;
-                }
-                
-                var dataListDay = Convert.ToDateTime(data[dataI].name);
-                if (checkedDay.Equals(dataListDay))
-                {
-                    resultData.Add(data[dataI]);
-                    dataI++;
-                }
-                else
-                {
-                    resultData.Add(new Statistics(checkedDay.ToString("yyyy-MM-dd"), 0));
-                }
-            }
-
-            return Ok(resultData);
+            return FillMissingEmptyDays(data, sevenDaysAgo, today);
         }
 
         [HttpGet]
@@ -71,6 +49,46 @@ namespace ProjectC.Controllers
         {
             var data = GetDaoManager().OrderProductsDao.GetTotalProductsSold();
             return Ok(data);
+        }
+
+        [HttpGet]
+        public IActionResult GetIncomeForTheLastSevenDays()
+        {
+            var today = DateTime.Today.AddDays(1);
+            var sevenDaysAgo = today.AddDays(-7);
+
+            var data = GetDaoManager().OrderDao.GetTotalOrdersForMinMaxDays(sevenDaysAgo, today);
+            return FillMissingEmptyDays(data, sevenDaysAgo, today);
+        }
+
+        public IActionResult FillMissingEmptyDays(List<Statistics> currentData, DateTime minDate, DateTime maxDate)
+        {
+            var totalDays = (maxDate - minDate).TotalDays;
+            var resultData = new List<Statistics>();
+            var dataI = 0;
+            for (var i = 0; i < totalDays; i++)
+            {
+                var checkedDay = minDate.AddDays(i);
+
+                if (currentData.Count < dataI + 1)
+                {
+                    resultData.Add(new Statistics(checkedDay.ToString(DateTimeStringFormat), 0));
+                    continue;
+                }
+
+                var dataListDay = Convert.ToDateTime(currentData[dataI].name);
+                if (checkedDay.Equals(dataListDay))
+                {
+                    resultData.Add(currentData[dataI]);
+                    dataI++;
+                }
+                else
+                {
+                    resultData.Add(new Statistics(checkedDay.ToString(DateTimeStringFormat), 0));
+                }
+            }
+
+            return Ok(resultData);
         }
     }
 }
