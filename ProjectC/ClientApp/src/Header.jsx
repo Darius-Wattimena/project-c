@@ -101,12 +101,14 @@ class Header extends React.Component {
                             </div>
                         </form>
                         <UserLoggedIn user={user} />
-                        <Link to={`/checkout`} class="btn btn-info">
-                            Shopping Cart <i class="fas fa-shopping-cart"></i>
-                        </Link>
-                        <Link to={`/wishlist`} class="btn btn-info">
-                            Wishlist <i class="fas fa-heart" style={{ color: 'red' }}></i>
-                        </Link>
+                        <div className="btn-group">
+                            <Link to={`/checkout`} class="btn btn-info">
+                                Shopping Cart <i class="fas fa-shopping-cart"></i>
+                            </Link>
+                            <Link to={`/wishlist`} class="btn btn-info">
+                                Wishlist <i class="fas fa-heart" style={{ color: 'red' }}></i>
+                            </Link>
+                        </div>
                     </div>
                 </nav>
                 <nav class="navbar">
