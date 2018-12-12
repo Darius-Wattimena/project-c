@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
-import { LineChart, Line, CartesianGrid, XAxis, YAxis } from 'recharts';
+import { AreaChart, Tooltip, Area, CartesianGrid, XAxis, YAxis } from 'recharts';
 import { statisticsActions } from '../_actions';
 
 const data = [
@@ -28,12 +28,13 @@ class AdminStatistics extends React.Component {
             <div class="panel col-md-8" style={{ width: "auto" }}>
                 <h3>Statistics</h3>
                 <h4>Total orders last 7 days</h4>
-                <LineChart width={900} height={500} data={statistics.items}>
-                    <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-                    <CartesianGrid stroke="#ccc" />
+                <AreaChart width={900} height={500} data={statistics.items}>
+                    <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
-                </LineChart>
+                    <Tooltip />
+                    <Area type='monotone' dataKey='uv' stroke='#82ca9d' fill='#82ca9d' />
+                </AreaChart>
             </div>
         );
     }
