@@ -69,6 +69,10 @@ class ShoppingCart extends React.Component {
                             &&
                             <div className="text-center">
                                 <h3 style={{ paddingTop: '2em' }}>Your shopping cart is empty. ☹</h3>
+                                <br />
+                                <Link to="/products">
+                                    Browse products
+                                </Link>
                             </div>
                         }
                         {shoppingCart.items.map((item, index) => {
@@ -102,11 +106,11 @@ class ShoppingCart extends React.Component {
                                     </div>
                                     <br />
                                     <div class="btn-group-vertical" role="group">
-                                        <button type="button" class="btn btn-default">
+                                        <button disabled={isDisabled} type="button" class="btn btn-default">
                                             <i class="actionIcon fas fa-heart" style={{ color: 'red' }}></i>
                                             &nbsp;Add to wishlist
                                         </button>
-                                        <button type="button" class="btn btn-default" onClick={this.handleRemove.bind(this, item)}>
+                                        <button disabled={isDisabled} type="button" class="btn btn-default" onClick={this.handleRemove.bind(this, item)}>
                                             <i class="actionIcon fas fa-trash align-middle"></i>
                                             Remove
                                         </button>
@@ -133,7 +137,7 @@ class ShoppingCart extends React.Component {
                                 </Link>
                                 &nbsp;
                                 <Link to="/order">
-                                    <button className="btn btn-primary orderButton">
+                                    <button disabled={shoppingCart.syncing} className="btn btn-primary orderButton">
                                         <i className="fas fa-chevron-right"></i>
                                         &nbsp;Order&nbsp;
                                 <i className="fas fa-truck"></i>
