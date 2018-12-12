@@ -107,21 +107,17 @@ function VerticalListing(props) {
                                     <td>{spec.value}</td>
                                 </tr>
                             )}
-                            <tr>
-                                <td>
-                                    <button className="btn colspecBtn collapsed" data-target={`.colspec${product.id}`} data-toggle="collapse" type="button">
-                                        <span className="ifCollapsed">
-                                            <i className="fas fa-eye" />
-                                            &nbsp;Show all specifications
-                                        </span>
-                                        <span className="else">
-                                            <i className="fas fa-eye-slash" />
-                                            &nbsp;Show less specifications
-                                        </span>
-                                    </button>
-                                </td>
-                            </tr>
                         </table>
+                        <button className="btn colspecBtn collapsed" data-target={`.colspec${product.id}`} data-toggle="collapse" type="button">
+                            <span className="ifCollapsed">
+                                <i className="fas fa-eye" />
+                                &nbsp;Show all specifications
+                                        </span>
+                            <span className="else">
+                                <i className="fas fa-eye-slash" />
+                                &nbsp;Show less specifications
+                                        </span>
+                        </button>
                     </div>
                 </div>
             )}
