@@ -47,14 +47,12 @@ class SingleProductPage extends React.Component {
                                     <h3>{formatCurrency(product.item.price)}</h3>
                                     <StockBlock stock={product.item.stock} />
                                     <div className="button-group">
-                                        <button disabled={(this.props.shoppingCart.adding && this.props.shoppingCart.adding.productId === product.item.id
-                                        )}
+                                        <button disabled={(this.props.shoppingCart.adding && this.props.shoppingCart.adding.productId === product.item.id)}
                                             className="btn btn-success" onClick={this.handleAdd.bind(this, product.item)}>Add to cart</button>
                                         <button className="btn btn-info">Add to wishlist</button>
                                     </div>
                                     <p>{product.item.description}</p>
                                 </div>
-
 
                                 {
                                     // Specifications

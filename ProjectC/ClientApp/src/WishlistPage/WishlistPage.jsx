@@ -10,40 +10,31 @@ import '../styling/WishlistStyling.css';
 
 
 function CartButton(props) {
-    console.log(window.component.props);
     return (
-        <button class="btn cartbutton" onClick={window.component.props.addProduct.bind(this, props.product)}>
+        <button class="btn cartbutton" onClick={props.base.props.addProduct.bind(this, props.product)}>
             Add to cart
         </button>
     );
 }
 
 class WishlistPage extends React.Component {
+
+    constructor(props) {
+        super(props);
+    }
+
     componentDidMount() {
-
-
+        // Load
         this.props.getAllProducts();
     }
 
     handleAdd(product) {
-        console.log("Adding product " + product.name + " to the shopping basket");
         this.props.addProduct(product);
-        this.forceUpdate();
     }
 
     handleRemove(product) {
         this.props.removeProduct(product);
-        // re-render
-        this.forceUpdate();
     }
-
-
-    constructor(props) {
-        super(props);
-        window.component = this;
-    }
-
-
 
     render() {
         const { products } = this.props;
@@ -51,38 +42,36 @@ class WishlistPage extends React.Component {
         return (
 
             <div>
-                <h3>Wishlist</h3>
-                <div>
-                    <div className="wishlistbutton-group">
-                        <button className="btn btn-info">Create wishlist</button>
+                <div className="row">
+                    <div className="col-md-2">
+                        <h4>My wishlists</h4>
+                        <hr />
+                        <button className="btn btn-info btn-block">Create wishlist</button>
                     </div>
+                    <div className="col-md-10">
+                        {products.items && products.items.map((product, index) =>
+                            <div className="wishlist-item row" key="{index}">
+                                <div className="col-sm-3">
 
-                    {products.items && products.items.map((product, index) =>
-                        <div className="wishlist-item row">
-                            <div className="col-sm-3">
+                                    <Link to={`/product/${product.id}`}>
 
-                                <Link to={`/product/${product.id}`}>
+                                        <div className="wishlist-image">
+                                            <img src={product.imageUrl}></img>
+                                        </div>
 
-                                    <div className="wishlist-image">
-                                        <img src={product.imageUrl}></img>
-                                    </div>
+                                    </Link>
+                                </div>
+                                <div className="col-sm-9">
+                                    <h4>{product.name}</h4>
+                                    <h3>{product.price},-</h3>
+                                    <CartButton product={product} base={this} />
+                                    <button className="btn btn-danger" onClick={this.handleRemove.bind(this, product)}>Remove</button>
+                                </div>
 
-                                </Link>
                             </div>
-                            <div className="col-sm-9">
-                                <h4>{product.name}</h4>
-                                <h3>{product.price},-</h3>
-                                <CartButton product={product} />
-                                <button className="btn btn-danger" onClick={this.handleRemove.bind(this, product)}>Remove</button>
-                            </div>
-
-                        </div>
-                    )}
-
-
+                        )}
+                    </div>
                 </div>
-
-
             </div>
         );
 
@@ -101,8 +90,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         // accessible via this.props.getAllProducts
         getAllProducts: () => dispatch(productActions.getAll()),
-        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); window.alert(product.name + " was added to the shopping cart! (TEST)"); console.log("Added product to the basket."); },
-        removeProduct: product => dispatch(wishlistActions.removeProduct(product)),
+        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); }
     }
 };
 

@@ -2,6 +2,8 @@
 using Microsoft.Extensions.Logging;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
+using System;
+using System.Security.Claims;
 
 namespace ProjectC.Controllers
 {
@@ -12,6 +14,30 @@ namespace ProjectC.Controllers
         public WishlistController(ILogger<WishlistController> logger) : base(logger)
         {
 
+        }
+
+        [HttpGet]
+        public IActionResult GetWishlistItems(int wishlistId)
+        {
+            // Get user id
+            if (HttpContext.User.Identity is ClaimsIdentity identity)
+            {
+                int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+
+                //items.ForEach(item =>
+                //{
+                //    // Store corresponding product inside the item
+                //    item.Product = GetDaoManager().ProductDao.Find(item.ProductId);
+                //});
+
+                //return Ok(items);
+            }
+            else
+            {
+                return LogError("Couldn't find the users identity.");
+            }
+
+            throw new NotImplementedException();
         }
 
         [HttpGet]
