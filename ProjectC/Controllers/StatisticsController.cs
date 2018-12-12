@@ -18,13 +18,19 @@ namespace ProjectC.Controllers
             
         }
 
+        public DaoManager GetDaoManager()
+        {
+            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
+            return daoManager;
+        }
+
         [HttpGet]
         public IActionResult GetSevenLastOrdersCount()
         {
-            var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
             var today = DateTime.Today.AddDays(1);
             var sevenDaysAgo = today.AddDays(-7);
-            var data = daoManager.OrderDao.GetTotalOrdersForLastSevenDays(sevenDaysAgo, today);
+
+            var data = GetDaoManager().OrderDao.GetTotalOrdersForLastSevenDays(sevenDaysAgo, today);
             var resultData = new List<Statistics>();
 
             var dataI = 0;
@@ -51,6 +57,20 @@ namespace ProjectC.Controllers
             }
 
             return Ok(resultData);
+        }
+
+        [HttpGet]
+        public IActionResult GetTotalUsers()
+        {
+            var totalUsers = GetDaoManager().UserDao.CountAll();
+            return Ok(totalUsers);
+        }
+
+        [HttpGet]
+        public IActionResult GetTotalProductsSold()
+        {
+            var data = GetDaoManager().OrderProductsDao.GetTotalProductsSold();
+            return Ok(data);
         }
     }
 }

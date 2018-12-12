@@ -31,7 +31,7 @@ namespace ProjectC.Database.Daos
 
         public List<Statistics> GetTotalOrdersForLastSevenDays(DateTime minDate, DateTime maxDate)
         {
-            var sql = "SELECT \n" +
+            var sqlQuery = "SELECT \n" +
                 "Date(OrderDate) as order_date,\n" +
                 "IFNULL((SELECT COUNT(*) FROM `order` \n" +
                 "WHERE Date(OrderDate) = order_date), 0) as total_orders\n" +
@@ -44,7 +44,7 @@ namespace ProjectC.Database.Daos
             using (var connection = new MySqlConnection(Database.Context.ConnectionString))
             {
                 connection.Open();
-                using (var command = new MySqlCommand(sql, connection))
+                using (var command = new MySqlCommand(sqlQuery, connection))
                 {
                     using (var reader = command.ExecuteReader())
                     {
