@@ -57,8 +57,23 @@ namespace ProjectC.Controllers
             var today = DateTime.Today.AddDays(1);
             var sevenDaysAgo = today.AddDays(-7);
 
-            var data = GetDaoManager().OrderDao.GetTotalOrdersForMinMaxDays(sevenDaysAgo, today);
+            var data = GetDaoManager().OrderDao.GetTotalIncomeForMinMaxDays(sevenDaysAgo, today);
             return FillMissingEmptyDays(data, sevenDaysAgo, today);
+        }
+
+        [HttpGet]
+        public IActionResult GetTotalOrders([FromQuery] DateTime s, [FromQuery] DateTime e)
+        {
+            var data = GetDaoManager().OrderDao.GetTotalOrdersForMinMaxDays(s, e);
+            return FillMissingEmptyDays(data, s, e);
+        }
+
+        [HttpGet]
+        public IActionResult GetIncome([FromQuery] int t, [FromQuery] DateTime s)
+        {
+            var endDate = s.AddDays(t);
+            var data = GetDaoManager().OrderDao.GetTotalIncomeForMinMaxDays(s, endDate);
+            return FillMissingEmptyDays(data, s, endDate);
         }
 
         public IActionResult FillMissingEmptyDays(List<Statistics> currentData, DateTime minDate, DateTime maxDate)

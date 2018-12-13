@@ -6,11 +6,11 @@ export const statisticsActions = {
     getOrders
 };
 
-function getOrders() {
+function getOrders(start, end) {
     return dispatch => {
         dispatch(request());
 
-        statisticsService.getOrders()
+        statisticsService.getOrders(start.toLocaleDateString("en-US"), end.toLocaleDateString("en-US"))
             .then(
                 count => {
                     dispatch(success(count));

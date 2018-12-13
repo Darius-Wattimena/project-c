@@ -4,7 +4,7 @@ export function statistics(state = {}, action) {
     switch (action.type) {
         case statisticsConstants.GETORDERS_SUCCESS:
             return {
-                items: action.count
+                data: action.count
             };
         case statisticsConstants.GETORDERS_FAILURE:
             return {

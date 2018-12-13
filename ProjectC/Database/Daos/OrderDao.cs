@@ -64,7 +64,7 @@ namespace ProjectC.Database.Daos
             }
         }
 
-        public List<Statistics> GetTotalIncomeForLastMinMaxDays(DateTime minDate, DateTime maxDate)
+        public List<Statistics> GetTotalIncomeForMinMaxDays(DateTime minDate, DateTime maxDate)
         {
             var sqlQuery = "SELECT \n" +
                            "Date(OrderDate) as order_date, \n" +

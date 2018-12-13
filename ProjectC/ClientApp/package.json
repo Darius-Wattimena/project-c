@@ -14,7 +14,8 @@
     "redux": "^3.7.2",
     "redux-thunk": "^2.2.0",
     "rimraf": "^2.6.2",
-    "recharts": "^1.4.1"
+    "recharts": "^1.4.1",
+    "react-datepicker": "^2.0.0"
   },
   "scripts": {
     "start": "rimraf ./build && react-scripts start",

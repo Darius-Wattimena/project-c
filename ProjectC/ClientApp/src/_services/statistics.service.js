@@ -4,13 +4,13 @@ export const statisticsService = {
     getOrders
 };
 
-function getOrders() {
+function getOrders(start, end) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(config.apiUrl + '/statistics/getTotalOrdersForTheLastSevenDays/', requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/statistics/getTotalOrders?s=' + start + "&e=" + end, requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {
