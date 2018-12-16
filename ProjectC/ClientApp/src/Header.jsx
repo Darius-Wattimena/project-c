@@ -87,7 +87,7 @@ class Header extends React.Component {
         const { user, searchValue } = this.props;
         return (
             <div>
-                <nav class="navbar navbar-light bg-light fixed-top">
+                <nav className="navbar navbar-light bg-light fixed-top">
                     <div className="container">
                         <Link to="/">
                             <img src={logo} width="auto" height="60" alt="" />
