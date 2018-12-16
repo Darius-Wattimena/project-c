@@ -9,12 +9,24 @@ import '../styling/progress-indicator.css';
 import '../styling/SingleProductStyle.css';
 import { StockBlock } from '../ProductPage/StockBlock';
 import { formatCurrency } from '../_helpers/currency-format';
+import { wishlistActions } from '../_actions/wishlist.actions';
 
 //base class
 class SingleProductPage extends React.Component {
 
     componentDidMount() {
         this.props.getProductById(this.props.match.params.id);
+    }
+
+    loadWishlists() {
+        // Load wishlists once 
+        if (!this.props.wishlist.loaded) {
+            this.props.getMyWishlists();
+        }
+    }
+
+    addToWishlist(product, wishlist) {
+        this.props.addToWishlist(product, wishlist);
     }
 
     // Adding quantity (or new product)
@@ -25,6 +37,9 @@ class SingleProductPage extends React.Component {
 
     render() {
         const { product } = this.props;
+
+        const wishlistState = this.props.wishlist;
+
         return (
             <div>
                 {!product.item
@@ -64,52 +79,78 @@ class SingleProductPage extends React.Component {
                                     <StockBlock stock={product.item.stock} />
                                     <div className="button-group">
                                         <button disabled={(this.props.shoppingCart.adding && this.props.shoppingCart.adding.productId === product.item.id)}
-                                            className="btn btn-success" onClick={this.handleAdd.bind(this, product.item)}>Add to cart</button>
-                                        <button className="btn btn-info">Add to wishlist</button>
+                                            className="btn btn-success actionButton" onClick={this.handleAdd.bind(this, product.item)}>Add to cart</button>
+                                        <div class="dropdown">
+                                            <button class="btn btn-info actionButton" onClick={this.loadWishlists.bind(this)} data-toggle="dropdown">
+                                                Add to wishlist
+                                                &nbsp;<i className="fas fa-heart" />
+                                            </button>
+                                            <div className="dropdown-menu dropdown-menu-right">
+                                                {
+                                                    wishlistState.loading
+                                                    &&
+                                                    <small>Loading...</small>
+                                                    ||
+                                                    wishlistState.lists && wishlistState.lists.map((wishlist, index) =>
+                                                        <button
+                                                            key={index}
+                                                            className="dropdown-item btn btn-link"
+                                                            onClick={this.addToWishlist.bind(this, product.item, wishlist)}
+                                                        >{wishlist.name}</button>
+                                            )
+                                        }
+                                            </div>
                                     </div>
-                                    <p>{product.item.description}</p>
                                 </div>
-
-                                {
-                                    // Specifications
-                                    product.item.specifications &&
-                                    <table className="table table-hover" style={{ margin: 1 + "em" }}>
-                                        <thead className="thead-dark">
-                                            <tr>
-                                                <th scope="col">#</th>
-                                                <th scope="col">Specificaties</th>
-                                            </tr>
-                                        </thead>
-                                        <tbody>
-                                            {product.item.specifications.map((spec, index) =>
-                                                <tr>
-                                                    <td scope="row">{spec.name}</td>
-                                                    <td>{spec.value}</td>
-                                                </tr>
-                                            )}
-                                        </tbody>
-                                    </table>
-                                }
+                                <p>{product.item.description}</p>
                             </div>
+
+                            {
+                                // Specifications
+                                product.item.specifications &&
+                                <table className="table table-hover" style={{ margin: 1 + "em" }}>
+                                    <thead className="thead-dark">
+                                        <tr>
+                                            <th scope="col">#</th>
+                                            <th scope="col">Specificaties</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {product.item.specifications.map((spec, index) =>
+                                            <tr>
+                                                <td scope="row">{spec.name}</td>
+                                                <td>{spec.value}</td>
+                                            </tr>
+                                        )}
+                                    </tbody>
+                                </table>
+                            }
                         </div>
                     </div>
-                }
+                    </div>
+            }
             </div>
         );
     }
 }
 function mapStateToProps(state) {
-    const { product, shoppingCart } = state;
+    const { product, shoppingCart, wishlist } = state;
     return {
         product,
-        shoppingCart
+        shoppingCart,
+        wishlist
     };
 }
 
 // Map actions to props
 const mapDispatchToProps = (dispatch) => {
     return {
+        getMyWishlists: () => dispatch(wishlistActions.getMyWishlists()),
+
+        addToWishlist: (product, wishlist) => { dispatch(wishlistActions.addProduct(product, wishlist)); },
+
         getProductById: id => { dispatch(productActions.getById(id)); },
+
         addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); },
     }
 };

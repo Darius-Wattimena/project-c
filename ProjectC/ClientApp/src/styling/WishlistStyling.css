@@ -22,10 +22,21 @@
     display: block;
 }
 
-    .wishlist-item h3 {
-        
+.wishlistContent {
+    margin-top: 2em;
+}
 
-    }
+.wishlistBtn {
+    text-overflow: ellipsis;
+    overflow: hidden;
+}
+
+.createWishlistBtn {
+    margin-top: 1em;
+}
+
+.wishlist-item h3 {
+}
 
     .wishlist-item h4 {
         

@@ -8,7 +8,8 @@ import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 import { wishlistActions } from '../_actions/wishlist.actions';
 import '../styling/WishlistStyling.css';
 import '../styling/progress-indicator.css';
-
+import { formatCurrency } from '../_helpers';
+import { DeleteConfirmModal, RenameModal } from './Helpers';
 
 function CartButton(props) {
     return (
@@ -39,8 +40,12 @@ class WishlistPage extends React.Component {
         this.props.addProduct(product);
     }
 
-    handleRemove(product) {
-        this.props.removeProduct(product);
+    handleRemove(item) {
+        this.props.removeItem(item);
+    }
+
+    handleCreate() {
+        this.props.createEmptyWishlist();
     }
 
     render() {
@@ -48,16 +53,28 @@ class WishlistPage extends React.Component {
 
         var selectedWishlist = null;
 
+        console.log(wishlistState.selectedItems);
+
         if (wishlistState.selectedId) {
+            // Wishlist has been selected
             selectedWishlist = wishlistState.lists.find(wl =>
                 wl.id === wishlistState.selectedId
             );
         }
+        else {
+            // If the lists are loaded,
+            if (wishlistState.loaded && wishlistState.lists.length > 0) {
+                // Load the first list by default
+                this.selectWishlist(wishlistState.lists[0].id);
+            }
+        }
+
+        const actionDisabled = wishlistState.deleting;
 
         return (
-            <div>
+            <div className="wishlistContent">
                 <div className="row">
-                    <div className="col-md-2">
+                    <div className="col-md-3">
                         <h4>My wishlists</h4>
                         <hr />
                         {
@@ -67,24 +84,45 @@ class WishlistPage extends React.Component {
                             <div className="progress">
                                 <div className="indeterminate"></div>
                             </div>
-                            ||
+                        }
+                        {
                             // Display users' wishlists
-                            wishlistState.lists && wishlistState.lists.map((wishlist, index) =>
-                                <button
-                                    key={index}
-                                    disabled={wishlist.id === wishlistState.selectedId}
-                                    className="btn btn-link"
-                                    onClick={this.selectWishlist.bind(this, wishlist.id)}>
-                                    {wishlist.name} {wishlist.id}
-                                </button>
+                            wishlistState.lists.length > 0 && wishlistState.lists.map((wishlist, index) =>
+                                <div className="row">
+                                    <div className="col-md-7">
+                                        <button
+                                            key={index}
+                                            disabled={wishlist.id === wishlistState.selectedId}
+                                            className="wishlistBtn text-left btn btn-link btn-block"
+                                            onClick={this.selectWishlist.bind(this, wishlist.id)}>
+                                            {wishlist.name}
+                                        </button>
+                                    </div>
+                                    <div className="col-md-5 btn-group">
+                                        <button className="btn btn-link float-right" data-toggle="modal" data-target={`#renameModal${wishlist.id}`}>
+                                            <i className="fas fa-edit text-default" />
+                                        </button>
+                                        <button className="btn btn-link float-right" data-toggle="modal" data-target={`#deleteModal${wishlist.id}`}>
+                                            <i className="fas fa-times text-danger" />
+                                        </button>
+                                        <RenameModal wishlist={wishlist} />
+                                        <DeleteConfirmModal wishlist={wishlist} />
+                                    </div>
+                                </div>
                             )
                         }
-                        <button className="btn btn-info btn-block">
-                            <i className="fas fa-plus"/>&nbsp;
+                        {
+                            wishlistState.creating && <button className="btn btn-link btn-block" disabled="true">...</button>
+                        }
+                        <button disabled={wishlistState.creating} className="createWishlistBtn btn btn-info btn-block" onClick={this.handleCreate.bind(this)}>
+                            <i className="fas fa-plus" />&nbsp;
                             Create wishlist
                         </button>
                     </div>
-                    <div className="col-md-10">
+
+                    <div className="col-md-1"></div>
+
+                    <div className="col-md-8">
                         {
                             // If a wishlist has been selected, show the name right away
                             selectedWishlist
@@ -109,25 +147,27 @@ class WishlistPage extends React.Component {
                                 &&
                                 <p>This wishlist is empty.</p>
                                 ||
-                                wishlistState.selectedItems.map((product, index) =>
+                                wishlistState.selectedItems.map((item, index) =>
                                     <div className="wishlist-item row" key="{index}">
-                                        <div className="col-sm-3">
-
-                                            <Link to={`/product/${product.id}`}>
+                                        <div className="col-sm-6">
+                                            <Link to={`/product/${item.product.id}`}>
 
                                                 <div className="wishlist-image">
-                                                    <img src={product.imageUrl}></img>
+                                                    <img src={item.product.imageUrl}></img>
                                                 </div>
 
                                             </Link>
                                         </div>
-                                        <div className="col-sm-9">
-                                            <h4>{product.name}</h4>
-                                            <h3>{product.price},-</h3>
-                                            <CartButton product={product} base={this} />
-                                            <button className="btn btn-danger" onClick={this.handleRemove.bind(this, product)}>
-                                                Remove
-                                    </button>
+                                        <div className="col-sm-6">
+                                            <h4>{item.product.name}</h4>
+                                            <h3>{formatCurrency(item.product.price)}</h3>
+
+                                            <div className="btn-group">
+                                                <CartButton product={item.product} base={this} />
+                                                <button disabled={actionDisabled} className="btn btn-danger" onClick={this.handleRemove.bind(this, item)}>
+                                                    Remove
+                                                </button>
+                                            </div>
                                         </div>
 
                                     </div>
@@ -150,9 +190,11 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
     return {
         // accessible via this.props.getAllProducts
+        createEmptyWishlist: () => dispatch(wishlistActions.createWishlist({})),
         getMyWishlists: () => dispatch(wishlistActions.getMyWishlists()),
         getWishlistItems: wishlistId => { dispatch(wishlistActions.getWishlistItems(wishlistId)); },
-        addProductToCart: product => { dispatch(shoppingCartActions.addProduct(product)); }
+        removeItem: wishlistItem => { dispatch(wishlistActions.removeItem(wishlistItem)) },
+        addProductToCart: product => { dispatch(shoppingCartActions.addProduct(product)); },
     }
 };
 

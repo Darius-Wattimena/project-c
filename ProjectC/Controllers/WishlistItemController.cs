@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
+using ProjectC.Helper;
 
 namespace ProjectC.Controllers
 {
@@ -14,6 +15,42 @@ namespace ProjectC.Controllers
 
         }
 
+        [HttpPost]
+        public override IActionResult Create([FromBody] WishlistItem input) {
+            int userId = UserSession.GetUserId(HttpContext);
+
+            // Check if product exists
+            if (!GetDaoManager().ProductDao.CheckIfExists(input.ProductId)) {
+                return BadRequest("Invalid product");
+            }
+            // Wishlist exists
+            else if (!GetDaoManager().WishlistDao.CheckIfExists(input.WishlistId)) {
+                return BadRequest("Wishlist does not exist");
+            }
+            // User must own wishlist
+            else if (!GetDaoManager().WishlistDao.IsOwnedByUser(userId, input.WishlistId)) {
+                return BadRequest("User does not own that wishlist.");
+            }
+            // Check if a product already is in this wishlist
+            else if (GetDao().WishlistItemForProductExists(input.WishlistId, input.ProductId)) {
+
+                var pname = GetDaoManager().ProductDao.FindById(input.ProductId).Name;
+                var wname = GetDaoManager().WishlistDao.Find(input.WishlistId).Name;
+
+                return BadRequest($"{pname} has already been added to {wname}!");
+            }
+
+            input.SetId(0);
+
+            return InnerSave(input); // Add it
+        }
+
+        [HttpDelete("{id}")]
+        public override IActionResult Delete(int id) {
+            return InnerDelete(id);
+        }
+
+        #region dontneedthis
         [HttpGet]
         public override IActionResult Get()
         {
@@ -32,22 +69,11 @@ namespace ProjectC.Controllers
             return InnerSearch(f, i);
         }
 
-        [HttpPost]
-        public override IActionResult Create([FromBody] WishlistItem input)
-        {
-            return InnerSave(input);
-        }
-
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] WishlistItem input)
         {
             return InnerSave(input, id);
         }
-
-        [HttpDelete("{id}")]
-        public override IActionResult Delete(int id)
-        {
-            return InnerDelete(id);
-        }
+        #endregion
     }
 }

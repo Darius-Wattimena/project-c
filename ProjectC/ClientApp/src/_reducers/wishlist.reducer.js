@@ -19,7 +19,7 @@ export function wishlist(state = initialState, action) {
     switch (action.type) {
         // GET wishlists
         case wishlistConstants.GET_REQUEST:
-            return { ...initialState, loading: true };
+            return { ...state, loading: true };
 
         case wishlistConstants.GET_SUCCESS:
             return { ...state, lists: action.lists, loading: false, loaded: true };
@@ -43,6 +43,32 @@ export function wishlist(state = initialState, action) {
             // Filter the products to exclude items that contain the id of the product to delete
             const filteredItems = state.items.filter((item) => item.productId !== action.product.id);
             return { ...state, wishlists: filteredItems };
+
+
+        //C CREATING A WISHLIST
+        case wishlistConstants.CREATE_REQUEST:
+            return { ...state, creating: true };
+
+        case wishlistConstants.CREATE_SUCCESS:
+        case wishlistConstants.CREATE_FAILURE:
+            return { ...state, creating: false };
+
+        // DELETING A WISHLIST ITEM
+        case wishlistConstants.REMOVE_REQUEST:
+            return { ...state, deleting: true };
+
+        case wishlistConstants.REMOVE_SUCCESS:
+        case wishlistConstants.REMOVE_FAILURE:
+            return { ...state, deleting: false };
+
+        // ADDING WISHLIST ITEM
+        case wishlistConstants.ADD_REQUEST:
+            return { ...state, adding: true };
+
+        case wishlistConstants.ADD_SUCCESS:
+        case wishlistConstants.ADD_FAILURE:
+            return { ...state, adding: false };
+
 
         default:
             return state;
