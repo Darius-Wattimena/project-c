@@ -53,7 +53,7 @@ class AdminStatisticsIncomePanel extends React.Component {
                     <div className="row admin-statistics-panel">
                         <div className="col-10">
                             <h4>Total Income</h4>
-                            <AreaChart width={900} height={300} data={statistics.data.income} animated={true}>
+                            <AreaChart width={1100} height={300} data={statistics.data.income} animated={true}>
                                 <CartesianGrid strokeDasharray="3 3" />
                                 <XAxis dataKey="name" />
                                 <YAxis />

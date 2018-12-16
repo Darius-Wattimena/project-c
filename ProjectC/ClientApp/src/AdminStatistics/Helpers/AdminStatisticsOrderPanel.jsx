@@ -53,7 +53,7 @@ class AdminStatisticsOrderPanel extends React.Component {
                     <div className="row admin-statistics-panel">
                         <div className="col-10">
                             <h4>Total Orders</h4>
-                            <BarChart width={900} height={300} data={statistics.data.orders} animated={true}>
+                            <BarChart width={1100} height={300} data={statistics.data.orders} animated={true}>
                                 <CartesianGrid strokeDasharray="3 3"/>
                                 <XAxis dataKey="name"/>
                                 <YAxis/>
