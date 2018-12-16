@@ -1,10 +1,18 @@
 ﻿import { wishlistConstants } from '../_constants';
 
 const initialState = {
-    items: [],
-    loaded: false,
+    // Users' wishlists
+    lists: [],
+
+    // Single wishlist
     selectedItems: [],
-    selectedId: null
+    selectedId: null,
+
+    // Loading flags
+    loading: false,
+    loaded: false,
+    loadingSingle: false,
+    loadedSingle: false
 };
 
 export function wishlist(state = initialState, action) {
@@ -14,7 +22,7 @@ export function wishlist(state = initialState, action) {
             return { ...initialState, loading: true };
 
         case wishlistConstants.GET_SUCCESS:
-            return { ...state, items: action.items, loading: false, loaded: true };
+            return { ...state, lists: action.lists, loading: false, loaded: true };
 
         case wishlistConstants.GET_FAILURE:
             return { ...state, error: action.error, loading: false };
@@ -22,14 +30,14 @@ export function wishlist(state = initialState, action) {
         // Get single wishlist
         case wishlistConstants.GET_SINGLE_REQUEST:
             return {
-                ...state, selected: false 
+                ...state, selectedId: action.id, loadingSingle: true, loadedSingle: false
             };
 
         case wishlistConstants.GET_SINGLE_SUCCESS:
-            return { ...state, current: action.wishlist, selected: true }
+            return { ...state, selectedItems: action.items, loadingSingle: false, loadedSingle: true }
 
         case wishlistConstants.GET_SINGLE_FAILURE:
-            return { ...state, error: action.error, selected: false };
+            return { ...state, error: action.error, loadingSingle: false };
 
         case wishlistConstants.REMOVE_WISHLISTPRODUCT:
             // Filter the products to exclude items that contain the id of the product to delete

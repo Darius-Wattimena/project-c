@@ -26,12 +26,17 @@ namespace ProjectC.Controllers
             return Ok(GetDao().Find("UserId", userId.ToString()));
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{wishlistId}")]
         public IActionResult GetItems(int wishlistId)
         {
             int userId = UserSession.GetUserId(HttpContext);
+            
+            // Ensure user owns wishlist
+            if (!GetDao().IsOwnedByUser(userId, wishlistId)) {
+                return BadRequest($"The current user ({userId}) does not own that wishlist ({wishlistId})!");
+            }
 
-            var items = GetDaoManager().WishlistItemDao.GetWishlistItems(userId, wishlistId);
+            var items = GetDaoManager().WishlistItemDao.GetWishlistItems(wishlistId);
 
             items.ForEach(item =>
             {

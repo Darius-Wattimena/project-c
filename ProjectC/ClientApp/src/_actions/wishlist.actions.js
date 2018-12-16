@@ -11,11 +11,11 @@ export const wishlistActions = {
 
 function getWishlistItems(wishlistId) {
     return dispatch => {
-        dispatch(request());
+        dispatch(request(wishlistId));
 
         wishlistService.getWishlistItems(wishlistId).then(
-            wishlist => {
-                dispatch(success(wishlist));
+            wishlistItems => {
+                dispatch(success(wishlistItems));
             },
             error => {
                 dispatch(alertActions.error(error));
@@ -24,9 +24,8 @@ function getWishlistItems(wishlistId) {
         );
     }
 
-    // Actions
-    function request() { return { type: wishlistConstants.GET_SINGLE_REQUEST } };
-    function success(wishlist) { return { type: wishlistConstants.GET_SINGLE_SUCCESS, wishlist: wishlist } };
+    function request(wishlistId) { return { type: wishlistConstants.GET_SINGLE_REQUEST, id: wishlistId } };
+    function success(wishlistItems) { return { type: wishlistConstants.GET_SINGLE_SUCCESS, items: wishlistItems } };
     function failure(error) { return { type: wishlistConstants.GET_SINGLE_FAILURE, error: error } };
 }
 
@@ -47,7 +46,7 @@ function getMyWishlists() {
 
     // Actions
     function request() { return { type: wishlistConstants.GET_REQUEST } };
-    function success(wishlists) { return { type: wishlistConstants.GET_SUCCESS, items: wishlists } };
+    function success(wishlists) { return { type: wishlistConstants.GET_SUCCESS, lists: wishlists } };
     function failure(error) { return { type: wishlistConstants.GET_FAILURE, error: error } };
 }
 
