@@ -33,6 +33,8 @@ namespace ProjectC.Database.Entities
         [Field] public int ShippingAddressId;
         [Field] public int RoleId;
 
+        public Address Address;
+
         public int GetId()
         {
             return Id;

@@ -143,8 +143,12 @@ namespace ProjectC.Controllers
                 }
 
                 var user = input.SetupUser(input);
+                var address = input.Address;
 
                 // Create user
+                var createdAddress = daoManager.AddressDao.Save(address);
+                user.AddressId = createdAddress.Id;
+
                 var createdUser = daoManager.UserDao.Save(user);
 
                 // Create shopping basket for user

@@ -2,10 +2,11 @@
 import { connect } from 'react-redux';
 import { history } from '../_helpers';
 
-import { userActions } from '../_actions';
+import { addressActions } from '../_actions';
 
 import '../styling/UserPageStyling.css';
 import { OrderHistory } from './OrderHistory';
+import { UserProfile } from './UserProfile';
 
 var page = "Profile";
 
@@ -14,13 +15,10 @@ function Page(props) {
     const page = props.page
 
     if (page === "Profile") {
-        return null;
+        return <UserProfile />;
     }
     else if (page === "Order History") {
         return <OrderHistory />;
-    }
-    else if (page === "Logout") {
-        return null;
     }
     else {
         return null;
@@ -76,10 +74,19 @@ class UserPage extends React.Component {
 function mapStateToProps(state) {
     const { authentication } = state;
     const { user } = authentication;
+    const { address } = state;
     return {
-        user
+        user,
+        address
     };
 }
 
-const connectedUserPage = connect(mapStateToProps)(UserPage);
+const mapDispatchToProps = (dispatch) => {
+    return {
+        // accessible via this.props.getAllProducts
+        
+    }
+};
+
+const connectedUserPage = connect(mapStateToProps, mapDispatchToProps)(UserPage);
 export { connectedUserPage as UserPage };

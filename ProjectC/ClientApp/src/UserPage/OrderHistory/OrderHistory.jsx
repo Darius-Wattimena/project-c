@@ -9,7 +9,7 @@ class OrderHistory extends React.Component {
     componentDidMount() {
         this.props.OrderByUser();
         this.setState({
-            os: 3
+            os: 0
         });
     }
 
@@ -45,11 +45,12 @@ class OrderHistory extends React.Component {
                     <h4>OrderInfo</h4>
                     <div className="orderStatus">
                         {this.state && <ul className="progressbar">
-                            <li className="active">Proccesing Order</li>
-                            {this.state.os > 0 && <li className="active">On the move</li>}
-                            {this.state.os <= 0 && <li >On the move</li>}
-                            {this.state.os > 1 && <li className="active">Delivered</li>}
-                            {this.state.os <= 1 && <li>Delivered</li>}
+                            <li className="active">Resupplying stock</li>
+
+                            {this.state.os > 0 && <li className="active">Order confirmed</li>}
+                            {this.state.os <= 0 && <li >Order confirmed</li>}
+                            {this.state.os > 1 && <li className="active">Order send</li>}
+                            {this.state.os <= 1 && <li>Order send</li>}
                         </ul>}
                     </div>
                     <h4>Products</h4>

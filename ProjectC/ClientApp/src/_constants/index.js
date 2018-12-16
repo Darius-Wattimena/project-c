@@ -6,3 +6,4 @@ export * from './specification.constants';
 export * from './order.constants';
 export * from './orderProducts.constants';
 export * from './wishlist.constants';
+export * from './address.constants';

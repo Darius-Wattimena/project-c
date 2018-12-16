@@ -13,6 +13,7 @@ import { SingleProductPage } from '../SingleProductPage';
 import { OrderPage } from '../OrderPage';
 import { UserPage } from '../UserPage';
 import { OrderHistory } from '../UserPage/OrderHistory';
+import { ChangeAddress } from '../UserPage/ChangeAddress';
 
 import { AdminPanelHeader } from '../AdminPanelHeader';
 import { AdminPanel } from '../AdminPanel';
@@ -88,6 +89,7 @@ class App extends Component {
                             <Route path="/wishlist" component={WishlistPage} />
                             <Route path="/orderhistory" component={OrderHistory} />
                             <Route path="/orderhistory/:orderid" component={OrderHistory} />
+                            <Route path="/changeaddress" component={ChangeAddress} />
                         </div>
                     </div>
                 </Router>
