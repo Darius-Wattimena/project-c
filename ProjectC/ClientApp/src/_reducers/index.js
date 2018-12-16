@@ -8,6 +8,7 @@ import { alert } from './alert.reducer';
 import { shoppingCart } from './shoppingCart.reducer';
 import { order } from './order.reducer'
 import { orderProducts } from './orderProducts.reducer'
+import { wishlist } from './wishlist.reducer';
 
 const rootReducer = combineReducers({
     registration,
@@ -19,7 +20,8 @@ const rootReducer = combineReducers({
     alert,
     shoppingCart,
     order,
-    orderProducts
+    orderProducts,
+    wishlist
 });
 
 export default rootReducer;

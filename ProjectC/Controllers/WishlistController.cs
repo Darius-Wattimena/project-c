@@ -19,6 +19,13 @@ namespace ProjectC.Controllers
 
         }
 
+        [HttpGet]
+        public IActionResult GetMyWishlists()
+        {
+            int userId = UserSession.GetUserId(HttpContext);
+            return Ok(GetDao().Find("UserId", userId.ToString()));
+        }
+
         [HttpGet("{id}")]
         public IActionResult GetItems(int wishlistId)
         {

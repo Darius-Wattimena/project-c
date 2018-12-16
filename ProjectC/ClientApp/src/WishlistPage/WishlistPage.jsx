@@ -7,11 +7,12 @@ import { history } from '../_helpers';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 import { wishlistActions } from '../_actions/wishlist.actions';
 import '../styling/WishlistStyling.css';
+import '../styling/progress-indicator.css';
 
 
 function CartButton(props) {
     return (
-        <button class="btn cartbutton" onClick={props.base.props.addProduct.bind(this, props.product)}>
+        <button class="btn cartbutton" onClick={props.base.props.addProductToCart.bind(this, props.product)}>
             Add to cart
         </button>
     );
@@ -24,8 +25,14 @@ class WishlistPage extends React.Component {
     }
 
     componentDidMount() {
-        // Load
-        this.props.getAllProducts();
+        // Load wishlists once 
+        if (!this.props.wishlist.loaded) {
+            this.props.getMyWishlists();
+        }
+    }
+
+    selectWishlist(wishlistId) {
+        this.props.getWishlistItems(wishlistId);
     }
 
     handleAdd(product) {
@@ -37,7 +44,7 @@ class WishlistPage extends React.Component {
     }
 
     render() {
-        const { products } = this.props;
+        const wishlist = this.props.wishlist;
 
         return (
             <div>
@@ -45,10 +52,27 @@ class WishlistPage extends React.Component {
                     <div className="col-md-2">
                         <h4>My wishlists</h4>
                         <hr />
+                        {
+                            wishlist.loading
+                            &&
+                            <div class="progress">
+                                <div class="indeterminate"></div>
+                            </div>
+                            ||
+                            wishlist.items && wishlist.items.map((wishlist, index) =>
+                                <button className="btn btn-link" onClick={this.selectWishlist(wishlist.id)}>{wishlist.name}</button>
+                            )
+                        }
                         <button className="btn btn-info btn-block">Create wishlist</button>
                     </div>
                     <div className="col-md-10">
-                        {products.items && products.items.map((product, index) =>
+                        {
+                            wishlist.selected === true
+                            &&
+                            <p>Selected {wishlist.current.name}</p>
+                        }
+                        {false &&
+                            wishlist.items.x && wishlist.items.x.map((product, index) =>
                             <div className="wishlist-item row" key="{index}">
                                 <div className="col-sm-3">
 
@@ -79,17 +103,19 @@ class WishlistPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { products } = state;
+    console.log(state);
+    const { wishlist } = state;
     return {
-        products
+        wishlist: wishlist
     };
 }
 
 const mapDispatchToProps = (dispatch) => {
     return {
         // accessible via this.props.getAllProducts
-        getAllProducts: () => dispatch(productActions.getAll()),
-        addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); }
+        getMyWishlists: () => dispatch(wishlistActions.getMyWishlists()),
+        getWishlistItems: wishlistId => { dispatch(wishlistActions.getWishlistItems(wishlistId)); },
+        addProductToCart: product => { dispatch(shoppingCartActions.addProduct(product)); }
     }
 };
 

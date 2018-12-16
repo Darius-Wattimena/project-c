@@ -2,7 +2,8 @@
 
 export const wishlistService = {
     add,
-    getItems,
+    getWishlistItems,
+    getMyWishlists,
     remove
 };
 
@@ -10,7 +11,16 @@ function add(wishlistItem, wishlistId) {
     // TODO: Implement...
 }
 
-function getItems(wishlistId) {
+function getMyWishlists() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(config.apiUrl + '/wishlist/GetMyWishlists/', requestOptions).then(handleResponse, handleError);
+}
+
+function getWishlistItems(wishlistId) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
@@ -35,7 +45,11 @@ function handleResponse(response) {
             var contentType = response.headers.get("content-type");
             if (contentType && contentType.includes("application/json")) {
                 response.json().then(json => resolve(json));
-            } else {
+            }
+            else if (contentType && contentType.includes("text/plain")) {
+                response.text().then(text => resolve(text));
+            }
+            else {
                 resolve();
             }
         } else {
