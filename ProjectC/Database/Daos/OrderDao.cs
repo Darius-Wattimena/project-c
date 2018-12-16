@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using MySql.Data.MySqlClient;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
 using ProjectC.Database.SQL;
@@ -32,36 +31,21 @@ namespace ProjectC.Database.Daos
         public List<Statistics> GetTotalOrdersForMinMaxDays(DateTime minDate, DateTime maxDate)
         {
             var sqlQuery = "SELECT \n" +
-                "Date(OrderDate) as order_date,\n" +
-                "IFNULL((SELECT COUNT(*) FROM `order` \n" +
-                "WHERE Date(OrderDate) = order_date), 0) as total_orders\n" +
-                "FROM `order`\n" +
-                "WHERE OrderDate >= \'" + minDate.ToString("yyyy-MM-dd") + "\'\n" +
-                "AND OrderDate < \'" + maxDate.ToString("yyyy-MM-dd") + "\'\n" +
+                "Date(OrderDate) as order_date, \n" +
+                "(SELECT COUNT(*) FROM `order` \n" +
+                "    WHERE Date(OrderDate) = order_date) as total_orders \n" +
+                "FROM `order` \n" +
+                "WHERE OrderDate >= \'" + minDate.ToString("yyyy-MM-dd") + "\' \n" +
+                "AND OrderDate < \'" + maxDate.ToString("yyyy-MM-dd") + "\' \n" +
                 "GROUP BY DAY(OrderDate) \n" +
                 "ORDER BY OrderDate ASC";
 
-            using (var connection = new MySqlConnection(Database.Context.ConnectionString))
+            return Database.ExecuteCustomQuery<Statistics>(sqlQuery, (reader, list) =>
             {
-                connection.Open();
-                using (var command = new MySqlCommand(sqlQuery, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        var results = new List<Statistics>();
-
-                        while (reader.Read())
-                        {
-                            var orderDate = reader.GetDateTime(0);
-                            var totalOrder = reader.GetInt32(1);
-                            results.Add(new Statistics(orderDate.ToString("yyyy-MM-dd"), totalOrder));
-                        }
-
-                        connection.Close();
-                        return results;
-                    }
-                }
-            }
+                var orderDate = reader.GetDateTime(0);
+                var totalOrder = reader.GetInt32(1);
+                list.Add(new Statistics(orderDate.ToString("yyyy-MM-dd"), totalOrder));
+            });
         }
 
         public List<Statistics> GetTotalIncomeForMinMaxDays(DateTime minDate, DateTime maxDate)
@@ -69,33 +53,16 @@ namespace ProjectC.Database.Daos
             var sqlQuery = "SELECT \n" +
                            "Date(OrderDate) as order_date, \n" +
                            "SUM(TotalPrice) as total_income \n" +
-                           "FROM `order`\n" +
-                           "WHERE OrderDate >= \'" + minDate.ToString("yyyy-MM-dd") + "\'\n" +
-                           "AND OrderDate < \'" + maxDate.ToString("yyyy-MM-dd") + "\'\n" +
+                           "FROM `order` \n" +
+                           "WHERE OrderDate >= \'" + minDate.ToString("yyyy-MM-dd") + "\' \n" +
+                           "AND OrderDate < \'" + maxDate.ToString("yyyy-MM-dd") + "\' \n" +
                            "GROUP BY DAY(OrderDate) \n" +
                            "ORDER BY OrderDate ASC";
-
-            using (var connection = new MySqlConnection(Database.Context.ConnectionString))
-            {
-                connection.Open();
-                using (var command = new MySqlCommand(sqlQuery, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        var results = new List<Statistics>();
-
-                        while (reader.Read())
-                        {
-                            var orderDate = reader.GetDateTime(0);
-                            var totalIncome = reader.GetInt32(1);
-                            results.Add(new Statistics(orderDate.ToString("yyyy-MM-dd"), totalIncome));
-                        }
-
-                        connection.Close();
-                        return results;
-                    }
-                }
-            }
+            return Database.ExecuteCustomQuery<Statistics>(sqlQuery, (reader, list) => { 
+                var orderDate = reader.GetDateTime(0);
+                var totalIncome = reader.GetInt32(1);
+                list.Add(new Statistics(orderDate.ToString("yyyy-MM-dd"), totalIncome));
+            });
         }
 
         public void SetOrderStateAndSave(int id, int orderState)

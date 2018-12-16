@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Runtime.InteropServices.ComTypes;
 using MySql.Data.MySqlClient;
 using ProjectC.Database.Core.Interfaces;
@@ -18,6 +19,28 @@ namespace ProjectC.Database.Core
         private Database(DatabaseContext context)
         {
             Context = context;
+        }
+
+        public List<T> ExecuteCustomQuery<T>(string query, Action<MySqlDataReader, List<T>> action)
+        {
+            using (var connection = new MySqlConnection(Context.ConnectionString))
+            {
+                connection.Open();
+                using (var command = new MySqlCommand(query, connection))
+                {
+                    using (var reader = command.ExecuteReader())
+                    {
+                        var results = new List<T>();
+
+                        while (reader.Read())
+                        {
+                            action.Invoke(reader, results);
+                        }
+                        connection.Close();
+                        return results;
+                    }
+                }
+            }
         }
 
         public List<T> ExecuteQuery<T, TU>(TU dao, string query) 

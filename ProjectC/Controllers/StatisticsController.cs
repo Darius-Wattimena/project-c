@@ -28,16 +28,6 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetTotalOrdersForTheLastSevenDays()
-        {
-            var today = DateTime.Today.AddDays(1);
-            var sevenDaysAgo = today.AddDays(-7);
-
-            var data = GetDaoManager().OrderDao.GetTotalOrdersForMinMaxDays(sevenDaysAgo, today);
-            return FillMissingEmptyDays(data, sevenDaysAgo, today);
-        }
-
-        [HttpGet]
         public IActionResult GetTotalUsers()
         {
             var totalUsers = GetDaoManager().UserDao.CountAll();
@@ -52,31 +42,49 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetIncomeForTheLastSevenDays()
+        public IActionResult GetOrders([FromQuery] DateTime s, [FromQuery] DateTime e)
         {
-            var today = DateTime.Today.AddDays(1);
-            var sevenDaysAgo = today.AddDays(-7);
+            //TODO edit frontend for now add one day to the end date
+            e = e.AddDays(1);
 
-            var data = GetDaoManager().OrderDao.GetTotalIncomeForMinMaxDays(sevenDaysAgo, today);
-            return FillMissingEmptyDays(data, sevenDaysAgo, today);
-        }
-
-        [HttpGet]
-        public IActionResult GetTotalOrders([FromQuery] DateTime s, [FromQuery] DateTime e)
-        {
             var data = GetDaoManager().OrderDao.GetTotalOrdersForMinMaxDays(s, e);
-            return FillMissingEmptyDays(data, s, e);
+            data = FillMissingEmptyDays(data, s, e);
+
+            var resultData = new List<object>();
+            foreach (var statistics in data)
+            {
+                resultData.Add(new
+                {
+                    statistics.name,
+                    orders = statistics.uv
+                });
+            }
+
+            return Ok(resultData);
         }
 
         [HttpGet]
-        public IActionResult GetIncome([FromQuery] int t, [FromQuery] DateTime s)
+        public IActionResult GetIncome([FromQuery] DateTime s, [FromQuery] DateTime e)
         {
-            var endDate = s.AddDays(t);
-            var data = GetDaoManager().OrderDao.GetTotalIncomeForMinMaxDays(s, endDate);
-            return FillMissingEmptyDays(data, s, endDate);
+            e = e.AddDays(1);
+
+            var data = GetDaoManager().OrderDao.GetTotalIncomeForMinMaxDays(s, e);
+            data = FillMissingEmptyDays(data, s, e);
+
+            var resultData = new List<object>();
+            foreach (var statistics in data)
+            {
+                resultData.Add(new
+                {
+                    statistics.name,
+                    income = statistics.uv
+                });
+            }
+
+            return Ok(resultData);
         }
 
-        public IActionResult FillMissingEmptyDays(List<Statistics> currentData, DateTime minDate, DateTime maxDate)
+        public List<Statistics> FillMissingEmptyDays(List<Statistics> currentData, DateTime minDate, DateTime maxDate)
         {
             var totalDays = (maxDate - minDate).TotalDays;
             var resultData = new List<Statistics>();
@@ -103,7 +111,7 @@ namespace ProjectC.Controllers
                 }
             }
 
-            return Ok(resultData);
+            return resultData;
         }
     }
 }
