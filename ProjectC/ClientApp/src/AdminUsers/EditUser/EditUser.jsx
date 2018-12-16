@@ -53,7 +53,7 @@ class AdminEditUser extends React.Component {
         const { user, submitted } = this.state;
         return (
             <div className="panel col-md-6 col-md-offset-3">
-                <h2>Edit</h2>
+                <h2>Edit User</h2>
                 {user &&
                     <form id="form" onSubmit={this.handleSubmit}>
                         <div className={'form-group' + (submitted && !user.firstname ? ' has-error' : '')}>

@@ -25,7 +25,7 @@ function StartButtons(props) {
 
 function AdminButtons(props) {
     if (props.role === "Admin") {
-        return <Link to={`admin`} className="btn btn-warning">Admin <i className="fas fa-user-shield"></i></Link>;
+        return <Link to={`admin/statistics`} className="btn btn-warning">Admin <i className="fas fa-user-shield"></i></Link>;
     } else {
         return "";
     }
