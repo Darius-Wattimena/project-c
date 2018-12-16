@@ -1,12 +1,20 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
-import { LineChart, Line, AreaChart, Area, Brush, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
 import DatePicker from "react-datepicker";
 
 import { statisticsActions } from '../../_actions';
 
 var startDate = new Date();
 var endDate = new Date();
+
+class CustomDatePickerButton extends React.Component {
+    render() {
+        return (
+            <button className="btn btn-outline-primary" onClick={this.props.onClick}>{this.props.value}</button>
+        );
+    }
+}
 
 class AdminStatisticsIncomePanel extends React.Component {
     constructor(props) {
@@ -67,12 +75,14 @@ class AdminStatisticsIncomePanel extends React.Component {
                             <DatePicker
                                 selected={this.state.startDate}
                                 onChange={this.onChange.startDate}
-                                maxDate={this.state.endDate}/>
+                                maxDate={this.state.endDate}
+                                customInput={<CustomDatePickerButton />}/>
                             <h6>End</h6>
                             <DatePicker
                                 selected={this.state.endDate}
                                 onChange={this.onChange.endDate}
-                                minDate={this.state.startDate}/>
+                                minDate={this.state.startDate}
+                                customInput={<CustomDatePickerButton />}/>
                         </div>
                     </div>
                 }
