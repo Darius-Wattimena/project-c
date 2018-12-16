@@ -9,6 +9,7 @@ import { shoppingCart } from './shoppingCart.reducer';
 import { order } from './order.reducer'
 import { orderProducts } from './orderProducts.reducer'
 import { statistics } from './statistics.reducer'
+import { address } from './address.reducer'
 import { wishlist } from './wishlist.reducer';
 
 const rootReducer = combineReducers({
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
     order,
     orderProducts,
     wishlist,
+    address,
     statistics
 });
 

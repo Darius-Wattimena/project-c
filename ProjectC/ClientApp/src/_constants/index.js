@@ -7,3 +7,4 @@ export * from './order.constants';
 export * from './orderProducts.constants';
 export * from './wishlist.constants';
 export * from './statistics.constants';
+export * from './address.constants';

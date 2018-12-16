@@ -9,7 +9,7 @@ class OrderHistory extends React.Component {
     componentDidMount() {
         this.props.OrderByUser();
         this.setState({
-            os: 3
+            os: 0
         });
     }
 
@@ -24,14 +24,13 @@ class OrderHistory extends React.Component {
         const { order } = this.props;
         const { orderProducts } = this.props;
         return (
-            <div className="row">
+            <div className="row ohf">
                 <div className="col-md-5 sec">
                     <h4>Orders</h4>
                     <div className="orders">
                         {order.items && order.items.map((order, index) =>
                             <a onClick={this.onClick.bind(this, order.id, order.orderState)}>
                             <div className="orderh">
-                                <p scope="row">{order.id}</p>
                                 <p>{order.orderDate.replace("T", " ")}</p>
                                 <p>TotalPrice: {order.totalPrice}</p>
                                 </div>
@@ -46,11 +45,12 @@ class OrderHistory extends React.Component {
                     <h4>OrderInfo</h4>
                     <div className="orderStatus">
                         {this.state && <ul className="progressbar">
-                            <li className="active">Proccesing Order</li>
-                            {this.state.os > 0 && <li className="active">On the move</li>}
-                            {this.state.os <= 0 && <li >On the move</li>}
-                            {this.state.os > 1 && <li className="active">Delivered</li>}
-                            {this.state.os <= 1 && <li>Delivered</li>}
+                            <li className="active">Resupplying stock</li>
+
+                            {this.state.os > 0 && <li className="active">Order confirmed</li>}
+                            {this.state.os <= 0 && <li >Order confirmed</li>}
+                            {this.state.os > 1 && <li className="active">Order send</li>}
+                            {this.state.os <= 1 && <li>Order send</li>}
                         </ul>}
                     </div>
                     <h4>Products</h4>

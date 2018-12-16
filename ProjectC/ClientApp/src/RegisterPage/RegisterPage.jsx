@@ -56,25 +56,49 @@ class RegisterPage extends React.Component {
                 confirmPassword: "",
                 mailaddress: "",
                 roleId: 2,
-                AddressId: 1
+                address: {
+                    country: "",
+                    county: "",
+                    city: "",
+                    street: "",
+                    streetNumber: "",
+                    streetSupplement: "",
+                    zipCode: ""
+                }
             },
             submitted: false
         }
-
         this.handleChange = this.handleChange.bind(this);
+        this.handleAddressChange = this.handleAddressChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     handleChange(event) {
         const { name, value } = event.target;
         const { user } = this.state;
+        console.log(user);
         this.setState({
             submitted: false,
             user: {
                 ...user,
                 [name]: value
-            }
+            },
+        });
+    }
 
+    handleAddressChange(event) {
+        const { name, value } = event.target;
+        const { user } = this.state;
+        console.log(user);
+        this.setState({
+            submitted: false,
+            user: {
+                ...user,
+                address: {
+                    ...user.address,
+                    [name]: value
+                }
+            }
         });
     }
 
@@ -83,17 +107,19 @@ class RegisterPage extends React.Component {
 
         this.setState({ submitted: true });
         const { user } = this.state;
+        const { address } = this.state;
         const { dispatch } = this.props;
-        if (user.firstname && user.lastname && user.password && user.confirmPassword && user.mailaddress) {
-            if (validateEmail(user.mailaddress) && (user.password != user.confirmPassword)) {
+        if (user.firstname && user.lastname && user.password && user.confirmPassword && user.mailaddress && user.address.country && user.address.county && user.address.city && user.address.street && user.address.streetNumber && user.address.zipCode) {
+            if (validateEmail(user.mailaddress) && (user.password === user.confirmPassword)) {
                 dispatch(userActions.register(user));
+                console.log(address);
             }
         }
     }
 
     render() {
         const { registering } = this.props;
-        const { user, submitted } = this.state;
+        const { user, submitted, address } = this.state;
         return (
             <div className="col-md-offset-3">
               
@@ -132,6 +158,53 @@ class RegisterPage extends React.Component {
                         <input type="text" className="form-control" name="lastname" value={user.lastname} onChange={this.handleChange} />
                         {submitted && !user.lastname &&
                             <div className="help-block text-danger">Last Name is required</div>
+                        }
+                    </div>
+
+                    <div className={'form-group' + (submitted && !user.address.country ? ' has-error' : '')}>
+                        <label htmlFor="country">Country</label>
+                        <input type="text" className="form-control" name="country" value={user.address.country} onChange={this.handleAddressChange} />
+                        {submitted && !user.address.country &&
+                            <div className="help-block text-danger">Country is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.address.county ? ' has-error' : '')}>
+                        <label htmlFor="county">County</label>
+                        <input type="text" className="form-control" name="county" value={user.address.county} onChange={this.handleAddressChange} />
+                        {submitted && !user.address.county &&
+                            <div className="help-block text-danger">County is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.address.city ? ' has-error' : '')}>
+                        <label htmlFor="city">City</label>
+                        <input type="text" className="form-control" name="city" value={user.address.city} onChange={this.handleAddressChange} />
+                        {submitted && !user.address.city &&
+                            <div className="help-block text-danger">City is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.address.street ? ' has-error' : '')}>
+                        <label htmlFor="street">Street</label>
+                        <input type="text" className="form-control" name="street" value={user.address.street} onChange={this.handleAddressChange} />
+                        {submitted && !user.address.street &&
+                            <div className="help-block text-danger">Street is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.address.streetNumber ? ' has-error' : '')}>
+                        <label htmlFor="streetNumber">StreetNumber</label>
+                        <input type="text" className="form-control" name="streetNumber" value={user.address.streetNumber} onChange={this.handleAddressChange} />
+                        {submitted && !user.address.streetNumber &&
+                            <div className="help-block text-danger">StreetNumber is required</div>
+                        }
+                    </div>
+                    <div className={'form-group' + (submitted && !user.address.streetSupplement ? ' has-error' : '')}>
+                        <label htmlFor="streetSupplement">StreetSupplement</label>
+                        <input type="text" className="form-control" name="streetSupplement" value={user.address.streetSupplement} onChange={this.handleAddressChange} />
+                    </div>
+                    <div className={'form-group' + (submitted && !user.address.zipCode ? ' has-error' : '')}>
+                        <label htmlFor="zipCode">ZipCode</label>
+                        <input type="text" className="form-control" name="zipCode" value={user.address.zipCode} onChange={this.handleAddressChange} />
+                        {submitted && !user.address.zipCode &&
+                            <div className="help-block text-danger">ZipCode is required</div>
                         }
                     </div>
                     <button type="submit" form="form" className="btn btn-primary">Register</button>

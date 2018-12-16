@@ -13,7 +13,7 @@
 .product-item {
     float: left;
     width: 16.6em;
-    height: 23.1em;
+    height: 23.2em;
     padding: 25px;
     margin: 5px 8px 5px 0;
     background-color: white;
@@ -28,6 +28,7 @@
 .product-item h3{
     float: left;
     width: 100%;
+    margin: 1px;
 }
 
 .product-item button{

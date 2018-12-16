@@ -84,6 +84,7 @@ function addProduct(product) {
                         // Product was added to the basket.
                         dispatch(success(newItem));
                         console.log("Added product to basket");
+                        dispatch(alertActions.success('Item was added to the basket.'));
                         dispatch(alertActions.success(newItem.product.name + ' was added to the basket.'));
                     },
                     error => {

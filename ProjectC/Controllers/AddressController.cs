@@ -1,7 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using MySql.Data.MySqlClient;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
+using System.Security.Claims;
 
 namespace ProjectC.Controllers
 {
@@ -27,6 +29,25 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet]
+        public IActionResult GetByUser()
+        {
+            try
+            {
+                if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
+
+                var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+                var user = GetDaoManager().UserDao.Find(userId);
+                var addressId = user.AddressId;
+                var address = GetDaoManager().AddressDao.Find(addressId);
+                return Ok(address);
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
+        }
+
+        [HttpGet]
         public override IActionResult Search(string f, string i)
         {
             return InnerSearch(f, i);
@@ -42,6 +63,17 @@ namespace ProjectC.Controllers
         public override IActionResult Update(int id, [FromBody] Address input)
         {
             return InnerSave(input, id);
+        }
+
+        [HttpPut]
+        public IActionResult ChangeAddress([FromBody] Address input)
+        {
+            if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
+
+            var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+            var user = GetDaoManager().UserDao.Find(userId);
+            var addressId = user.AddressId;
+            return InnerSave(input, addressId);
         }
 
         [HttpDelete("{id}")]

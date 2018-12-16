@@ -4,3 +4,4 @@ export * from './specification.service';
 export * from './order.service';
 export * from './orderProducts.service';
 export * from './statistics.service';
+export * from './address.service';
