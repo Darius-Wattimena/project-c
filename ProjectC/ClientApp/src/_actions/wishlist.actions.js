@@ -6,6 +6,7 @@ import { alertActions } from "./alert.actions";
 export const wishlistActions = {
     getMyWishlists,
     getWishlistItems,
+    addProduct,
     removeProduct,
 };
 
@@ -48,6 +49,33 @@ function getMyWishlists() {
     function request() { return { type: wishlistConstants.GET_REQUEST } };
     function success(wishlists) { return { type: wishlistConstants.GET_SUCCESS, lists: wishlists } };
     function failure(error) { return { type: wishlistConstants.GET_FAILURE, error: error } };
+}
+
+function addProduct(productId, wishlistId) {
+
+    var wishlistItem = {
+        'productId': productId,
+        'wishlistId' : wishlistId
+    };
+
+    return dispatch => {
+        dispatch(request());
+
+        wishlistService.add(wishlistItem).then(
+            response => {
+                dispatch(success());
+            },
+            error => {
+                dispatch(alertActions.error(error));
+                dispatch(failure(error));
+            }
+        );
+    }
+
+    // Actions
+    function request() { return { type: wishlistConstants.ADD_REQUEST } };
+    function success() { return { type: wishlistConstants.ADD_SUCCESS } };
+    function failure(error) { return { type: wishlistConstants.ADD_FAILURE, error: error } };
 }
 
 function removeProduct(product) {

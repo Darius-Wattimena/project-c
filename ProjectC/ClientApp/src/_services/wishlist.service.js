@@ -2,13 +2,23 @@
 
 export const wishlistService = {
     add,
+    remove,
     getWishlistItems,
     getMyWishlists,
-    remove
+    create,
+    delete: _delete
 };
 
-function add(wishlistItem, wishlistId) {
-    // TODO: Implement...
+function add(wishlistItem) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
+        body: JSON.stringify(wishlistItem)
+    };
+
+    console.log(wishlistItem);
+
+    return fetch(config.apiUrl + '/wishlistitem/create/', requestOptions).then(handleResponse, handleError);
 }
 
 function getMyWishlists() {
@@ -27,6 +37,25 @@ function getWishlistItems(wishlistId) {
     };
 
     return fetch(config.apiUrl + '/wishlist/GetItems/' + wishlistId, requestOptions).then(handleResponse, handleError);
+}
+
+function create(wishlist) {
+    const requestOptions = {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
+        body: JSON.stringify(wishlist)
+    };
+
+    return fetch(config.apiUrl + '/wishlistitem/create/', requestOptions).then(handleResponse, handleError);
+}
+
+function _delete(wishlistId) {
+    const requestOptions = {
+        method: 'DELETE',
+        headers: authHeader()
+    };
+
+    return fetch(config.apiUrl + '/wishlistitem/delete/' + wishlistId, requestOptions).then(handleResponse, handleError);
 }
 
 function remove(wishlistItem) {

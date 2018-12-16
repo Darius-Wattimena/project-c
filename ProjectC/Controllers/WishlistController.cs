@@ -14,23 +14,20 @@ namespace ProjectC.Controllers
     [ApiController]
     public class WishlistController : DaoController<WishlistDao, Wishlist>
     {
-        public WishlistController(ILogger<WishlistController> logger) : base(logger)
-        {
+        public WishlistController(ILogger<WishlistController> logger) : base(logger) {
 
         }
 
         [HttpGet]
-        public IActionResult GetMyWishlists()
-        {
+        public IActionResult GetMyWishlists() {
             int userId = UserSession.GetUserId(HttpContext);
             return Ok(GetDao().Find("UserId", userId.ToString()));
         }
 
         [HttpGet("{wishlistId}")]
-        public IActionResult GetItems(int wishlistId)
-        {
+        public IActionResult GetItems(int wishlistId) {
             int userId = UserSession.GetUserId(HttpContext);
-            
+
             // Ensure user owns wishlist
             if (!GetDao().IsOwnedByUser(userId, wishlistId)) {
                 return BadRequest($"The current user ({userId}) does not own that wishlist ({wishlistId})!");
@@ -38,8 +35,7 @@ namespace ProjectC.Controllers
 
             var items = GetDaoManager().WishlistItemDao.GetWishlistItems(wishlistId);
 
-            items.ForEach(item =>
-            {
+            items.ForEach(item => {
                 // store corresponding product inside the item
                 item.Product = GetDaoManager().ProductDao.Find(item.ProductId);
             });
@@ -48,45 +44,51 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet]
-        public override IActionResult Get()
-        {
+        public override IActionResult Get() {
             return InnerGet();
         }
 
         [HttpGet("{id}")]
-        public override IActionResult Get(int id)
-        {
+        public override IActionResult Get(int id) {
             return InnerGet(id);
         }
 
         [HttpGet]
-        public override IActionResult Search(string f, string i)
-        {
+        public override IActionResult Search(string f, string i) {
             return InnerSearch(f, i);
         }
 
         [HttpPost]
-        public override IActionResult Create([FromBody] Wishlist input)
-        {
+        public override IActionResult Create([FromBody] Wishlist input) {
             // Make sure id is not set (0)
             input.SetId(0);
 
             // Set user id
             input.UserId = UserSession.GetUserId(HttpContext);
 
-            return InnerSave(input); // Perform insert
+            // Make sure user doesn't exceed wishlist creation limit
+            if (GetDao().Count("UserId", input.UserId.ToString()) >= Wishlist.MAX_WISHLISTS) {
+                return BadRequest($"Thy wishlists may not exceedeth {Wishlist.MAX_WISHLISTS}!");
+            }
+
+            return InnerSave(input); // Performs an insert
         }
 
         [HttpPut("{id}")]
-        public override IActionResult Update(int id, [FromBody] Wishlist input)
-        {
+        public override IActionResult Update(int id, [FromBody] Wishlist input) {
             return InnerSave(input, id);
         }
 
         [HttpDelete("{id}")]
-        public override IActionResult Delete(int id)
-        {
-            return InnerDelete(id);
+        public override IActionResult Delete(int id) {
+            int userId = UserSession.GetUserId(HttpContext);
+
+            if (GetDao().IsOwnedByUser(userId, id)) {
+                return InnerDelete(id);
+            }
+
+            return BadRequest($"This wishlist cannot be deleted by the user. (user id: {userId}, " +
+                $"wishlist id: {id})");
         }
     }
 }

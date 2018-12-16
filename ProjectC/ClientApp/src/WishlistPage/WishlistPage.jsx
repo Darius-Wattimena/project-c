@@ -112,7 +112,6 @@ class WishlistPage extends React.Component {
                                 wishlistState.selectedItems.map((product, index) =>
                                     <div className="wishlist-item row" key="{index}">
                                         <div className="col-sm-3">
-
                                             <Link to={`/product/${product.id}`}>
 
                                                 <div className="wishlist-image">

@@ -16,11 +16,8 @@
     display: block;
 }
 
-.button-group{
-    width: 70%;
-}
-.button-group button{
-    width: 70%;
+.button-group .actionButton{
+    width: 40%;
     margin: 5px 0;
 }
 

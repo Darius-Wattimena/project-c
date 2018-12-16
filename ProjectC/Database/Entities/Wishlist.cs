@@ -12,6 +12,8 @@ namespace ProjectC.Database.Entities
         [Field] public string Name;
         [Field] public int UserId;
 
+        public const int MAX_WISHLISTS = 5;
+
         public int GetId()
         {
             return Id;
