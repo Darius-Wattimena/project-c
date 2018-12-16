@@ -24,13 +24,13 @@ class OrderHistory extends React.Component {
         const { order } = this.props;
         const { orderProducts } = this.props;
         return (
-            <div class="row">
-                <div class="col-md-5 sec">
+            <div className="row">
+                <div className="col-md-5 sec">
                     <h4>Orders</h4>
                     <div className="orders">
                         {order.items && order.items.map((order, index) =>
                             <a onClick={this.onClick.bind(this, order.id, order.orderState)}>
-                            <div class="orderh">
+                            <div className="orderh">
                                 <p scope="row">{order.id}</p>
                                 <p>{order.orderDate.replace("T", " ")}</p>
                                 <p>TotalPrice: {order.totalPrice}</p>
@@ -42,7 +42,7 @@ class OrderHistory extends React.Component {
 
                     </div>
                 </div>
-                <div class="col-md-6 sec">
+                <div className="col-md-6 sec">
                     <h4>OrderInfo</h4>
                     <div className="orderStatus">
                         {this.state && <ul className="progressbar">

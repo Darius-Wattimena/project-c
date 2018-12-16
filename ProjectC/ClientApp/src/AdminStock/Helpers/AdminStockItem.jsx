@@ -72,7 +72,7 @@ export class AdminStockItem extends React.Component {
                         </div>
                     </h5>
                 </div>
-                <div id={`collapse${index}`} class="collapse" aria-labelledby={`heading${index}`} data-parent="#stockAccordion">
+                <div id={`collapse${index}`} className="collapse" aria-labelledby={`heading${index}`} data-parent="#stockAccordion">
                     <div className="card-body">
                         <div className="row">
                             <div className="col-sm-11">

@@ -18,14 +18,14 @@ class AdminProducts extends React.Component {
     render() {
         const { products } = this.props;
         return (
-            <div class="panel col-md-8">
+            <div className="panel col-md-8">
                 <h3>Products</h3>
                 {products.loading && <em>Loading products...</em>}
                 {products.error && <span className="text-danger">ERROR: {products.error}</span>}
                 {products.items &&
                     <div>
-                        <table class="table table-hover">
-                            <thead class="thead-dark">
+                        <table className="table table-hover">
+                            <thead className="thead-dark">
                                 <tr>
                                     <th scope="col">ID</th>
                                     <th scope="col">Name</th>
@@ -47,7 +47,7 @@ class AdminProducts extends React.Component {
                                 )}
                             </tbody>
                         </table>
-                        <Link to="/adminpanel/addproduct" class="btn btn-primary">Add a product</Link>
+                        <Link to="/adminpanel/addproduct" className="btn btn-primary">Add a product</Link>
                     </div>
                 }
             </div>

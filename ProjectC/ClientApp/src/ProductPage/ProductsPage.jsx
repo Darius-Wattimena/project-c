@@ -132,11 +132,11 @@ function VerticalListing(props) {
 }
 
 function VerticalViewButton(props) {
-    return (<div ><i class="fas fa-th"></i> Switch To Horizontal</div>);
+    return (<div ><i className="fas fa-th"></i> Switch To Horizontal</div>);
 }
 
 function HorizontalViewButton(props) {
-    return (<div ><i class="fas fa-align-justify"></i> Switch To Vertical</div >);
+    return (<div ><i className="fas fa-align-justify"></i> Switch To Vertical</div >);
 }
 
 function SwitchViewButton(props) {
@@ -190,39 +190,39 @@ class ProductPage extends React.Component {
 
         return (
             <div>
-                <nav class="path-nav" aria-label="breadcrumb">
-                    <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><Link to="/home">Home</Link></li>
-                        <li class="breadcrumb-item active">Products</li>
+                <nav className="path-nav" aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                        <li className="breadcrumb-item active">Products</li>
                     </ol>
                 </nav>
                 <div className="row">
-                    <div class="filters-container col-sm-3">
-                        <nav class="navbar navbar-dark bg-info">
-                            <a class="nav-link">Filters</a>
+                    <div className="filters-container col-sm-3">
+                        <nav className="navbar navbar-dark bg-info">
+                            <a className="nav-link">Filters</a>
                         </nav>
                         {
                             products.items &&
                             <FilterColumn products={products.items} setFilteredProducts={this.setFilteredProducts.bind(this)} />
                             ||
-                            <div class="progress">
-                                <div class="indeterminate"></div>
+                            <div className="progress">
+                                <div className="indeterminate"></div>
                             </div>
                         }
                     </div>
-                    <div class="products-container col-sm-9">
-                        <nav class="navbar navbar-dark bg-info">
-                            <ul class="navbar-nav">
-                                <li class="nav-right active">
-                                    <a class="btn btn-light" onClick={onClick}>
+                    <div className="products-container col-sm-9">
+                        <nav className="navbar navbar-dark bg-info">
+                            <ul className="navbar-nav">
+                                <li className="nav-right active">
+                                    <a className="btn btn-light" onClick={onClick}>
                                         <SwitchViewButton vertical={vertical} />
                                     </a>
                                 </li>
                             </ul>
                         </nav>
                         {products.loading &&
-                            <div class="progress">
-                                <div class="indeterminate"></div>
+                            <div className="progress">
+                                <div className="indeterminate"></div>
                             </div>
                         }
                         {products.error && <span className="text-danger">ERROR: {products.error}</span>}

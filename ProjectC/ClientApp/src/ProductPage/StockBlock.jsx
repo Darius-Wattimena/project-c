@@ -24,13 +24,13 @@ export class StockBlock extends React.Component {
                             ?
                             <div className="product-stock text-success">
                                 In stock &nbsp;
-                                <i class="fas fa-dolly"></i>
+                                <i className="fas fa-dolly"></i>
                             </div>
                             : // In stock but low stock
                             <div>
                                 <div className="product-stock text-warning">
                                     Limited stock &nbsp;
-                                    <i class="fas fa-people-carry"></i>
+                                    <i className="fas fa-people-carry"></i>
                                 </div>
                                 <br />
                                 <small>Only {stock} left. Order now!</small>
@@ -39,7 +39,7 @@ export class StockBlock extends React.Component {
                         <div>
                             <div className="product-stock text-danger">
                                 Currently not in stock &nbsp;
-                                <i class="fas fa-skull-crossbones"></i>
+                                <i className="fas fa-skull-crossbones"></i>
                             </div>
                             <br />
                             {
@@ -52,7 +52,7 @@ export class StockBlock extends React.Component {
                                     <br />
                                 </span>
                             }
-                            <small class="text-danger">You can still order {amount && amount > 1 ? `these products` : `this product`} but please take extra delivery time into account.</small>
+                            <small className="text-danger">You can still order {amount && amount > 1 ? `these products` : `this product`} but please take extra delivery time into account.</small>
                         </div>
                 }
             </div>

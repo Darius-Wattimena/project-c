@@ -16,8 +16,8 @@ class AdminOrder extends React.Component {
         const { orderProducts } = this.props;
         console.log(orderProducts);
         return (
-            <div class="panel col-md-8">
-                <table class="table">
+            <div className="panel col-md-8">
+                <table className="table">
                     <tr>
                         <th scope="col">ID</th>
                         <th scope="col">Amount</th>

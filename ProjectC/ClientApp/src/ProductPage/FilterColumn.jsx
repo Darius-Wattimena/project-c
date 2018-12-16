@@ -7,18 +7,18 @@ function ClearFilterButton({ visible }) {
     return (
         visible
         &&
-        <button class="btn btn-sm float-right btn-outline-primary" onClick={window.filterComponent.clearFilters}>Clear filters</button>
+        <button className="btn btn-sm float-right btn-outline-primary" onClick={window.filterComponent.clearFilters}>Clear filters</button>
         ||
         null
     );
 }
 
 function RenderCheckbox(props) {
-    return (<div class="row">
-        <div class="col-sm-1">
-            <input class="filterCheckBox" type="checkbox" onChange={window.filterComponent.handleFilter} name={props.name} spec={props.spec} />
+    return (<div className="row">
+        <div className="col-sm-1">
+            <input className="filterCheckBox" type="checkbox" onChange={window.filterComponent.handleFilter} name={props.name} spec={props.spec} />
         </div>
-        <div class="col-sm-10">{props.name}</div>
+        <div className="col-sm-10">{props.name}</div>
     </div>
     );
 }

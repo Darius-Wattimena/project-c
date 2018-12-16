@@ -56,9 +56,9 @@ class UserPage extends React.Component {
             return (
 
                 <div className="row">
-                    <div class="filters-container col-sm-3">
-                        <nav class="navbar navbar-dark bg-info">
-                            <a class="nav-link">Mijn C-Mobile</a>
+                    <div className="filters-container col-sm-3">
+                        <nav className="navbar navbar-dark bg-info">
+                            <a className="nav-link">Mijn C-Mobile</a>
                         </nav>
                         <a className="Link" onClick={this.onClick.bind(this,"Profile")}>Profile</a><br />
                         <a className="Link" onClick={this.onClick.bind(this,"Order History")}>Order History</a><br/>
@@ -66,11 +66,11 @@ class UserPage extends React.Component {
                         <a className="Link" onClick={this.onClick.bind(this, "Shoppingcart")}>Shoppingcart</a><br />
                         <a className="Link" onClick={this.onClick.bind(this,"Logout")}>Logout</a><br/>
                     </div>
-                    <div class="products-container col-sm-9">
-                        <nav class="navbar navbar-dark bg-info">
-                            <ul class="navbar-nav">
-                                <li class="nav-right active">
-                                    <a class="nav-link">{page}</a>
+                    <div className="products-container col-sm-9">
+                        <nav className="navbar navbar-dark bg-info">
+                            <ul className="navbar-nav">
+                                <li className="nav-right active">
+                                    <a className="nav-link">{page}</a>
                                 </li>
                             </ul>
                         </nav>
