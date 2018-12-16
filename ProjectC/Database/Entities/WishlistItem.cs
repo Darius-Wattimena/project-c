@@ -12,6 +12,8 @@ namespace ProjectC.Database.Entities
         [Field] public int ProductId;
         [Field] public int WishlistId;
 
+        public Product Product;
+
         public int GetId()
         {
             return Id;

@@ -2,6 +2,7 @@
 import { userService } from '../_services';
 import { alertActions } from './';
 import { history } from '../_helpers';
+import { shoppingCartActions } from './';
 
 export const userActions = {
     login,
@@ -20,6 +21,8 @@ function login(user) {
         userService.login(user)
             .then(
                 user => {
+                    dispatch(shoppingCartActions.clearState());
+                    dispatch(shoppingCartActions.loadCart());
                     dispatch(success(user));
                     history.goBack();
                 },
@@ -36,8 +39,13 @@ function login(user) {
 }
 
 function logout() {
+
     userService.logout();
-    return { type: userConstants.LOGOUT };
+
+    return dispatch => {
+        dispatch(shoppingCartActions.clearState());
+        dispatch({ type: userConstants.LOGOUT });
+    }
 }
 
 function register(user) {

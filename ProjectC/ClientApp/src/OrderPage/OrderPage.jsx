@@ -53,24 +53,24 @@ class OrderPage extends React.Component {
             return (
                 <div>
                 {!order.loading &&
-                        <div class="container">
-                        <div class="row">
-                            <div class="col-sm-7">
+                        <div className="container">
+                        <div className="row">
+                            <div className="col-sm-7">
                                 <div className="section orderbox">
                                     {items.map((item, index) =>
-                                        <div class="row cartitem">
-                                            <div class="col-md-3">
+                                        <div className="row cartitem">
+                                            <div className="col-md-3">
                                                 <img src={item.product.imageUrl} height="80px" width="80px;" />
                                             </div>
-                                            <div class="col-md-4">
+                                            <div className="col-md-4">
                                                 <h6>Name</h6>
                                                 <p>{item.product.name}</p>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div className="col-md-2">
                                                 <h6>Price</h6>
                                                 <p>{item.product.price}</p>
                                             </div>
-                                            <div class="col-md-2">
+                                            <div className="col-md-2">
                                                 <h6>Amount</h6>
                                                 <p>{item.amount}</p>
                                             </div>
@@ -80,24 +80,24 @@ class OrderPage extends React.Component {
                                 <div className="section pricebox">
                                     <label>Coupon Code:</label>
                                     <input type="text" />
-                                    <div class="price">
+                                    <div className="price">
                                         <p>total price: <span>{total}</span></p>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="col-sm-5">
+                            <div className="col-sm-5">
                                 <div className="section userbox">
-                                    <div className="row"><i class="fas fa-user-circle user"></i><h5>{user.firstname} {user.lastname}</h5></div>
+                                    <div className="row"><i className="fas fa-user-circle user"></i><h5>{user.firstname} {user.lastname}</h5></div>
                                 </div>
                                 <div className="section paymentbox">
                                     <form>
-                                        <div class="row payment">
-                                            <div class="col-md-2">
+                                        <div className="row payment">
+                                            <div className="col-md-2">
                                                 <input type="radio" name="drone" id="Ideal" onChange={() => { onChange("Ideal") }} />
                                             </div>
-                                            <div class="col-md-10">
-                                                <div class="row">
+                                            <div className="col-md-10">
+                                                <div className="row">
                                                     <img alt="" src="https://upload.wikimedia.org/wikipedia/commons/e/e9/IDEAL_Logo.png" width="40px" height="40px" />
                                                     <p>Ideal</p>
                                                     <select>
@@ -109,24 +109,24 @@ class OrderPage extends React.Component {
                                             </div>
                                         </div>
 
-                                        <div class="row payment">
-                                            <div class="col-md-2">
+                                        <div className="row payment">
+                                            <div className="col-md-2">
                                                 <input type="radio" name="drone" id="Paypal" onChange={() => { onChange("Paypal") }} />
                                             </div>
-                                            <div class="col-md-10">
-                                                <div class="row">
+                                            <div className="col-md-10">
+                                                <div className="row">
                                                     <img alt="" src="https://pbs.twimg.com/profile_images/1014219302495375360/dIgZhxTm_400x400.jpg" width="40px" height="40px" />
                                                     <p>Paypal</p>
                                                 </div>
                                             </div>
                                         </div>
 
-                                        <div class="row payment">
-                                            <div class="col-md-2">
+                                        <div className="row payment">
+                                            <div className="col-md-2">
                                                 <input type="radio" name="drone" id="Visa" onChange={() => { onChange("Visa") }} />
                                             </div>
-                                            <div class="col-md-10">
-                                                <div class="row">
+                                            <div className="col-md-10">
+                                                <div className="row">
                                                     <img alt="" src="https://business.visa.com/Content/images/tarjeta-visa-empresarial/tarjetas.png" width="40px" height="40px" />
                                                     <p>Visa</p>
                                                 </div>
@@ -138,7 +138,7 @@ class OrderPage extends React.Component {
                                         <button className="btn btn-info checkout-btn" disabled>Checkout</button>
                                         ||
                                         // order button
-                                        <button class="btn btn-info checkout-btn" onClick={() => { this.checkout(string, items) }}>Checkout</button>
+                                        <button className="btn btn-info checkout-btn" onClick={() => { this.checkout(string, items) }}>Checkout</button>
                                     }
                                 </div>
                             </div>

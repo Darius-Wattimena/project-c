@@ -11,7 +11,7 @@
 
 .img-container img{
     height: 100%;
-    width: auto;
+    width: 100%;
     margin: auto;
     display: block;
 }
@@ -22,4 +22,12 @@
 .button-group button{
     width: 70%;
     margin: 5px 0;
+}
+
+.product-stock {
+    padding: 0.5em;
+    display: inline-block;
+    font-weight: 600;
+    border: 1px solid currentColor;
+    margin-bottom: .25em;
 }

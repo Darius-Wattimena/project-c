@@ -9,6 +9,7 @@ import { shoppingCart } from './shoppingCart.reducer';
 import { order } from './order.reducer'
 import { orderProducts } from './orderProducts.reducer'
 import { statistics } from './statistics.reducer'
+import { wishlist } from './wishlist.reducer';
 
 const rootReducer = combineReducers({
     registration,
@@ -21,6 +22,7 @@ const rootReducer = combineReducers({
     shoppingCart,
     order,
     orderProducts,
+    wishlist,
     statistics
 });
 

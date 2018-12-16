@@ -5,25 +5,26 @@ const initialState = {
     items: []
 };
 
-function setLocalShoppingCart(state) {
+function saveState(state) {
     localStorage.setItem('shoppingCart', JSON.stringify(state));
+    return state;
 }
 
 export function shoppingCart(state = initialState, action) {
 
     switch (action.type) {
 
-        // GET ITEMS
+        ////////////////////// LOADING ITEMS //////////////////////
         case shoppingCartConstants.GET_REQUEST:
             return {
                 ...state,
-                loading: true
+                syncing: true
             };
 
         case shoppingCartConstants.GET_SUCCESS:
-            return {
+            return saveState({
                 items: action.items
-            };
+            });
 
         case shoppingCartConstants.GET_FAILURE:
             return {
@@ -31,7 +32,7 @@ export function shoppingCart(state = initialState, action) {
                 error: action.error
             };
 
-        // ADD ITEM
+        ////////////////////// ADDING ITEMS //////////////////////
         case shoppingCartConstants.ADD_REQUEST:
             return {
                 ...state,
@@ -39,12 +40,13 @@ export function shoppingCart(state = initialState, action) {
             };
 
         case shoppingCartConstants.ADD_SUCCESS:
-            return {
+        case shoppingCartConstants.ADD_FAILURE:
+            return saveState({
                 ...state,
-                adding: null
-            }
+                adding: false
+            });
 
-        // UPDATE ITEM
+        ////////////////////// UPDATE ITEM //////////////////////
         case shoppingCartConstants.UPDATE_REQUEST:
             return {
                 ...state,
@@ -53,28 +55,35 @@ export function shoppingCart(state = initialState, action) {
                     item.productId === action.item.productId
                         ? { ...item, updating: true }
                         : item
-                )
+                ),
+                syncing: true
             };
 
         case shoppingCartConstants.UPDATE_SUCCESS:
 
-            // Discard any items with an amount of 0 or less
+            // Replace the updated item
             var remainingItems = state.items.map(item =>
-                                    item.productId === action.item.productId
-                                        ? action.item // updated item
-                                        : item);      // untouched item
+                item.productId === action.item.productId
+                    ? action.item // updated item
+                    : item);      // untouched item
 
+            // Discard any items with an amount of 0 or less
             remainingItems = remainingItems.filter((i) => i.amount >= 1);
 
-            console.log(remainingItems);
-
-            return {
+            return saveState({
                 ...state,
                 // REPLACE old item with updated item
-                items: remainingItems
-            };
+                items: remainingItems,
+                syncing: false
+            });
 
-        // REMOVE ITEM
+        case shoppingCartConstants.UPDATE_FAILURE:
+            return saveState({
+                ...state,
+                syncing: false
+            });
+
+        ////////////////////// REMOVE ITEM //////////////////////
         case shoppingCartConstants.REMOVE_REQUEST:
 
             return {
@@ -88,32 +97,29 @@ export function shoppingCart(state = initialState, action) {
             };
 
         case shoppingCartConstants.REMOVE_SUCCESS:
-            return {
+            return saveState({
                 ...state,
                 // Exclude removed item
                 items: state.items.filter(i => i.productId !== action.item.productId)
-            };
+            });
 
-        // CLEAR CART
+        ////////////////////// CLEAR CART //////////////////////
         case shoppingCartConstants.CLEAR_REQUEST:
             return {
                 ...state,
-                loading: true
+                syncing: true
             };
 
         case shoppingCartConstants.CLEAR_SUCCESS:
-            return initialState;
+            return saveState(initialState);
 
-        // CLIENT SIDED
-        //GET
+        ////////////////////// CLIENT CART FUNCTIONS //////////////////////
         case shoppingCartConstants.GET_CLIENT:
             var cart = JSON.parse(localStorage.getItem('shoppingCart'));
             if (cart) {
-                console.log(cart);
-                console.log(state);
-                return cart;
+                return saveState(cart); // Cart found
             }
-            return state;
+            return state; // Cart not found
 
         // ADD
         case shoppingCartConstants.ADD_CLIENT:
@@ -121,26 +127,23 @@ export function shoppingCart(state = initialState, action) {
             // If the item already exists in the shopping cart:
             if (state.items.some(i => i.productId === action.item.productId)) {
 
-                // Increment the amount of that product
+                // Increment the amount of that product (update)
                 state.items.map(i => {
                     if (i.productId === action.item.id)
                         i.amount += 1;
                 });
 
-                setLocalShoppingCart(state); // store in cookies
+                saveState(state); // store in cookies
                 return state;
             }
 
-            // otherwise
-            var newState = {
+            // Otherwise
+            return saveState({
                 // Whatever was in the state
                 ...state,
-                // The existing items plus the new item
+                // The existing items plus the new item with an initial amount of 1
                 items: [...state.items, { ...action.item, amount: 1 }]
-            };
-
-            setLocalShoppingCart(newState); // store in cookies
-            return newState;
+            }); // save state
 
         // REMOVE
         case shoppingCartConstants.REMOVE_CLIENT:
@@ -148,8 +151,7 @@ export function shoppingCart(state = initialState, action) {
             var filteredItems = state.items.filter((item) => item.productId !== action.item.productId);
             var newState = { ...state, items: filteredItems };
 
-            setLocalShoppingCart(newState); // store in cookies
-            return newState;
+            return saveState(newState); // save state
 
         // UPDATE
         case shoppingCartConstants.UPDATE_CLIENT:
@@ -160,16 +162,14 @@ export function shoppingCart(state = initialState, action) {
                 ...state, items: remainingItems
             };
 
-            setLocalShoppingCart(newState); // store in cookies
-            return newState;
+            return saveState(newState); // save state
 
         // CLEAR
         case shoppingCartConstants.CLEAR_CLIENT:
-
             localStorage.removeItem('shoppingCart');
-            return initialState;
+            return saveState(initialState);
 
         default:
-            return state
+            return state;
     }
 }

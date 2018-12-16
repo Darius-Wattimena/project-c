@@ -7,6 +7,7 @@ using System.Linq;
 using System.Security.Claims;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
+using ProjectC.Helper;
 
 namespace ProjectC.Controllers
 {
@@ -26,84 +27,41 @@ namespace ProjectC.Controllers
         [HttpPost]
         public IActionResult Add([FromBody]ShoppingBasketItem input)
         {
-            // TODO: Shopping basket table is unnecessary
-            // TODO: Remove shopping basket table from database, replace 'ShoppingBasketId' in table ShoppingBasketItem with 'UserId'
-
             try
             {
                 // Get user id
-                if (HttpContext.User.Identity is ClaimsIdentity identity)
+                int userId = UserSession.GetUserId(HttpContext);
+
+                // Obtain users' shopping basket
+                var shoppingBasket = GetDaoManager().ShoppingBasketDao.GetShoppingBasketForUser(userId);
+
+                // Obtain shopping basket item (in case it already exists)
+                var shoppingBasketItem = GetDao().GetItemByProductForUser(userId, input.ProductId);
+
+                if (shoppingBasketItem != null)
                 {
-                    int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
-
-                    // Obtain users' shopping basket
-                    var shoppingBasket = GetDaoManager().ShoppingBasketDao.GetShoppingBasketForUser(userId);
-
-                    // Shopping basket for user does not exist
-                    if (shoppingBasket == null)
-                        return NotFound("404 - Shopping Basket not found");
-
-                    // Obtain shopping basket item (in case it already exists)
-                    var shoppingBasketItem = GetDao().GetShoppingBasketItem(shoppingBasket.Id, input.ProductId);
-
-                    if (shoppingBasketItem != null)
-                    {
-                        // Item already exists
-                        // Increment the amount
-                        shoppingBasketItem.Amount++;
-                    }
-                    else
-                    {
-                        // Item does not exist, create from input
-                        shoppingBasketItem = input;
-                        shoppingBasketItem.Amount = 1;
-                    }
-
-                    // Pair the item with the users' shopping basket
-                    shoppingBasketItem.ShoppingBasketId = shoppingBasket.GetId();
-
-                    return InnerSave(shoppingBasketItem);
+                    // Item already exists
+                    // Increment the amount
+                    shoppingBasketItem.Amount++;
                 }
                 else
                 {
-                    return LogError("Couldn't find the users identity.");
+                    // Item does not exist, create from input
+                    shoppingBasketItem = input;
+                    shoppingBasketItem.Amount = 1;
                 }
+
+                // Pair the item with the users' shopping basket
+                shoppingBasketItem.ShoppingBasketId = shoppingBasket.GetId();
+
+                return InnerSave(shoppingBasketItem);
             }
             catch (MySqlException ex)
             {
                 return LogError(ex);
             }
 
-
-            
         }
-
-        /*
-        /// <summary>
-        /// Removes a shopping basket item by providing the product id it is associated with
-        /// </summary>
-        /// <param name="productId">The product id of the item</param>
-        [HttpDelete("{productId}")]
-        public IActionResult Remove(int productId)
-        {
-            // Get user id
-            var identity = HttpContext.User.Identity as ClaimsIdentity;
-            int userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
-
-            var shoppingBasket = GetDaoManager().ShoppingBasketDao.GetShoppingBasketForUser(userId); // Get users' shopping basket
-
-            var item = GetDao().GetShoppingBasketItem(shoppingBasket.Id, productId); // Get shopping basket item to delete
-
-            if (item == null)
-            {
-                return BadRequest("Item does not exist");
-            }
-
-            GetDao().Delete(item.Id); // Delete the item
-
-            return Ok("Item was succesfully removed from the cart");
-        }
-        */
 
         [HttpGet]
         public override IActionResult Get()
@@ -132,21 +90,30 @@ namespace ProjectC.Controllers
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] ShoppingBasketItem input)
         {
-            // TODO: CHECK IF USER owns this item
+            int userId = UserSession.GetUserId(HttpContext);
+
+            ShoppingBasketItem item = GetDao().GetItemByProductForUser(userId, input.Product.Id);
+
             if (input.Amount <= 0)
             {
-                return InnerDelete(id);
+                return InnerDelete(item.Id);
             }
             else
             {
-               return InnerSave(input, id);
+                return InnerSave(input, item.Id);
             }
         }
 
+        /// <summary>
+        /// Deletes a shoppingcartitem
+        /// </summary>
+        /// <param name="id">The id of the PRODUCT to delete from the basket</param>
         [HttpDelete("{id}")]
         public override IActionResult Delete(int id)
         {
-            return InnerDelete(id);
+            int userId = UserSession.GetUserId(HttpContext);
+            ShoppingBasketItem item = GetDao().GetItemByProductForUser(userId, id);
+            return InnerDelete(item.Id);
         }
     }
 }

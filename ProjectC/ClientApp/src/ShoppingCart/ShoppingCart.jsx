@@ -2,17 +2,21 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { history } from '../_helpers';
-
+import '../styling/progress-indicator.css';
 import '../styling/ShoppingCartListingStyle.css';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
-import { orderActions } from '../_actions/order.actions';
+import { StockBlock } from '../ProductPage/StockBlock';
+import { formatCurrency } from '../_helpers';
 
 class ShoppingCart extends React.Component {
     constructor(props) {
         super(props);
 
         this.props.getItems();
+
+        if (localStorage.getItem("user")) {
+            this.props.loadCart();
+        }
     }
 
     handleRemove(item) {
@@ -40,49 +44,106 @@ class ShoppingCart extends React.Component {
 
         var shoppingCart = this.props.shoppingCart;
 
+        this.totalPrice = 0;    // Variable used to calculate the total price for order details
+        this.totalDiscount = 0; // Variable used to calculate the total discount price for order details
+
         return (
             <div>
                 <h2 style={{ 'padding-top': '1em' }}>Shopping Cart</h2>
                 {
-                    shoppingCart.loading && <p><small>Loading...</small></p>
+                    // Show indicator if shopping cart is being synced
+                    shoppingCart.syncing
+                    &&
+                    <div className="progress">
+                        <div className="indeterminate"></div>
+                    </div>
+                    ||
+                    <div className="progress invisible"></div>
                 }
                 {shoppingCart.items &&
                     <div>
                         {
-                            shoppingCart.items.length == 0 &&
-                            <div>
-                                <h3 style={{ 'padding-top': '2em' }}>Your shopping cart is empty. ☹</h3>
+                            shoppingCart.items.length == 0
+                            &&
+                            !shoppingCart.syncing
+                            &&
+                            <div className="text-center">
+                                <h3 style={{ paddingTop: '2em' }}>Your shopping cart is empty. ☹</h3>
+                                <br />
+                                <Link to="/products">
+                                    Browse products
+                                </Link>
                             </div>
                         }
-                        {shoppingCart.items.map((item, index) =>
-                            <div className="product row" key={index}>
-                                <div className="imageColumn col-md-4">
+                        {shoppingCart.items.map((item, index) => {
+                            const isDisabled = shoppingCart.syncing || item.updating || item.deleting;
+
+                            // Add up to price
+                            this.totalPrice += item.product.price * item.amount;
+
+                            return <div className="product row" key={index}>
+                                <div className="imageColumn col-md-2">
                                     <Link to={`/product/${item.id}`}>
                                         <img src={item.product.imageUrl} />
                                     </Link>
                                 </div>
-                                <div className="productColumn col-md-4">
+                                <div className="nameColumn col-md-2">
                                     <Link to={`/product/${item.product.id}`}>
                                         <h4>{item.product.name}</h4>
                                     </Link>
-                                    <h2>{item.product.price},-</h2>
-                                    <p>Quantity:
-                                <button disabled={item.updating || item.deleting} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
-                                        {item.amount}
-                                        <button disabled={item.updating || item.deleting} className="btn btn-sm" onClick={this.handleIncrement.bind(this, item)}>+</button>
-                                    </p>
                                 </div>
-                                <div className="actionsColumn col-md-4">
-                                    <button disabled={item.updating || item.deleting} className="btn btn-danger" onClick={this.handleRemove.bind(this, item)}>Remove</button>
-                                    <button disabled={item.updating || item.deleting} className="btn btn-primary">Add to wishlist</button>
+                                <div className="stockColumn col-md-3">
+                                    <StockBlock stock={item.product.stock} amount={item.amount} />
+                                </div>
+                                <div className="actionsColumn col-md-3">
+                                    <div className="quantity row">
+                                        Quantity:
+                                        <div className="btn-group" role="group">
+                                            <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
+                                            {item.amount}
+                                            <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleIncrement.bind(this, item)}>+</button>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <div className="btn-group-vertical" role="group">
+                                        <button disabled={isDisabled} type="button" className="btn btn-default">
+                                            <i className="actionIcon fas fa-heart" style={{ color: 'red' }}></i>
+                                            &nbsp;Add to wishlist
+                                        </button>
+                                        <button disabled={isDisabled} type="button" className="btn btn-default" onClick={this.handleRemove.bind(this, item)}>
+                                            <i className="actionIcon fas fa-trash align-middle"></i>
+                                            Remove
+                                        </button>
+                                    </div>
+                                </div>
+                                <div className="priceColumn col-md-2">
+                                    <h2>{formatCurrency(item.product.price * item.amount)}</h2>
                                 </div>
                             </div>
+                        }
                         )}
                         {
                             shoppingCart.items.length > 0 &&
-                            <Link className="btn btn-danger" to="/order">
-                                Order
-                            </Link>
+                            <div className="orderDetails">
+                                {
+                                    this.totalDiscount > 0 &&
+                                    <h2 className="discount">Total Discount: {formatCurrency(this.totalDiscount)}</h2>
+                                }
+                                <h2>Total Price: {formatCurrency(this.totalPrice)}</h2>
+                                <br />
+                                <Link className="continueShopping" to="/products">
+                                    <i className="fas fa-chevron-left" />
+                                    &nbsp;Continue shopping
+                                </Link>
+                                &nbsp;
+                                <Link to="/order">
+                                    <button disabled={shoppingCart.syncing} className="btn btn-primary orderButton">
+                                        <i className="fas fa-chevron-right"></i>
+                                        &nbsp;Order&nbsp;
+                                <i className="fas fa-truck"></i>
+                                    </button>
+                                </Link>
+                            </div>
                         }
                     </div>
                 }
@@ -102,6 +163,9 @@ function mapStateToProps(state) {
 // Map actions to props
 const mapDispatchToProps = (dispatch) => {
     return {
+        // this.props.loadCart
+        loadCart: () => dispatch(shoppingCartActions.loadCart()),
+
         // this.props.getItems
         getItems: () => dispatch(shoppingCartActions.getItems()),
 

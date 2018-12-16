@@ -34,7 +34,7 @@ function update(shoppingBasketItem) {
         body: JSON.stringify(shoppingBasketItem)
     };
 
-    return fetch(config.apiUrl + '/shoppingbasketitem/update/' + shoppingBasketItem.id, requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/shoppingbasketitem/update/' + shoppingBasketItem.product.id, requestOptions).then(handleResponse, handleError);
 }
 
 function remove(shoppingBasketItem) {
@@ -43,7 +43,7 @@ function remove(shoppingBasketItem) {
         headers: authHeader()
     };
 
-    return fetch(config.apiUrl + '/shoppingbasketitem/delete/' + shoppingBasketItem.id, requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/shoppingbasketitem/delete/' + shoppingBasketItem.product.id, requestOptions).then(handleResponse, handleError);
 }
 
 function clear() {

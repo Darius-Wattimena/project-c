@@ -1,18 +1,122 @@
-﻿.product {
+﻿.product:first-child {
+    border-top: 1px solid rgba(0,0,0,.1);
+}
+
+.product {
     float: left;
     width: 100%;
     height: auto;
     padding: 20px;
     margin: 5px;
     background-color: white;
-    border: 0.5px gray solid;
+    /*border: 0.5px gray solid;*/
+    border-bottom: 1px solid rgba(0,0,0,.1);
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
-.actionsColumn button {
-    float:right;
-}
+    .product .actionsColumn button {
+        float: right;
+    }
 
-.imageColumn img {
-    height: auto;
+    .product .imageColumn img {
+        height: auto;
+        width: 100%;
+        max-width: 320px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        border: 1px solid rgba(0,0,0,0.75);
+        border: 1px solid #eee;
+    }
+
+    .product .imageColumn img:hover {
+        border: 1px solid #aaa;
+    }
+
+    .product .priceColumn {
+        text-align: right;
+    }
+
+    .product .nameColumn {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .product .nameColumn h4 {
+        font-weight: bold;
+    }
+
+    .product .stockColumn {
+        justify-content: center;
+        align-items: center;
+    }
+
+    .product .actionsColumn .quantity {
+        font-weight: bold;
+    }
+
+    .product .actionsColumn .quantity button {
+        text-align: center;
+        vertical-align: middle;
+        padding: 0.25rem 0.75rem;
+        margin-right: 4px;
+        margin-left: 4px;
+    }
+
+    .product .actionsColumn button {
+        border: 1px solid #CCC;
+    }
+
+.orderDetails {
+    float:left;
     width: 100%;
+    height: auto;
+    padding: 20px;
+    margin-bottom: 5em;
+    background-color: white;
+    text-align: right;
+}
+
+.orderDetails .continueShopping {
+    margin-right: 12em;
+}
+
+.orderDetails .discount {
+    color: green;
+}
+
+.orderDetails .orderButton {
+    float: right;
+}
+
+.actionsColumn .actionIcon {
+    float: left;
+    padding-top: .25rem;
+}
+
+.fa-circle-notch {
+    -webkit-animation: spin 3s linear infinite;
+    -moz-animation: spin 3s linear infinite;
+    animation: spin 3s linear infinite;
+}
+
+@-moz-keyframes spin {
+    100% {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    100% {
+        -webkit-transform: rotate(360deg);
+        transform: rotate(360deg);
+    }
 }

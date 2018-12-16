@@ -8,7 +8,8 @@ export function products(state = {}, action) {
             };
         case productConstants.GETALL_SUCCESS:
             return {
-                items: action.products
+                items: action.products,
+                loaded: true
             };
         case productConstants.GETALL_FAILURE:
             return {
@@ -69,7 +70,7 @@ export function product(state = {}, action) {
             };
         case productConstants.GET_SUCCESS:
             return {
-                items: action.product
+                item: action.product
             };
         case productConstants.GET_FAILURE:
             return {

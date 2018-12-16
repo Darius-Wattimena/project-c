@@ -1,10 +1,15 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
+using ProjectC.Helper;
+using System;
+using System.Security.Claims;
 
 namespace ProjectC.Controllers
 {
+    [Authorize(Roles = "User, Admin")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class WishlistController : DaoController<WishlistDao, Wishlist>
@@ -12,6 +17,34 @@ namespace ProjectC.Controllers
         public WishlistController(ILogger<WishlistController> logger) : base(logger)
         {
 
+        }
+
+        [HttpGet]
+        public IActionResult GetMyWishlists()
+        {
+            int userId = UserSession.GetUserId(HttpContext);
+            return Ok(GetDao().Find("UserId", userId.ToString()));
+        }
+
+        [HttpGet("{wishlistId}")]
+        public IActionResult GetItems(int wishlistId)
+        {
+            int userId = UserSession.GetUserId(HttpContext);
+            
+            // Ensure user owns wishlist
+            if (!GetDao().IsOwnedByUser(userId, wishlistId)) {
+                return BadRequest($"The current user ({userId}) does not own that wishlist ({wishlistId})!");
+            }
+
+            var items = GetDaoManager().WishlistItemDao.GetWishlistItems(wishlistId);
+
+            items.ForEach(item =>
+            {
+                // store corresponding product inside the item
+                item.Product = GetDaoManager().ProductDao.Find(item.ProductId);
+            });
+
+            return Ok(items);
         }
 
         [HttpGet]
@@ -35,7 +68,13 @@ namespace ProjectC.Controllers
         [HttpPost]
         public override IActionResult Create([FromBody] Wishlist input)
         {
-            return InnerSave(input);
+            // Make sure id is not set (0)
+            input.SetId(0);
+
+            // Set user id
+            input.UserId = UserSession.GetUserId(HttpContext);
+
+            return InnerSave(input); // Perform insert
         }
 
         [HttpPut("{id}")]

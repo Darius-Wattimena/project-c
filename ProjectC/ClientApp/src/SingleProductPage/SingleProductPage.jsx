@@ -5,7 +5,10 @@ import { Link } from 'react-router-dom';
 import { productActions } from '../_actions';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 
+import '../styling/progress-indicator.css';
 import '../styling/SingleProductStyle.css';
+import { StockBlock } from '../ProductPage/StockBlock';
+import { formatCurrency } from '../_helpers/currency-format';
 
 //base class
 class SingleProductPage extends React.Component {
@@ -19,56 +22,73 @@ class SingleProductPage extends React.Component {
         console.log("Adding product " + product.name + " to the shopping basket");
         this.props.addProduct(product);
     }
-    
+
     render() {
         const { product } = this.props;
         return (
             <div>
-                {product.items &&
+                {!product.item
+                    &&
+                    <div className="SingleProduct row">
+                        <div className="col-md-12">
+                            <nav className="path-nav" aria-label="breadcrumb">
+                                <ol className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/products">Products</Link></li>
+                                </ol>
+                            </nav>
+                            <div className="progress">
+                                <div className="indeterminate"></div>
+                            </div>
+                        </div>
+                    </div>
+                    ||
                     <div>
-                        <nav class="path-nav" aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><Link to="/home">Home</Link></li>
-                                <li class="breadcrumb-item"><Link to="/products">Products</Link></li>
-                                <li class="breadcrumb-item active" aria-current="page">{product.items.name}</li>
+                        <nav className="path-nav" aria-label="breadcrumb">
+                            <ol className="breadcrumb">
+                                <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                                <li className="breadcrumb-item"><Link to="/products">Products</Link></li>
+                                <li className="breadcrumb-item active" aria-current="page">{product.item.name}</li>
                             </ol>
                         </nav>
                         <div className="SingleProduct">
                             <div className="row">
                                 <div className="col-md-5">
                                     <div className="img-container">
-                                        <img src={product.items.imageUrl} alt=""/>
+                                        <img src={product.item.imageUrl ? product.item.imageUrl : 'https://www.elite-electronics.com.au/images/yamaha/imagenotavailable.png'} />
                                     </div>
                                 </div>
                                 <div className="col-md-7">
-                                    <h2>{product.items.name}</h2>
-                                    <h3>{product.items.price},-</h3>
-                                <div className="button-group">
-                                    <button disabled={(this.props.shoppingCart.adding && this.props.shoppingCart.adding.productId === product.items.id
-                                    )}
-                                        className="btn btn-success" onClick={this.handleAdd.bind(this, product.items)}>Add to cart</button>
+                                    <h2>{product.item.name}</h2>
+                                    <h3>{formatCurrency(product.item.price)}</h3>
+                                    <StockBlock stock={product.item.stock} />
+                                    <div className="button-group">
+                                        <button disabled={(this.props.shoppingCart.adding && this.props.shoppingCart.adding.productId === product.item.id)}
+                                            className="btn btn-success" onClick={this.handleAdd.bind(this, product.item)}>Add to cart</button>
                                         <button className="btn btn-info">Add to wishlist</button>
                                     </div>
-                                    <p>{product.items.description}</p>
+                                    <p>{product.item.description}</p>
                                 </div>
 
-                                {product.items.specifications &&
-                                <table class="table table-hover" style={{ margin: 1 + "em" }}>
-                                    <thead class="thead-dark">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Specificaties</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                    {product.items.specifications.map((spec, index) =>
-                                        <tr>
-                                            <td scope="row">{spec.name}</td>
-                                            <td>{spec.value}</td>
-                                        </tr>
-                                    )}
-                                    </tbody>
-                                </table>
+                                {
+                                    // Specifications
+                                    product.item.specifications &&
+                                    <table className="table table-hover" style={{ margin: 1 + "em" }}>
+                                        <thead className="thead-dark">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Specificaties</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {product.item.specifications.map((spec, index) =>
+                                                <tr>
+                                                    <td scope="row">{spec.name}</td>
+                                                    <td>{spec.value}</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
                                 }
                             </div>
                         </div>

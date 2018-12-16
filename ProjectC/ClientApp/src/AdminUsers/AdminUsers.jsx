@@ -21,8 +21,8 @@ class AdminUsers extends React.Component {
                 {users.loading && <em>Loading users...</em>}
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                 {users.items &&
-                    <table class="table table-hover">
-                        <thead class="thead-dark">
+                    <table className="table table-hover">
+                        <thead className="thead-dark">
                             <tr>
                                 <th scope="col">ID</th>
                                 <th scope="col">Email</th>

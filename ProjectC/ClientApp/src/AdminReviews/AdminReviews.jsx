@@ -3,7 +3,7 @@
 export class AdminReviews extends React.Component {
     render() {
         return (
-            <div class="panel">
+            <div className="panel">
 
             </div>
         );
