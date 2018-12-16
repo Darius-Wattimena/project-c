@@ -16,16 +16,16 @@ function UserLoggedIn(props) {
 
 function StartButtons(props) {
     return (
-        <div class="btn-group">
-            <a href="/login" class="btn btn-info">Login</a>
-            <a href="/register" class="btn btn-info">Register</a>
+        <div className="btn-group">
+            <a href="/login" className="btn btn-info">Login</a>
+            <a href="/register" className="btn btn-info">Register</a>
         </div>
     );
 }
 
 function AdminButtons(props) {
     if (props.role === "Admin") {
-        return <Link to={`admin`} class="btn btn-warning">Admin <i class="fas fa-user-shield"></i></Link>;
+        return <Link to={`admin`} className="btn btn-warning">Admin <i className="fas fa-user-shield"></i></Link>;
     } else {
         return "";
     }
@@ -34,12 +34,12 @@ function AdminButtons(props) {
 function UserButtons(props) {
     return (
         <div>
-            <div class="btn-group" role="group" aria-label="Basic example">
-                <Link to={`profile`} class="btn btn-info">
-                    User <i class="fas fa-user"></i>
+            <div className="btn-group" role="group" aria-label="Basic example">
+                <Link to={`profile`} className="btn btn-info">
+                    User <i className="fas fa-user"></i>
                 </Link>
                 <AdminButtons role={props.user.role} />
-                <button type="button" class="btn btn-danger" onClick={window.headercomponent.logout}> Logout <i class="fas fa-sign-out-alt"></i></button>
+                <button type="button" className="btn btn-danger" onClick={window.headercomponent.logout}> Logout <i className="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
     );
@@ -88,41 +88,41 @@ class Header extends React.Component {
         return (
             <div>
                 <nav class="navbar navbar-light bg-light fixed-top">
-                    <div class="container">
+                    <div className="container">
                         <Link to="/">
                             <img src={logo} width="auto" height="60" alt="" />
                         </Link>
-                        <form class="form-inline" onSubmit={this.handleSubmit}>
-                            <div class="input-group">
-                                <input type="text" class="form-control" value={searchValue} onChange={this.handleChange} placeholder="Search..." />
-                                <div class="input-group-append">
-                                    <button onClick={this.handleSubmit} class="btn btn-outline-info" type="button">Search</button>
+                        <form className="form-inline" onSubmit={this.handleSubmit}>
+                            <div className="input-group">
+                                <input type="text" className="form-control" value={searchValue} onChange={this.handleChange} placeholder="Search..." />
+                                <div className="input-group-append">
+                                    <button onClick={this.handleSubmit} className="btn btn-outline-info" type="button">Search</button>
                                 </div>
                             </div>
                         </form>
                         <UserLoggedIn user={user} />
                         <div className="btn-group">
-                            <Link to={`/checkout`} class="btn btn-info">
-                                Shopping Cart <i class="fas fa-shopping-cart"></i>
+                            <Link to={`/checkout`} className="btn btn-info">
+                                Shopping Cart <i className="fas fa-shopping-cart"></i>
                             </Link>
-                            <Link to={`/wishlist`} class="btn btn-info">
-                                Wishlist <i class="fas fa-heart" style={{ color: 'red' }}></i>
+                            <Link to={`/wishlist`} className="btn btn-info">
+                                Wishlist <i className="fas fa-heart" style={{ color: 'red' }}></i>
                             </Link>
                         </div>
                     </div>
                 </nav>
-                <nav class="navbar">
+                <nav className="navbar">
                     <img src={logo} width="auto" height="60" alt="" />
                 </nav>
 
-                <nav class="navbar" style={{ backgroundColor: "#223843", color: "white" }}>
-                    <div class="container">
-                        <ul class="navbar-nav">
-                            <li class="nav-item active">
-                                <Link to={`/home`} class="nav-link">Home</Link>
+                <nav className="navbar" style={{ backgroundColor: "#223843", color: "white" }}>
+                    <div className="container">
+                        <ul className="navbar-nav">
+                            <li className="nav-item active">
+                                <Link to={`/home`} className="nav-link">Home</Link>
                             </li>
-                            <li class="nav-item active">
-                                <Link to={`/products`} class="nav-link">Products</Link>
+                            <li className="nav-item active">
+                                <Link to={`/products`} className="nav-link">Products</Link>
                             </li>
                         </ul>
                     </div>

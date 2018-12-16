@@ -31,24 +31,24 @@ class SingleProductPage extends React.Component {
                     &&
                     <div className="SingleProduct row">
                         <div className="col-md-12">
-                            <nav class="path-nav" aria-label="breadcrumb">
-                                <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><Link to="/home">Home</Link></li>
-                                    <li class="breadcrumb-item"><Link to="/products">Products</Link></li>
+                            <nav className="path-nav" aria-label="breadcrumb">
+                                <ol className="breadcrumb">
+                                    <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                                    <li className="breadcrumb-item"><Link to="/products">Products</Link></li>
                                 </ol>
                             </nav>
-                            <div class="progress">
-                                <div class="indeterminate"></div>
+                            <div className="progress">
+                                <div className="indeterminate"></div>
                             </div>
                         </div>
                     </div>
                     ||
                     <div>
-                        <nav class="path-nav" aria-label="breadcrumb">
-                            <ol class="breadcrumb">
-                                <li class="breadcrumb-item"><Link to="/home">Home</Link></li>
-                                <li class="breadcrumb-item"><Link to="/products">Products</Link></li>
-                                <li class="breadcrumb-item active" aria-current="page">{product.item.name}</li>
+                        <nav className="path-nav" aria-label="breadcrumb">
+                            <ol className="breadcrumb">
+                                <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                                <li className="breadcrumb-item"><Link to="/products">Products</Link></li>
+                                <li className="breadcrumb-item active" aria-current="page">{product.item.name}</li>
                             </ol>
                         </nav>
                         <div className="SingleProduct">
@@ -73,8 +73,8 @@ class SingleProductPage extends React.Component {
                                 {
                                     // Specifications
                                     product.item.specifications &&
-                                    <table class="table table-hover" style={{ margin: 1 + "em" }}>
-                                        <thead class="thead-dark">
+                                    <table className="table table-hover" style={{ margin: 1 + "em" }}>
+                                        <thead className="thead-dark">
                                             <tr>
                                                 <th scope="col">#</th>
                                                 <th scope="col">Specificaties</th>

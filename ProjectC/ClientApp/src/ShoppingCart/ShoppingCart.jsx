@@ -55,7 +55,7 @@ class ShoppingCart extends React.Component {
                     shoppingCart.syncing
                     &&
                     <div className="progress">
-                        <div class="indeterminate"></div>
+                        <div className="indeterminate"></div>
                     </div>
                     ||
                     <div className="progress invisible"></div>
@@ -96,22 +96,22 @@ class ShoppingCart extends React.Component {
                                     <StockBlock stock={item.product.stock} amount={item.amount} />
                                 </div>
                                 <div className="actionsColumn col-md-3">
-                                    <div class="quantity row">
+                                    <div className="quantity row">
                                         Quantity:
-                                        <div class="btn-group" role="group">
+                                        <div className="btn-group" role="group">
                                             <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleDecrement.bind(this, item)}>-</button>
                                             {item.amount}
                                             <button disabled={isDisabled} className="btn btn-sm" onClick={this.handleIncrement.bind(this, item)}>+</button>
                                         </div>
                                     </div>
                                     <br />
-                                    <div class="btn-group-vertical" role="group">
-                                        <button disabled={isDisabled} type="button" class="btn btn-default">
-                                            <i class="actionIcon fas fa-heart" style={{ color: 'red' }}></i>
+                                    <div className="btn-group-vertical" role="group">
+                                        <button disabled={isDisabled} type="button" className="btn btn-default">
+                                            <i className="actionIcon fas fa-heart" style={{ color: 'red' }}></i>
                                             &nbsp;Add to wishlist
                                         </button>
-                                        <button disabled={isDisabled} type="button" class="btn btn-default" onClick={this.handleRemove.bind(this, item)}>
-                                            <i class="actionIcon fas fa-trash align-middle"></i>
+                                        <button disabled={isDisabled} type="button" className="btn btn-default" onClick={this.handleRemove.bind(this, item)}>
+                                            <i className="actionIcon fas fa-trash align-middle"></i>
                                             Remove
                                         </button>
                                     </div>
@@ -124,10 +124,10 @@ class ShoppingCart extends React.Component {
                         )}
                         {
                             shoppingCart.items.length > 0 &&
-                            <div class="orderDetails">
+                            <div className="orderDetails">
                                 {
                                     this.totalDiscount > 0 &&
-                                    <h2 class="discount">Total Discount: {formatCurrency(this.totalDiscount)}</h2>
+                                    <h2 className="discount">Total Discount: {formatCurrency(this.totalDiscount)}</h2>
                                 }
                                 <h2>Total Price: {formatCurrency(this.totalPrice)}</h2>
                                 <br />
