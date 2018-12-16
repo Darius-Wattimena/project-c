@@ -64,11 +64,19 @@ namespace ProjectC.Controllers
             input.SetId(0);
 
             // Set user id
-            input.UserId = UserSession.GetUserId(HttpContext);
+            int userId = UserSession.GetUserId(HttpContext);
+
+            input.UserId = userId;
 
             // Make sure user doesn't exceed wishlist creation limit
             if (GetDao().Count("UserId", input.UserId.ToString()) >= Wishlist.MAX_WISHLISTS) {
-                return BadRequest($"Thy wishlists may not exceedeth {Wishlist.MAX_WISHLISTS}!");
+                return BadRequest($"You may not create more than {Wishlist.MAX_WISHLISTS} wishlists!");
+            }
+
+            if (string.IsNullOrEmpty(input.Name)) {
+                // Default name is 'WishlistX' where X is the 1-based wishlist count number
+                int amount = GetDao().Count("UserId", userId.ToString());
+                input.Name = $"Wishlist{amount + 1}";
             }
 
             return InnerSave(input); // Performs an insert

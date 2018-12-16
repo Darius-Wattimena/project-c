@@ -20,5 +20,16 @@ namespace ProjectC.Database.Daos
 
             return Find(searchFields);
         }
+
+        public bool WishlistItemForProductExists(int wishlistId, int productId) {
+            var searchFields = new Dictionary<string, string>()
+            {
+                { "WishlistId", wishlistId.ToString() },
+                { "ProductId", productId.ToString() }
+            };
+
+            return Find(searchFields).Count != 0;
+        }
+
     }
 }

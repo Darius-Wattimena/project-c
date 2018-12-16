@@ -131,6 +131,7 @@ namespace ProjectC.Controllers
                 if (_dao.CheckIfExists(id))
                 {
                     _dao.Delete(id);
+                    return Ok();
                 }
 
                 return BadRequest();

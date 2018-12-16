@@ -6,9 +6,35 @@ import { alertActions } from "./alert.actions";
 export const wishlistActions = {
     getMyWishlists,
     getWishlistItems,
+    createWishlist,
+    updateWishlist,
+    deleteWishlist,
     addProduct,
-    removeProduct,
+    removeItem,
 };
+
+function createWishlist(wishlist) {
+    return dispatch => {
+        dispatch(request());
+
+        wishlistService.create(wishlist).then(
+            () => {
+                dispatch(success());
+
+                // Re-load 'my wishlists'
+                dispatch(getMyWishlists());
+            },
+            error => {
+                dispatch(alertActions.error(error));
+                dispatch(failure(error));
+            }
+        );
+    }
+
+    function request() { return { type: wishlistConstants.CREATE_REQUEST } };
+    function success() { return { type: wishlistConstants.CREATE_SUCCESS } };
+    function failure(error) { return { type: wishlistConstants.CREATE_FAILURE, error: error } };
+}
 
 function getWishlistItems(wishlistId) {
     return dispatch => {
@@ -51,11 +77,13 @@ function getMyWishlists() {
     function failure(error) { return { type: wishlistConstants.GET_FAILURE, error: error } };
 }
 
-function addProduct(productId, wishlistId) {
+function addProduct(product, wishlist) {
+
+    console.log(product);
 
     var wishlistItem = {
-        'productId': productId,
-        'wishlistId' : wishlistId
+        'productId': product.id,
+        'wishlistId': wishlist.id
     };
 
     return dispatch => {
@@ -64,6 +92,7 @@ function addProduct(productId, wishlistId) {
         wishlistService.add(wishlistItem).then(
             response => {
                 dispatch(success());
+                dispatch(alertActions.success(product.name + " was added to '" + wishlist.name + "'!"));
             },
             error => {
                 dispatch(alertActions.error(error));
@@ -78,10 +107,74 @@ function addProduct(productId, wishlistId) {
     function failure(error) { return { type: wishlistConstants.ADD_FAILURE, error: error } };
 }
 
-function removeProduct(product) {
+function removeItem(wishlistItem) {
     return dispatch => {
-        dispatch(remove(product));
+        dispatch(request());
+
+        wishlistService.remove(wishlistItem).then(
+            response => {
+                dispatch(success());
+
+                // Re-load all items
+                dispatch(getWishlistItems(wishlistItem.wishlistId));
+            },
+            error => {
+                dispatch(alertActions.error(error));
+                dispatch(failure(error));
+            }
+        );
     }
 
-    function remove(product) { return { type: wishlistConstants.REMOVE_WISHLISTPRODUCT, product } }
+    // Actions
+    function request() { return { type: wishlistConstants.REMOVE_REQUEST } };
+    function success() { return { type: wishlistConstants.REMOVE_SUCCESS } };
+    function failure(error) { return { type: wishlistConstants.REMOVE_FAILURE, error: error } };
+}
+
+function deleteWishlist(wishlistId) {
+    return dispatch => {
+        dispatch(request());
+
+        wishlistService.deleteWishlist(wishlistId).then(
+            response => {
+                dispatch(success());
+
+                // Re-load 'my wishlists'
+                dispatch(getMyWishlists());
+            },
+            error => {
+                dispatch(alertActions.error(error));
+                dispatch(failure(error));
+            }
+        );
+    }
+
+    // Actions
+    function request() { return { type: wishlistConstants.DELETE_REQUEST } };
+    function success() { return { type: wishlistConstants.DELETE_SUCCESS } };
+    function failure(error) { return { type: wishlistConstants.DELETE_FAILURE, error: error } };
+}
+
+function updateWishlist(wishlist) {
+    return dispatch => {
+        dispatch(request());
+
+        wishlistService.update(wishlist).then(
+            response => {
+                dispatch(success());
+
+                // Re-load 'my wishlists'
+                dispatch(getMyWishlists());
+            },
+            error => {
+                dispatch(alertActions.error(error));
+                dispatch(failure(error));
+            }
+        );
+    }
+
+    // Actions
+    function request() { return { type: wishlistConstants.DELETE_REQUEST } };
+    function success() { return { type: wishlistConstants.DELETE_SUCCESS } };
+    function failure(error) { return { type: wishlistConstants.DELETE_FAILURE, error: error } };
 }

@@ -25,8 +25,8 @@ class SingleProductPage extends React.Component {
         }
     }
 
-    addToWishlist(productId, wishlistId) {
-        this.props.addToWishlist(productId, wishlistId);
+    addToWishlist(product, wishlist) {
+        this.props.addToWishlist(product, wishlist);
     }
 
     // Adding quantity (or new product)
@@ -95,7 +95,7 @@ class SingleProductPage extends React.Component {
                                                         <button
                                                             key={index}
                                                             className="dropdown-item btn btn-link"
-                                                            onClick={this.addToWishlist.bind(this, product.item.id, wishlist.id)}
+                                                            onClick={this.addToWishlist.bind(this, product.item, wishlist)}
                                                         >{wishlist.name}</button>
                                             )
                                         }
@@ -147,7 +147,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         getMyWishlists: () => dispatch(wishlistActions.getMyWishlists()),
 
-        addToWishlist: (productId, wishlistId) => { dispatch(wishlistActions.addProduct(productId, wishlistId)); },
+        addToWishlist: (product, wishlist) => { dispatch(wishlistActions.addProduct(product, wishlist)); },
 
         getProductById: id => { dispatch(productActions.getById(id)); },
 

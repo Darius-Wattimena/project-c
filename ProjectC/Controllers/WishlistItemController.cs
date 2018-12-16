@@ -29,12 +29,20 @@ namespace ProjectC.Controllers
             }
             // User must own wishlist
             else if (!GetDaoManager().WishlistDao.IsOwnedByUser(userId, input.WishlistId)) {
-                return BadRequest("User does not own wishlist.");
+                return BadRequest("User does not own that wishlist.");
+            }
+            // Check if a product already is in this wishlist
+            else if (GetDao().WishlistItemForProductExists(input.WishlistId, input.ProductId)) {
+
+                var pname = GetDaoManager().ProductDao.FindById(input.ProductId).Name;
+                var wname = GetDaoManager().WishlistDao.Find(input.WishlistId).Name;
+
+                return BadRequest($"{pname} has already been added to {wname}!");
             }
 
             input.SetId(0);
 
-            return InnerSave(input);
+            return InnerSave(input); // Add it
         }
 
         [HttpDelete("{id}")]

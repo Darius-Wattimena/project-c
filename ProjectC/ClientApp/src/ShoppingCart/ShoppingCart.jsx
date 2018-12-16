@@ -7,6 +7,7 @@ import '../styling/ShoppingCartListingStyle.css';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
 import { StockBlock } from '../ProductPage/StockBlock';
 import { formatCurrency } from '../_helpers';
+import { wishlistActions } from '../_actions/wishlist.actions';
 
 class ShoppingCart extends React.Component {
     constructor(props) {
@@ -40,12 +41,25 @@ class ShoppingCart extends React.Component {
         this.props.updateItem(item);
     }
 
+    loadWishlists() {
+        // Load wishlists once 
+        if (!this.props.wishlist.loaded) {
+            this.props.getMyWishlists();
+        }
+    }
+
+    addToWishlist(product, wishlist) {
+        this.props.addToWishlist(product, wishlist);
+    }
+
     render() {
 
         var shoppingCart = this.props.shoppingCart;
 
         this.totalPrice = 0;    // Variable used to calculate the total price for order details
         this.totalDiscount = 0; // Variable used to calculate the total discount price for order details
+
+        const wishlistState = this.props.wishlist;
 
         return (
             <div>
@@ -106,10 +120,28 @@ class ShoppingCart extends React.Component {
                                     </div>
                                     <br />
                                     <div className="btn-group-vertical" role="group">
-                                        <button disabled={isDisabled} type="button" className="btn btn-default">
-                                            <i className="actionIcon fas fa-heart" style={{ color: 'red' }}></i>
-                                            &nbsp;Add to wishlist
-                                        </button>
+                                        <div class="dropdown">
+                                            <button disabled={isDisabled || wishlistState.adding} type="button" onClick={this.loadWishlists.bind(this)} data-toggle="dropdown" className="btn btn-default">
+                                                <i className="actionIcon fas fa-heart" style={{ color: 'red' }}></i>
+                                                &nbsp;Add to wishlist
+                                            </button>
+                                            <div className="dropdown-menu dropdown-menu-right">
+                                                {
+                                                    wishlistState.loading
+                                                    &&
+                                                    <small>Loading...</small>
+                                                    ||
+                                                    wishlistState.lists && wishlistState.lists.map((wishlist, index) =>
+                                                        <button
+                                                            key={index}
+                                                            className="dropdown-item btn btn-link"
+                                                            onClick={this.addToWishlist.bind(this, item.product, wishlist)}
+                                                        >{wishlist.name}</button>
+                                                    )
+                                                }
+                                            </div>
+                                        </div>
+
                                         <button disabled={isDisabled} type="button" className="btn btn-default" onClick={this.handleRemove.bind(this, item)}>
                                             <i className="actionIcon fas fa-trash align-middle"></i>
                                             Remove
@@ -153,10 +185,11 @@ class ShoppingCart extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { shoppingCart } = state;
+    const { shoppingCart, wishlist } = state;
     return {
         //this.props.shoppingCart
-        shoppingCart
+        shoppingCart,
+        wishlist
     };
 }
 
@@ -176,7 +209,12 @@ const mapDispatchToProps = (dispatch) => {
         updateItem: item => dispatch(shoppingCartActions.updateItem(item)),
 
         // this.props.removeItem
-        removeItem: item => dispatch(shoppingCartActions.removeItem(item))
+        removeItem: item => dispatch(shoppingCartActions.removeItem(item)),
+
+        // Wishlist stuff
+        getMyWishlists: () => dispatch(wishlistActions.getMyWishlists()),
+
+        addToWishlist: (product, wishlist) => { dispatch(wishlistActions.addProduct(product, wishlist)); },
     }
 };
 
