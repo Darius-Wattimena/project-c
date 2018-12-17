@@ -45,8 +45,7 @@ class OrderHistory extends React.Component {
                     <h4>OrderInfo</h4>
                     <div className="orderStatus">
                         {this.state && <ul className="progressbar">
-                            <li className="active">Resupplying stock</li>
-
+                            <li className="active">Order pending</li>
                             {this.state.os > 0 && <li className="active">Order confirmed</li>}
                             {this.state.os <= 0 && <li >Order confirmed</li>}
                             {this.state.os > 1 && <li className="active">Order send</li>}
