@@ -59,7 +59,7 @@ class EditUserPage extends React.Component {
                     <div className={'form-group' + (submitted && !user.firstname ? ' has-error' : '')}>
                             <label htmlFor="firstname">First Name</label>
                         <input type="text" className="form-control" name="firstname" value={user.firstname} onChange={this.handleChange} />
-                        {submitted && !user.firstname &&
+                            {submitted && !user.firstname &&
                                 <div className="help-block">First Name is required</div>
                             }
                         </div>

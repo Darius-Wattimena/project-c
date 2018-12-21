@@ -13,6 +13,8 @@ import { history } from '../_helpers';
 import { FilterColumn } from '../ProductPage';
 import { formatCurrency } from '../_helpers/currency-format';
 
+import { AddToCartConfirmModal } from '../ShoppingCart/AddToCartConfirmModal'
+
 var vertical = false;
 
 function onClick(e) {
@@ -39,7 +41,10 @@ function CartButton(props) {
 
     return (
         <button
-            className="btn btn-success cartbutton" onClick={base.props.addProduct.bind(this, props.product)}>
+            className="btn btn-success cartbutton"
+            onClick={base.handleAdd.bind(base, props.product)}
+            data-toggle="modal"
+            data-target={`#AddToCartConfirmModal`}>
             Add to cart
             {
                 isAddingThis
@@ -159,12 +164,14 @@ class ProductPage extends React.Component {
         this.state = {
             filteredProducts: null
         };
+
+        this.addedProduct = null;
     }
 
     // Adding quantity (or new product)
     handleAdd(product) {
         this.props.addProduct(product);
-        this.forceUpdate();
+        this.addedProduct = product;
     }
 
     componentDidMount() {
@@ -240,6 +247,9 @@ class ProductPage extends React.Component {
                         }
                     </div>
                 </div>
+
+                <AddToCartConfirmModal product={this.addedProduct} />
+
             </div>
         );
     }

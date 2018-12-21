@@ -101,7 +101,8 @@ namespace ProjectC.Controllers
                         new Claim(ClaimTypes.Role, roleName)
                     }),
                     Expires = DateTime.UtcNow.AddDays(7),
-                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key), SecurityAlgorithms.HmacSha256Signature)
+                    SigningCredentials = new SigningCredentials(new SymmetricSecurityKey(key),
+                        SecurityAlgorithms.HmacSha256Signature)
                 };
                 SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
                 string tokenString = tokenHandler.WriteToken(token);
@@ -152,7 +153,7 @@ namespace ProjectC.Controllers
                 var createdUser = daoManager.UserDao.Save(user);
 
                 // Create shopping basket for user
-                daoManager.ShoppingBasketDao.Save(new ShoppingBasket { UserId = createdUser.Id });
+                daoManager.ShoppingBasketDao.Save(new ShoppingBasket {UserId = createdUser.Id});
 
                 return Ok();
             }
