@@ -1,10 +1,20 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { history } from '../_helpers';
 
 import '../styling/AdminpanelStyling.css';
 
 class AdminPanel extends React.Component {
+
+    constructor(props) {
+        super(props);
+        const user = JSON.parse(localStorage.getItem("user"));
+        console.log(user);
+        if (!user || user.role != "Admin") {
+            history.push("/login");
+        }
+    }
 
     render() {
         return (
