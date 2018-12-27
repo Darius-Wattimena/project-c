@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
@@ -9,6 +10,7 @@ using ProjectC.Database.Entities;
 
 namespace ProjectC.Controllers
 {
+    [Authorize(Roles = "Admin")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class OrderProductsController : DaoController<OrderProductsDao, OrderProducts>
@@ -30,6 +32,7 @@ namespace ProjectC.Controllers
             return InnerGet(id);
         }
 
+        [Authorize(Roles = "Admin, User")]
         [HttpGet("{orderId}")]
         public IActionResult GetByOrderId(int orderId)
         {

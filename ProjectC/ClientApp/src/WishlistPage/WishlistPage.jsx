@@ -23,6 +23,11 @@ class WishlistPage extends React.Component {
 
     constructor(props) {
         super(props);
+
+        var user = localStorage.getItem("user");
+        if (!user) {
+            history.push("/login");
+        }
     }
 
     componentDidMount() {

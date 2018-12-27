@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using DevOne.Security.Cryptography.BCrypt;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -31,6 +32,7 @@ namespace ProjectC.Controllers
         /// <summary>
         /// Get all users
         /// </summary>
+        [Authorize( Roles = "Admin" )]
         [HttpGet]
         public override IActionResult Get()
         {
@@ -40,19 +42,19 @@ namespace ProjectC.Controllers
         /// <summary>
         /// Get single user
         /// </summary>
-        [HttpGet("{id}")]
+        [HttpGet("{id}"), Authorize(Roles = "Admin")]
         public override IActionResult Get(int id)
         {
             return InnerGet(id);
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         public override IActionResult Search(string f, string i)
         {
             return InnerSearch(f, i);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin")]
         public override IActionResult Create([FromBody] User input)
         {
             return InnerSave(input);
@@ -64,7 +66,7 @@ namespace ProjectC.Controllers
             return InnerSave(input, id);
         }
 
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public override IActionResult Delete(int id)
         {
             return InnerDelete(id);
