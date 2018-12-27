@@ -63,7 +63,12 @@ class ShoppingCart extends React.Component {
 
         return (
             <div>
-                <h2 style={{ 'padding-top': '1em' }}>Shopping Cart</h2>
+                <nav className="path-nav" aria-label="breadcrumb">
+                    <ol className="breadcrumb">
+                        <li className="breadcrumb-item"><Link to="/home">Home</Link></li>
+                        <li className="breadcrumb-item"><Link to="/checkout">Shopping Cart</Link></li>
+                    </ol>
+                </nav>
                 {
                     // Show indicator if shopping cart is being synced
                     shoppingCart.syncing
