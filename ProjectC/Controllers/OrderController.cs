@@ -9,6 +9,7 @@ using System.Linq;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using ProjectC.Database.SQL;
+using ProjectC.Model;
 
 namespace ProjectC.Controllers
 {
@@ -102,7 +103,8 @@ namespace ProjectC.Controllers
         public IActionResult GetPendingOrders()
         {
             var dao = GetDao();
-            return Ok(dao.GetPendingOrders());
+            var pendingOrders = dao.GetPendingOrders();
+            return Ok(pendingOrders);
         }
 
         [HttpPut("{id}")]

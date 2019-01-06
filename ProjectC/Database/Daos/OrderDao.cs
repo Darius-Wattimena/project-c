@@ -4,6 +4,7 @@ using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
 using ProjectC.Database.SQL;
 using ProjectC.Helper;
+using ProjectC.Model;
 
 namespace ProjectC.Database.Daos
 {
@@ -14,7 +15,7 @@ namespace ProjectC.Database.Daos
 
         }
 
-        public List<Order> GetPendingOrders()
+        public List<StockOrderModel> GetPendingOrders()
         {
             var sqlBuilder = new SqlBuilder<Order>(TableConfig);
 
@@ -24,8 +25,24 @@ namespace ProjectC.Database.Daos
 
             sqlBuilder.AddParameters(queryPart);
             //sqlBuilder.AddOrderBy("OrderState");
-
-            return Execute(sqlBuilder.Build(QueryType.Select));
+            var sqlQuery = "SELECT o.OrderId orderId, \n" +
+                           "o.OrderState as state, \n" +
+                           "o.OrderDate as date,\n " +
+                           "IFNULL((SELECT SUM(op.Amount) FROM `orderproducts` as op WHERE op.OrderId = o.OrderId), 0) as amount, \n" +
+                           "IFNULL((SELECT SUM(p.Stock) FROM `product` as p LEFT JOIN `orderproducts` as op ON p.ProductId = op.ProductId WHERE op.OrderId = o.OrderId), 0) as stock \n" +
+                           "FROM `order` as o \n" +
+                           "WHERE OrderState = \'0\' \n" +
+                           "OR OrderState = \'1\'";
+            return Database.ExecuteCustomQuery<StockOrderModel>(sqlQuery, (reader, list) =>
+            {
+                var item = new StockOrderModel();
+                item.OrderId = reader.GetInt32(0);
+                item.State = reader.GetInt32(1);
+                item.Date = reader.GetDateTime(2);
+                item.Amount = reader.GetInt32(3);
+                item.Stock = reader.GetInt32(4);
+                list.Add(item);
+            });
         }
 
         public List<Statistics> GetTotalOrdersForMinMaxDays(DateTime minDate, DateTime maxDate)

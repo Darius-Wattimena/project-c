@@ -33,7 +33,7 @@ class AdminOrderManagement extends React.Component {
                     {order.items &&
                     <tbody>
                         {order.items.map((order, index) =>
-                            <AdminOrderManagementItem order={order} orderState={order.orderState} index={index} />
+                            <AdminOrderManagementItem order={order} orderState={order.state} index={index} />
                         )}
                     </tbody>
                     }

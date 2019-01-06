@@ -97,7 +97,7 @@ class AdminOrderManagementItem extends React.Component {
         return (
             <tr className="admin-order-mangement-item">
                 <th scope="row">{order.id}</th>
-                <td>{this.getParsedDate(order.orderDate)}</td>
+                <td>{this.getParsedDate(order.date)}</td>
                 <td>{this.orderStateToText(orderState)}</td>
                 <td><button className="btn btn-info" disabled={!confirmButtonActive} onClick={this.confirmPayment.bind(this)}>Confirm Payment</button></td>
                 <td><button className="btn btn-info" disabled={!sendButtonActive} onClick={this.confirmSend.bind(this)}>Send Order</button></td>
