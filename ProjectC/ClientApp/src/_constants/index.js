@@ -8,3 +8,4 @@ export * from './orderProducts.constants';
 export * from './wishlist.constants';
 export * from './statistics.constants';
 export * from './address.constants';
+export * from './review.constants';

@@ -71,7 +71,7 @@ function addProduct(product) {
 
         // Add the item to local shopping cart
         dispatch(add_local(item));
-        dispatch(alertActions.success(item.product.name + ' was added to the basket.'));
+        //dispatch(alertActions.success(item.product.name + ' was added to the basket.'));
 
         // If user is logged in, add the item to their online basket as well
         if (user) {

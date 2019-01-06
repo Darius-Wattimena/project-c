@@ -20,7 +20,7 @@ class AddToCartConfirmModal extends React.Component {
         const product = this.props.product;
 
         return (
-            <div className="modal show" id={`AddToCartConfirmModal`} tabindex="-1" role="dialog" aria-hidden="true">
+            <div className="modal show" id={`AddToCartConfirmModal`} tabIndex="-1" role="dialog" aria-hidden="true">
                 <div className="modal-dialog modal-dialog-centered" role="document">
                     <div className="modal-content">
                         <div className="modal-header">
