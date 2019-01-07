@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using ProjectC.Database.Core.Interfaces;
+﻿using ProjectC.Database.Core.Interfaces;
 using ProjectC.Database.Daos;
 
 namespace ProjectC.Database.Core
@@ -83,20 +81,20 @@ namespace ProjectC.Database.Core
 
         private void RegisterDaos()
         {
-            AddressDao = new AddressDao(_context, this);
-            CouponCodeDao = new CouponCodeDao(_context, this);
-            CouponCodeProductDao = new CouponCodeProductDao(_context, this);
-            OrderDao = new OrderDao(_context, this);
-            OrderProductsDao = new OrderProductsDao(_context, this);
-            ProductDao = new ProductDao(_context, this);
-            ReviewDao = new ReviewDao(_context, this);
-            RoleDao = new RoleDao(_context, this);
-            ShoppingBasketDao = new ShoppingBasketDao(_context, this);
-            ShoppingBasketItemDao = new ShoppingBasketItemDao(_context, this);
-            SpecificationDao = new SpecificationDao(_context, this);
-            UserDao = new UserDao(_context, this);
-            WishlistDao = new WishlistDao(_context, this);
-            WishlistItemDao = new WishlistItemDao(_context, this);
+            AddressDao = new AddressDao(_context);
+            CouponCodeDao = new CouponCodeDao(_context);
+            CouponCodeProductDao = new CouponCodeProductDao(_context);
+            OrderDao = new OrderDao(_context);
+            OrderProductsDao = new OrderProductsDao(_context);
+            ProductDao = new ProductDao(_context);
+            ReviewDao = new ReviewDao(_context);
+            RoleDao = new RoleDao(_context);
+            ShoppingBasketDao = new ShoppingBasketDao(_context);
+            ShoppingBasketItemDao = new ShoppingBasketItemDao(_context);
+            SpecificationDao = new SpecificationDao(_context);
+            UserDao = new UserDao(_context);
+            WishlistDao = new WishlistDao(_context);
+            WishlistItemDao = new WishlistItemDao(_context);
         }
     }
 }

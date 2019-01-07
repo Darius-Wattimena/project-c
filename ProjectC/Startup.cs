@@ -37,6 +37,8 @@ namespace ProjectC
                 configuration.RootPath = "ClientApp/build";
             });
             _logger.LogInformation("Setting up custom services");
+            
+            // Setup the database
             var databaseContext = new DatabaseContext(Configuration.GetConnectionString("DefaultConnection"));
             services.Add(new ServiceDescriptor(typeof(DatabaseContext), databaseContext));
             services.Add(new ServiceDescriptor(typeof(DaoManager), DaoManager.Get(databaseContext)));

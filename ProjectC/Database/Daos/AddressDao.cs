@@ -5,7 +5,7 @@ namespace ProjectC.Database.Daos
 {
     public class AddressDao : Dao<Address>
     {
-        public AddressDao(DatabaseContext context, DaoManager manager) : base(context, manager)
+        public AddressDao(DatabaseContext context) : base(context)
         {
 
         }

@@ -7,7 +7,7 @@ namespace ProjectC.Database.Daos
 {
     public class ReviewDao : Dao<Review>
     {
-        public ReviewDao(DatabaseContext context, DaoManager manager) : base(context, manager)
+        public ReviewDao(DatabaseContext context) : base(context)
         {
 
         }

@@ -5,7 +5,7 @@ namespace ProjectC.Database.Daos
 {
     public class CouponCodeProductDao : Dao<CouponCodeProduct>
     {
-        public CouponCodeProductDao(DatabaseContext context, DaoManager manager) : base(context, manager)
+        public CouponCodeProductDao(DatabaseContext context) : base(context)
         {
 
         }

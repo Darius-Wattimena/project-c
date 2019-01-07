@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
-using ProjectC.Database.SQL;
 using ProjectC.Helper;
 using ProjectC.Model;
 
@@ -10,7 +9,7 @@ namespace ProjectC.Database.Daos
 {
     public class OrderDao : Dao<Order>
     {
-        public OrderDao(DatabaseContext context, DaoManager manager) : base(context, manager)
+        public OrderDao(DatabaseContext context) : base(context)
         {
 
         }
@@ -21,14 +20,15 @@ namespace ProjectC.Database.Daos
                            "o.OrderState as state, \n" +
                            "o.OrderDate as date, \n" +
                            "IFNULL((SELECT 0 \n" +
-                           "\tFROM `product` as p \n" +
-                           "\tLEFT JOIN `orderproducts` as op ON p.ProductId = op.ProductId \n" +
-                           "\tWHERE op.OrderId = o.OrderId \n" +
-                           "\tAND op.Amount > p.Stock), 1) as onStock_Yn \n" +
+                           "    FROM `product` as p \n" +
+                           "    LEFT JOIN `orderproducts` as op ON p.ProductId = op.ProductId \n" +
+                           "    WHERE op.OrderId = o.OrderId \n" +
+                           "    AND op.Amount > p.Stock), 1) as onStock_Yn \n" +
                            "FROM `order` as o \n" +
                            "WHERE OrderState = \'0\' \n" +
                            "OR OrderState = \'1\'";
-            return Database.ExecuteCustomQuery<StockOrderModel>(sqlQuery, (reader, list) =>
+
+            return ExecuteCustom<StockOrderModel>(sqlQuery, (reader, list) =>
             {
                 var item = new StockOrderModel();
                 item.OrderId = reader.GetInt32(0);
@@ -51,7 +51,7 @@ namespace ProjectC.Database.Daos
                 "GROUP BY DAY(OrderDate) \n" +
                 "ORDER BY OrderDate ASC";
 
-            return Database.ExecuteCustomQuery<Statistics>(sqlQuery, (reader, list) =>
+            return ExecuteCustom<Statistics>(sqlQuery, (reader, list) =>
             {
                 var orderDate = reader.GetDateTime(0);
                 var totalOrder = reader.GetInt32(1);
@@ -69,7 +69,7 @@ namespace ProjectC.Database.Daos
                            "AND OrderDate < \'" + maxDate.ToString("yyyy-MM-dd") + "\' \n" +
                            "GROUP BY DAY(OrderDate) \n" +
                            "ORDER BY OrderDate ASC";
-            return Database.ExecuteCustomQuery<Statistics>(sqlQuery, (reader, list) => { 
+            return ExecuteCustom<Statistics>(sqlQuery, (reader, list) => { 
                 var orderDate = reader.GetDateTime(0);
                 var totalIncome = reader.GetInt32(1);
                 list.Add(new Statistics(orderDate.ToString("yyyy-MM-dd"), totalIncome));

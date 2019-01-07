@@ -6,7 +6,7 @@ namespace ProjectC.Database.Daos
 {
     public class WishlistDao : Dao<Wishlist>
     {
-        public WishlistDao(DatabaseContext context, DaoManager manager) : base(context, manager) {
+        public WishlistDao(DatabaseContext context) : base(context) {
 
         }
 

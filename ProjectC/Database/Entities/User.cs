@@ -29,6 +29,7 @@ namespace ProjectC.Database.Entities
         [Field] public string Lastname;
         [Field] public string MailAddress;
         [Field] public string PasswordHash;
+        [Field("ActiveYn")] public bool Active;
         [Field] public int AddressId;
         [Field] public int ShippingAddressId;
         [Field] public int RoleId;

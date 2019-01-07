@@ -5,7 +5,7 @@ namespace ProjectC.Database.Daos
 {
     public class ShoppingBasketDao : Dao<ShoppingBasket>
     {
-        public ShoppingBasketDao(DatabaseContext context, DaoManager manager) : base(context, manager)
+        public ShoppingBasketDao(DatabaseContext context) : base(context)
         {
 
         }
