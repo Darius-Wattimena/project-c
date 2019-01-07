@@ -11,7 +11,9 @@ export const userActions = {
     getEditUser,
     getAll,
     update,
-    delete: _delete
+    delete: _delete,
+    ChangeUserName,
+    getUserByToken
 };
 
 function login(user) {
@@ -105,11 +107,49 @@ function getAll() {
     function failure(error) { return { type: userConstants.GETALL_FAILURE, error } }
 }
 
+function getUserByToken() {
+    return dispatch => {
+        dispatch(request());
+
+        userService.getUserByToken()
+            .then(
+                user => dispatch(success(user)),
+                error => dispatch(failure(error))
+            );
+    };
+
+    function request() { return { type: userConstants.GET_REQUEST } }
+    function success(user) { return { type: userConstants.GET_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.GET_FAILURE, error } }
+}
+
 function update(user) {
     return dispatch => {
         dispatch(request(user));
 
         userService.update(user)
+            .then(
+                () => {
+                    dispatch(success());
+                    history.goBack();
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    }
+
+    function request(user) { return { type: userConstants.REGISTER_REQUEST, user } }
+    function success(user) { return { type: userConstants.REGISTER_SUCCESS, user } }
+    function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
+}
+
+function ChangeUserName(user) {
+    return dispatch => {
+        dispatch(request(user));
+
+        userService.ChangeUserName(user)
             .then(
                 () => {
                     dispatch(success());

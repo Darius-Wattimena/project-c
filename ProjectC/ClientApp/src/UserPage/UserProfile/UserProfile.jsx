@@ -1,25 +1,27 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
-import { addressActions } from '../../_actions';
+import { addressActions, userActions } from '../../_actions';
 import { connect } from 'react-redux';
 
 class UserProfile extends React.Component {
     componentDidMount() {
         this.props.AddressByUser()
+        this.props.getUserByToken();
     }
 
     render() {
         const { address } = this.props;
-        const { user } = this.props.authentication;
+        const user = this.props.editUser;
         return (
             <div class="row ohf">
                 <div className="col-md-5">
                     <h5>User</h5>
                     {user &&
                         <div>
-                            <p>{user.firstName}</p>
-                            <p>{user.lastName}</p>
-                            <p>{user.mailAddress}</p>
+                            <p>{user.firstname}</p>
+                            <p>{user.lastname}</p>
+                        <p>{user.mailAddress}</p>
+                        <Link to="changename">Change Name</Link>
                         </div>
                     }
                 </div>
@@ -44,10 +46,11 @@ class UserProfile extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { authentication } = state;
+    const { items, loading } = state.editUser;
     const { address } = state;
     return {
-        authentication,
+        editUser: items,
+        loading: loading,
         address
     }
 }
@@ -56,6 +59,7 @@ const mapDispatchToProps = (dispatch) => {
     return {
         // accessible via this.props.getAllProducts
         AddressByUser: () => dispatch(addressActions.getByUser()),
+        getUserByToken: () => dispatch(userActions.getUserByToken())
     }
 };
 

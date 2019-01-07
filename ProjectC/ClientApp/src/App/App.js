@@ -14,6 +14,7 @@ import { OrderPage } from '../OrderPage';
 import { UserPage } from '../UserPage';
 import { OrderHistory } from '../UserPage/OrderHistory';
 import { ChangeAddress } from '../UserPage/ChangeAddress';
+import { EditUserName } from '../UserPage/EditUserName';
 
 import { AdminPanelHeader } from '../AdminPanelHeader';
 import { AdminPanel } from '../AdminPanel';
@@ -90,6 +91,7 @@ class App extends Component {
                             <Route path="/orderhistory" component={OrderHistory} />
                             <Route path="/orderhistory/:orderid" component={OrderHistory} />
                             <Route path="/changeaddress" component={ChangeAddress} />
+                            <Route path="/changename/" component={EditUserName} />
                         </div>
                     </div>
                 </Router>
