@@ -7,7 +7,9 @@ export const userService = {
     update,
     login,
     logout,
-    delete: _delete
+    delete: _delete,
+    getUserByToken,
+    ChangeUserName
 };
 
 function getAll() {
@@ -17,6 +19,15 @@ function getAll() {
     };
 
     return fetch(config.apiUrl + '/user/get', requestOptions).then(handleResponse, handleError);
+}
+
+function getUserByToken() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(config.apiUrl + '/user/GetUser', requestOptions).then(handleResponse, handleError);
 }
 
 function getById(id) {
@@ -69,6 +80,16 @@ function update(user) {
     };
 
     return fetch(config.apiUrl + '/user/edituser/' + user.id, requestOptions).then(handleResponse, handleError);
+}
+
+function ChangeUserName(user) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: { ...authHeader(), 'Content-Type': 'application/json' },
+        body: JSON.stringify(user)
+    };
+
+    return fetch(config.apiUrl + '/user/ChangeUserName', requestOptions).then(handleResponse, handleError);
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

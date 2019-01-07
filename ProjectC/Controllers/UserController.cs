@@ -200,5 +200,22 @@ namespace ProjectC.Controllers
                 return LogError(ex);
             }
         }
+        [HttpGet]
+        public IActionResult GetUser()
+        {
+            if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
+
+            var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+            var user = GetDaoManager().UserDao.Find(userId);
+            return Ok(user);
+        }
+        [HttpPut]
+        public IActionResult ChangeUserName([FromBody] User input)
+        {
+            if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
+
+            var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
+            return InnerSave(input, userId);
+        }
     }
 }

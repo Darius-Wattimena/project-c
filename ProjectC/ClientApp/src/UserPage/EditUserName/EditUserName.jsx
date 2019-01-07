@@ -3,10 +3,9 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 
-import { userActions } from '../_actions';
-import { editUser } from '../_reducers/users.reducer';
+import { userActions } from '../../_actions';
 
-class EditUserPage extends React.Component {
+class EditUserName extends React.Component {
     constructor(props) {
         super(props);
 
@@ -19,7 +18,7 @@ class EditUserPage extends React.Component {
     }
 
     componentDidMount() {
-        this.props.dispatch(userActions.getEditUser(this.props.match.params.id));
+        this.props.dispatch(userActions.getUserByToken());
     }
 
     componentDidUpdate() {
@@ -47,7 +46,6 @@ class EditUserPage extends React.Component {
         const { dispatch } = this.props;
         if (user.firstname && user.lastname && user.password && user.mailAddress) {
             dispatch(userActions.update(user));
-            this.setState({ editUser: {} });
         }
     }
 
@@ -61,7 +59,7 @@ class EditUserPage extends React.Component {
                     <div className={'form-group' + (submitted && !user.firstname ? ' has-error' : '')}>
                             <label htmlFor="firstname">First Name</label>
                         <input type="text" className="form-control" name="firstname" value={user.firstname} onChange={this.handleChange} />
-                            {submitted && !user.firstname &&
+                        {submitted && !user.firstname &&
                                 <div className="help-block">First Name is required</div>
                             }
                         </div>
@@ -74,7 +72,7 @@ class EditUserPage extends React.Component {
                         </div>
                     <div className={'form-group' + (submitted && !user.mailAddress ? ' has-error' : '')}>
                             <label htmlFor="mailaddress">Email</label>
-                        <input type="email" className="form-control" name="mailaddress" value={user.mailAddress} onChange={this.handleChange} />
+                        <input type="email" className="form-control" name="mailAddress" value={user.mailAddress} onChange={this.handleChange} />
                         {submitted && !user.mailAddress &&
                                 <div className="help-block">Email is required</div>
                             }
@@ -85,11 +83,11 @@ class EditUserPage extends React.Component {
                         {submitted && !user.password &&
                                 <div className="help-block">Password is required</div>
                             }
-                        </div>
+                    </div>
+                    <button type="submit" form="form" className="btn btn-primary">Save</button>
+                    <a href="home" className="btn btn-danger">Cancel</a>
                     </form>
                 }
-                <button type="submit" form="form" className="btn btn-primary">Save</button>
-                <a href="home" className="btn btn-danger">Cancel</a>
             </div>
         );
     }
@@ -103,5 +101,5 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedRegisterPage = connect(mapStateToProps)(EditUserPage);
-export { connectedRegisterPage as EditUserPage };
+const connectedRegisterPage = connect(mapStateToProps)(EditUserName);
+export { connectedRegisterPage as EditUserName };
