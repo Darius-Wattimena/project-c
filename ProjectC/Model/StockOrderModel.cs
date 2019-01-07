@@ -7,7 +7,6 @@ namespace ProjectC.Model
         public int OrderId;
         public int State;
         public DateTime Date;
-        public int Amount;
-        public int Stock;
+        public int OnStock;
     }
 }

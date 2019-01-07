@@ -22,6 +22,7 @@ class AdminOrderManagement extends React.Component {
                     <thead className="thead-dark">
                         <tr>
                             <th scope="col">#</th>
+                            <th></th>
                             <th scope="col">Order Date</th>
                             <th scope="col">Order State</th>
                             <th scope="col">Confirm Action</th>

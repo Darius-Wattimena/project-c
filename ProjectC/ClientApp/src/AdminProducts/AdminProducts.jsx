@@ -47,7 +47,7 @@ class AdminProducts extends React.Component {
                                 )}
                             </tbody>
                         </table>
-                        <Link to="/adminpanel/addproduct" className="btn btn-primary">Add a product</Link>
+                        <Link to="/admin/addproduct" className="btn btn-primary">Add a product</Link>
                     </div>
                 }
             </div>

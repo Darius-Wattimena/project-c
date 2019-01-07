@@ -3,6 +3,18 @@ import { connect } from 'react-redux';
 
 import { orderActions } from '../../_actions';
 
+function NoStockIcon(props) {
+    if (!props.onStock) {
+        return (
+            <div className="admin-stock-icon">
+                Not enough stock! <i className="fas fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Low Stock" style={{ color: 'red' }} />
+            </div>
+        );
+    }
+
+    return <i />;
+}
+
 class AdminOrderManagementItem extends React.Component {
     constructor(props) {
         super(props);
@@ -12,10 +24,10 @@ class AdminOrderManagementItem extends React.Component {
 
         if (this.props.orderState < 1) {
             confirmButtonActive = true;
-            sendButtonActive = true;
+            sendButtonActive = this.props.order.onStock ? true : false;
         } else if (this.props.orderState < 2) {
             confirmButtonActive = false;
-            sendButtonActive = true;
+            sendButtonActive = this.props.order.onStock ? true : false;
         } else {
             confirmButtonActive = false;
             sendButtonActive = false;
@@ -52,7 +64,7 @@ class AdminOrderManagementItem extends React.Component {
         if (this.state.confirmButtonActive) {
             const { dispatch } = this.props;
             console.log("Mark order as ConfirmPayment");
-            dispatch(orderActions.setOrderStatusConfirmed(this, this.state.order.id));
+            dispatch(orderActions.setOrderStatusConfirmed(this, this.state.order.orderId));
         }
     }
 
@@ -61,7 +73,7 @@ class AdminOrderManagementItem extends React.Component {
         if (this.state.sendButtonActive) {
             const { dispatch } = this.props;
             console.log("Mark order as OrderSend");
-            dispatch(orderActions.setOrderStatusSend(this, this.state.order.id));
+            dispatch(orderActions.setOrderStatusSend(this, this.state.order.orderId));
         }
     }
 
@@ -84,6 +96,10 @@ class AdminOrderManagementItem extends React.Component {
         }
     }
 
+    onSelectRow(orderId) {
+        console.log(orderId);
+    }
+
     getParsedDate(date) {
         var dateParts = date.split("-");
         var jsDate = new Date(dateParts[0], dateParts[1] - 1, dateParts[2].substr(0, 2));
@@ -96,9 +112,10 @@ class AdminOrderManagementItem extends React.Component {
 
         return (
             <tr className="admin-order-mangement-item">
-                <th scope="row">{order.id}</th>
-                <td>{this.getParsedDate(order.date)}</td>
-                <td>{this.orderStateToText(orderState)}</td>
+                <th scope="row" onClick={this.onSelectRow.bind(this, order.orderId)}>{order.orderId}</th>
+                <td onClick={this.onSelectRow.bind(this, order.orderId)}><NoStockIcon onStock={order.onStock} /></td>
+                <td onClick={this.onSelectRow.bind(this, order.orderId)}>{this.getParsedDate(order.date)}</td>
+                <td onClick={this.onSelectRow.bind(this, order.orderId)}>{this.orderStateToText(orderState)}</td>
                 <td><button className="btn btn-info" disabled={!confirmButtonActive} onClick={this.confirmPayment.bind(this)}>Confirm Payment</button></td>
                 <td><button className="btn btn-info" disabled={!sendButtonActive} onClick={this.confirmSend.bind(this)}>Send Order</button></td>
             </tr>
