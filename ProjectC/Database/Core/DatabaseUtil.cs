@@ -15,7 +15,7 @@ namespace ProjectC.Database.Core
 
             if (entityAttribute == null)
             {
-                return new TableConfig<T>();
+                throw new Exception("EntityAttribute not found on the given type " + type.FullName);
             }
 
             var entityAttr = (EntityAttribute)entityAttribute;

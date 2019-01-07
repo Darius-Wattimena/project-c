@@ -3,7 +3,7 @@ using ProjectC.Database.Core.Interfaces;
 
 namespace ProjectC.Database.Core
 {
-    internal class TableConfig<T>
+    public class TableConfig<T>
         where T : IEntity
     {
         // Name of the table in the database
