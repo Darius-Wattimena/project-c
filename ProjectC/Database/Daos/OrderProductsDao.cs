@@ -32,6 +32,30 @@ namespace ProjectC.Database.Daos
             return list;
         }
 
+        public bool UserHasBoughtProduct(int userId, int productId) {
+            var sqlQuery = $@"SELECT Count(OrderId) FROM orderproducts
+                                WHERE ProductId = {productId} AND
+                                OrderId in (SELECT o.OrderId from `order` as o WHERE o.UserId = {userId})";
+
+            var result = false;
+
+            using (var connection = new MySqlConnection(Database.Context.ConnectionString)) {
+                connection.Open();
+                using (var command = new MySqlCommand(sqlQuery, connection)) {
+                    using (var reader = command.ExecuteReader()) {
+
+                        if (reader.FieldCount > 0) {
+                            result = true;
+                        }
+
+                        connection.Close();
+                    }
+                }
+            }
+
+            return result;
+        }
+
         public List<Statistics> GetTotalProductsSold()
         {
             var sqlQuery = "SELECT \n" +

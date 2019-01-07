@@ -93,6 +93,9 @@ function addProduct(product, wishlist) {
             response => {
                 dispatch(success());
                 dispatch(alertActions.success(product.name + " was added to '" + wishlist.name + "'!"));
+
+                // Re-load wishlist
+                dispatch(getWishlistItems(wishlist.id));
             },
             error => {
                 dispatch(alertActions.error(error));

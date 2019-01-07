@@ -1,7 +1,7 @@
 ﻿import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { userActions } from '../_actions';
+import { userActions, alertActions } from '../_actions';
 import { productActions } from '../_actions';
 import { history } from '../_helpers';
 import { shoppingCartActions } from '../_actions/shoppingCart.actions';
@@ -10,10 +10,15 @@ import '../styling/WishlistStyling.css';
 import '../styling/progress-indicator.css';
 import { formatCurrency } from '../_helpers';
 import { DeleteConfirmModal, RenameModal } from './Helpers';
+import { AddToCartConfirmModal } from '../ShoppingCart/AddToCartConfirmModal';
 
 function CartButton(props) {
     return (
-        <button className="btn cartbutton" onClick={props.base.props.addProductToCart.bind(this, props.product)}>
+        <button
+            className="btn cartbutton"
+            onClick={props.base.handleAdd.bind(props.base, props.product)}
+            data-toggle="modal"
+            data-target={`#AddToCartConfirmModal`}>
             Add to cart
         </button>
     );
@@ -23,6 +28,13 @@ class WishlistPage extends React.Component {
 
     constructor(props) {
         super(props);
+
+        var user = localStorage.getItem("user");
+        if (!user) {
+            history.push("/login");
+        }
+
+        this.addedProduct = null;
     }
 
     componentDidMount() {
@@ -37,7 +49,8 @@ class WishlistPage extends React.Component {
     }
 
     handleAdd(product) {
-        this.props.addProduct(product);
+        this.addedProduct = product;
+        this.props.addProductToCart(product);
     }
 
     handleRemove(item) {
@@ -52,8 +65,6 @@ class WishlistPage extends React.Component {
         const wishlistState = this.props.wishlist;
 
         var selectedWishlist = null;
-
-        console.log(wishlistState.selectedItems);
 
         if (wishlistState.selectedId) {
             // Wishlist has been selected
@@ -73,6 +84,7 @@ class WishlistPage extends React.Component {
 
         return (
             <div className="wishlistContent">
+                <AddToCartConfirmModal product={this.addedProduct} />
                 <div className="row">
                     <div className="col-md-3">
                         <h4>My wishlists</h4>

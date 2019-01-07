@@ -20,6 +20,7 @@ namespace ProjectC.Controllers
 
         [HttpGet]
         public IActionResult GetMyWishlists() {
+            // Safe
             int userId = UserSession.GetUserId(HttpContext);
             return Ok(GetDao().Find("UserId", userId.ToString()));
         }
@@ -28,7 +29,7 @@ namespace ProjectC.Controllers
         public IActionResult GetItems(int wishlistId) {
             int userId = UserSession.GetUserId(HttpContext);
 
-            // Ensure user owns wishlist
+            // Make sure user owns wishlist
             if (!GetDao().IsOwnedByUser(userId, wishlistId)) {
                 return BadRequest($"The current user ({userId}) does not own that wishlist ({wishlistId})!");
             }
@@ -43,6 +44,7 @@ namespace ProjectC.Controllers
             return Ok(items);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpGet]
         public override IActionResult Get() {
             return InnerGet();
@@ -50,6 +52,17 @@ namespace ProjectC.Controllers
 
         [HttpGet("{id}")]
         public override IActionResult Get(int id) {
+
+            int userId = UserSession.GetUserId(HttpContext);
+            string role = UserSession.GetUserRole(HttpContext);
+
+            // Make sure user is either an admin, or owns wishlist
+            if (!GetDao().IsOwnedByUser(userId, id)
+                &&
+                !role.Equals("Admin")) {
+                return BadRequest($"You may not access wishlist with id ({id})!");
+            }
+
             return InnerGet(id);
         }
 
@@ -84,6 +97,16 @@ namespace ProjectC.Controllers
 
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] Wishlist input) {
+
+            if (!GetDao().IsOwnedByUser(UserSession.GetUserId(HttpContext), id)
+                &&
+                !UserSession.GetUserRole(HttpContext).Equals("Admin"))
+                return BadRequest($"You may not access wishlist with id ({id})!");
+
+            if (string.IsNullOrEmpty(input.Name)) {
+                return BadRequest("Wishlist name cannot be empty.");
+            }
+
             return InnerSave(input, id);
         }
 

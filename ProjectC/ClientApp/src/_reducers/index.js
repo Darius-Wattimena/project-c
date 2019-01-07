@@ -11,6 +11,7 @@ import { orderProducts } from './orderProducts.reducer'
 import { statistics } from './statistics.reducer'
 import { address } from './address.reducer'
 import { wishlist } from './wishlist.reducer';
+import { review } from './review.reducer';
 
 const rootReducer = combineReducers({
     registration,
@@ -25,7 +26,8 @@ const rootReducer = combineReducers({
     orderProducts,
     wishlist,
     address,
-    statistics
+    statistics,
+    review
 });
 
 export default rootReducer;

@@ -10,12 +10,44 @@ import '../styling/SingleProductStyle.css';
 import { StockBlock } from '../ProductPage/StockBlock';
 import { formatCurrency } from '../_helpers/currency-format';
 import { wishlistActions } from '../_actions/wishlist.actions';
+import { reviewActions } from '../_actions/review.actions';
+
+import { AddToCartConfirmModal } from '../ShoppingCart/AddToCartConfirmModal'
+
+function Rating(props) {
+
+    // Used for displaying outline/solid stars based on review rating
+
+    let result = [];
+
+    var star;
+
+    for (var i = 1; i <= 5; ++i) {
+        if (i <= props.amount)
+            star = <span key={i} className="fas fa-star" title={`${props.amount} star rating`} />
+        else
+            star = <span key={i} className="far fa-star" />
+
+        result.push(star);
+    }
+
+    return result;
+}
 
 //base class
 class SingleProductPage extends React.Component {
 
+    constructor(props) {
+        super(props);
+        this.submitReview = this.submitReview.bind(this);
+    }
+
     componentDidMount() {
+        // Load single product
         this.props.getProductById(this.props.match.params.id);
+
+        // Load reviews for this single product
+        this.props.getReviews(this.props.match.params.id);
     }
 
     loadWishlists() {
@@ -35,15 +67,49 @@ class SingleProductPage extends React.Component {
         this.props.addProduct(product);
     }
 
+    submitReview() {
+
+        // Find out what rating was selected (checking whether 'checked' or not from high to low)
+        var rating =
+            document.getElementById("star-5").checked ? 5 :
+                document.getElementById("star-4").checked ? 4 :
+                    document.getElementById("star-3").checked ? 3 :
+                        document.getElementById("star-2").checked ? 2 :
+                            document.getElementById("star-1").checked ? 1 :
+                                -1;
+
+        var reviewText = document.getElementById("reviewBody").value;
+
+        var submitButton = document.getElementById("reviewSubmitBtn");
+
+        var review = {
+            'rating': rating,
+            'body': reviewText,
+            'productId': this.props.product.item.id
+        };
+
+        // Post the review
+        this.props.postReview(review);
+    }
+
+    removeReview(review) {
+        // DELETE review
+        this.props.removeReview(review);
+    }
+
     render() {
         const { product } = this.props;
 
         const wishlistState = this.props.wishlist;
+        const reviewState = this.props.review;
+
+        const user = JSON.parse(localStorage.getItem('user'));
 
         return (
             <div>
                 {!product.item
                     &&
+                    // Product has not loaded yet, show empty section with progress bar
                     <div className="SingleProduct row">
                         <div className="col-md-12">
                             <nav className="path-nav" aria-label="breadcrumb">
@@ -58,6 +124,7 @@ class SingleProductPage extends React.Component {
                         </div>
                     </div>
                     ||
+                    // Show product
                     <div>
                         <nav className="path-nav" aria-label="breadcrumb">
                             <ol className="breadcrumb">
@@ -79,9 +146,14 @@ class SingleProductPage extends React.Component {
                                     <StockBlock stock={product.item.stock} />
                                     <div className="button-group">
                                         <button disabled={(this.props.shoppingCart.adding && this.props.shoppingCart.adding.productId === product.item.id)}
-                                            className="btn btn-success actionButton" onClick={this.handleAdd.bind(this, product.item)}>Add to cart</button>
-                                        <div class="dropdown">
-                                            <button class="btn btn-info actionButton" onClick={this.loadWishlists.bind(this)} data-toggle="dropdown">
+                                            className="btn btn-success actionButton"
+                                            onClick={this.handleAdd.bind(this, product.item)}
+                                            data-toggle="modal"
+                                            data-target={`#AddToCartConfirmModal`}>
+                                            Add to cart
+                                        </button>
+                                        <div className="dropdown">
+                                            <button className="btn btn-info actionButton" onClick={this.loadWishlists.bind(this)} data-toggle="dropdown">
                                                 Add to wishlist
                                                 &nbsp;<i className="fas fa-heart" />
                                             </button>
@@ -97,48 +169,135 @@ class SingleProductPage extends React.Component {
                                                             className="dropdown-item btn btn-link"
                                                             onClick={this.addToWishlist.bind(this, product.item, wishlist)}
                                                         >{wishlist.name}</button>
-                                            )
-                                        }
+                                                    )
+                                                }
                                             </div>
+                                        </div>
+                                    </div>
+                                    <p>{product.item.description}</p>
+                                </div>
+
+                                {
+                                    // Specifications
+                                    product.item.specifications &&
+                                    <table className="table table-hover" style={{ margin: 1 + "em" }}>
+                                        <thead className="thead-dark">
+                                            <tr>
+                                                <th scope="col">#</th>
+                                                <th scope="col">Specificaties</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {product.item.specifications.map((spec, index) =>
+                                                <tr>
+                                                    <td scope="row">{spec.name}</td>
+                                                    <td>{spec.value}</td>
+                                                </tr>
+                                            )}
+                                        </tbody>
+                                    </table>
+                                }
+                            </div>
+                        </div>
+
+                        <div id="reviewSection">
+                            <h3>Reviews</h3>
+                            <hr />
+                            {
+                                reviewState.loading
+                                &&
+                                <div className="progress">
+                                    <div className="indeterminate"></div>
+                                </div>
+                                ||
+                                reviewState.reviews && reviewState.reviews.map(
+                                    (review, index) =>
+                                        <div className="review" key={index}>
+                                            <h5>{review.name}</h5>
+                                            <h6>{review.date}</h6>
+                                            <small>
+                                                <Rating amount={review.rating} />
+                                            </small>
+                                            <p>
+                                                {review.body}
+                                            </p>
+                                            {
+                                                (review.canEdit || user.role == "Admin")
+                                                &&
+                                                <button disabled={reviewState.deleting} className="btn btn-danger" onClick={() => { this.removeReview(review) }}>
+                                                    <i className="fas fa-trash" />
+                                                    &nbsp;Delete this review
+                                                </button>
+                                            }
+                                            <hr />
+                                        </div>
+                                )
+                            }
+                            {
+                                (reviewState.reviews && !reviewState.loading)
+                                &&
+                                reviewState.reviews.length == 0
+                                &&
+                                <small>No reviews have been placed on this product yet. {reviewState.canPost ? ` Be the first!` : ``}<br /></small>
+                            }
+                            {
+                                reviewState.sending
+                                &&
+                                <div className="progress">
+                                    <div className="indeterminate"></div>
+                                </div>
+                            }
+                            {
+                                (reviewState.canPost && !reviewState.sent)
+                                &&
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <h4>Rate and review your {product.item.name}</h4>
+                                        <small>Your name ({user && `${user.firstName} ${user.lastName}`}) will be publicized upon placing a review.</small>
+                                        <br />
+                                        <div className="stars row" disabled={reviewState.sending}>
+                                            <input className="star star-5" id="star-5" type="radio" name="star" disabled={reviewState.sending} />
+                                            <label className="star star-5" for="star-5" disabled={reviewState.sending}></label>
+                                            <input className="star star-4" id="star-4" type="radio" name="star" disabled={reviewState.sending} />
+                                            <label className="star star-4" for="star-4" disabled={reviewState.sending}></label>
+                                            <input className="star star-3" id="star-3" type="radio" name="star" disabled={reviewState.sending} />
+                                            <label className="star star-3" for="star-3" disabled={reviewState.sending}></label>
+                                            <input className="star star-2" id="star-2" type="radio" name="star" disabled={reviewState.sending} />
+                                            <label className="star star-2" for="star-2" disabled={reviewState.sending}></label>
+                                            <input className="star star-1" id="star-1" type="radio" name="star" disabled={reviewState.sending} />
+                                            <label className="star star-1" for="star-1" disabled={reviewState.sending}></label>
+                                        </div>
+                                        <br />
+                                        <textarea id="reviewBody" className="form-control" rows="5" disabled={reviewState.sending} />
+                                        <br />
+                                        <button id="reviewSubmitBtn" className="btn btn-primary" onClick={this.submitReview} disabled={reviewState.sending}>Submit</button>
                                     </div>
                                 </div>
-                                <p>{product.item.description}</p>
-                            </div>
-
+                            }
                             {
-                                // Specifications
-                                product.item.specifications &&
-                                <table className="table table-hover" style={{ margin: 1 + "em" }}>
-                                    <thead className="thead-dark">
-                                        <tr>
-                                            <th scope="col">#</th>
-                                            <th scope="col">Specificaties</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {product.item.specifications.map((spec, index) =>
-                                            <tr>
-                                                <td scope="row">{spec.name}</td>
-                                                <td>{spec.value}</td>
-                                            </tr>
-                                        )}
-                                    </tbody>
-                                </table>
+                                // Confirmation
+                                reviewState.sent
+                                &&
+                                <p>Thank you for your feedback. 😊</p>
                             }
                         </div>
+
                     </div>
-                    </div>
-            }
+                }
+
+                <AddToCartConfirmModal product={product.item} />
+
             </div>
         );
     }
 }
 function mapStateToProps(state) {
-    const { product, shoppingCart, wishlist } = state;
+    const { product, shoppingCart, wishlist, review } = state;
     return {
         product,
         shoppingCart,
-        wishlist
+        wishlist,
+        review
     };
 }
 
@@ -152,6 +311,12 @@ const mapDispatchToProps = (dispatch) => {
         getProductById: id => { dispatch(productActions.getById(id)); },
 
         addProduct: product => { dispatch(shoppingCartActions.addProduct(product)); },
+
+        getReviews: productId => { dispatch(reviewActions.getAllForProduct(productId)) },
+
+        postReview: review => { dispatch(reviewActions.add(review)) },
+
+        removeReview: review => { dispatch(reviewActions.remove(review)) }
     }
 };
 

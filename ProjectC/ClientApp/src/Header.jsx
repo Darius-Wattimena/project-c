@@ -9,7 +9,7 @@ import logo from './styling/cmobile.jpg';
 function UserLoggedIn(props) {
     const isLoggedIn = props.user;
     if (isLoggedIn) {
-        return <UserButtons user={props.user} />;
+        return <UserButtons base={props.base} user={props.user} />;
     }
     return <StartButtons />;
 }
@@ -36,10 +36,10 @@ function UserButtons(props) {
         <div>
             <div className="btn-group" role="group" aria-label="Basic example">
                 <Link to={`profile`} className="btn btn-info">
-                    User <i className="fas fa-user"></i>
+                    {props.user.firstName} <i className="fas fa-user"></i>
                 </Link>
                 <AdminButtons role={props.user.role} />
-                <button type="button" className="btn btn-danger" onClick={window.headercomponent.logout}> Logout <i className="fas fa-sign-out-alt"></i></button>
+                <button type="button" className="btn btn-danger" onClick={props.base.logout}> Logout <i className="fas fa-sign-out-alt"></i></button>
             </div>
         </div>
     );
@@ -53,9 +53,6 @@ class Header extends React.Component {
         this.state = {
             searchValue: ""
         }
-
-        // Make component accessible
-        window.headercomponent = this;
 
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -100,7 +97,7 @@ class Header extends React.Component {
                                 </div>
                             </div>
                         </form>
-                        <UserLoggedIn user={user} />
+                        <UserLoggedIn base={this} user={user} />
                         <div className="btn-group">
                             <Link to={`/checkout`} className="btn btn-info">
                                 Shopping Cart <i className="fas fa-shopping-cart"></i>

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
 using ProjectC.Database.Daos;
@@ -7,6 +8,7 @@ using System.Security.Claims;
 
 namespace ProjectC.Controllers
 {
+    [Authorize(Roles = "User, Admin")]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class AddressController : DaoController<AddressDao, Address>

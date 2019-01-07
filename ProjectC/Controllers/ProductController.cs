@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using MySql.Data.MySqlClient;
@@ -100,6 +101,7 @@ namespace ProjectC.Controllers
             return InnerSearch(f, i);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public IActionResult CreateWithSpecifications([FromBody] ProductSpecificationsModel model)
         {
@@ -122,6 +124,7 @@ namespace ProjectC.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut]
         public IActionResult ChangeStock([FromBody]ProductChangeStockModel model)
         {
@@ -153,12 +156,14 @@ namespace ProjectC.Controllers
             }
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         public override IActionResult Create([FromBody] Product input)
         {
             return InnerSave(input);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] Product input)
         {
@@ -166,6 +171,7 @@ namespace ProjectC.Controllers
         }
 
         // TODO ~needs rework
+        [Authorize(Roles = "Admin")]
         [HttpDelete("{id}")]
         public override IActionResult Delete(int id)
         {
