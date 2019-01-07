@@ -8,6 +8,12 @@ namespace ProjectC.Database.Core
 {
     internal class DatabaseUtil
     {
+        /// <summary>
+        /// Create a <see cref="TableConfig{T}"/> instance with the given class <see cref="Type"/>
+        /// </summary>
+        /// <typeparam name="T">An entity object that implements the IEntity interface</typeparam>
+        /// <param name="type">The type instance of the given T object</param>
+        /// <returns>An instance of <see cref="TableConfig{T}"/> for the given entity</returns>
         public static TableConfig<T> CreateTableConfig<T>(Type type)
             where T : IEntity
         {
@@ -29,6 +35,12 @@ namespace ProjectC.Database.Core
             };
         }
 
+        /// <summary>
+        /// Create a <see cref="FieldConfig{T}"/> instance with the given <see cref="FieldInfo"/>
+        /// </summary>
+        /// <typeparam name="T">An entity object that implements the IEntity interface</typeparam>
+        /// <param name="field">An field object</param>
+        /// <returns>An instance of <see cref="FieldConfig{T}"/> when the targeted field has the <see cref="FieldAttribute"/> otherwise return null</returns>
         public static FieldConfig<T> CreateFieldConfig<T>(FieldInfo field)
             where T : IEntity
         {
