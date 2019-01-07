@@ -19,7 +19,7 @@ namespace ProjectC.Database.Core
         /// Singleton pattern to get the database class
         /// </summary>
         /// <param name="context">A DatabaseContext object containing the connection string</param>
-        /// <returns>The instance of the database class</returns>
+        /// <returns>An instance of the database class</returns>
         public static Database Get(DatabaseContext context)
         {
             return _instance ?? (_instance = new Database(context));

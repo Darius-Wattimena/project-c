@@ -3,7 +3,8 @@ using ProjectC.Database.Core.Interfaces;
 
 namespace ProjectC.Database.Core
 {
-    public class FieldConfig<T> where T : IEntity
+    internal class FieldConfig<T> 
+        where T : IEntity
     {
         // Database Config
         public string Name;

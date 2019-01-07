@@ -2,13 +2,15 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Reflection;
+using ProjectC.Database.Core.Annotations;
 using ProjectC.Database.Core.Interfaces;
 using ProjectC.Database.SQL;
 
 namespace ProjectC.Database.Core
 {
     /// <summary>
-    /// The Dao class is an Database Access Layer object that has build-in Table and Field 
+    /// The Dao class is an Database Access Layer object that has build-in Table and Field recognition
+    /// when adding the <see cref="EntityAttribute"/> above the entity and <see cref="FieldAttribute"/> for every database field
     /// </summary>
     /// <typeparam name="T">An entity object that implements the IEntity interface</typeparam>
     public abstract class Dao<T> where T : IEntity

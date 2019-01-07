@@ -3,6 +3,10 @@ using ProjectC.Database.Daos;
 
 namespace ProjectC.Database.Core
 {
+    /// <summary>
+    /// The DaoManger class is a central point where all the Dao classes are registered and can be accessed in every Dao object 
+    /// without needing to initialize a Dao object multiple times
+    /// </summary>
     public class DaoManager
     {
         private static DaoManager _instance;
@@ -23,6 +27,11 @@ namespace ProjectC.Database.Core
         public WishlistDao WishlistDao;
         public WishlistItemDao WishlistItemDao;
 
+        /// <summary>
+        /// Singleton pattern to get the DaoManger class
+        /// </summary>
+        /// <param name="context">A DatabaseContext object containing the connection string</param>
+        /// <returns>An instance of the DaoManger class</returns>
         public static DaoManager Get(DatabaseContext context)
         {
             if (_instance == null)  {
@@ -40,6 +49,13 @@ namespace ProjectC.Database.Core
 
         }
 
+        /// <summary>
+        /// Method to receive the instance of an Dao object using the name of the needed dao
+        /// </summary>
+        /// <typeparam name="T">A dao object that extends the base dao class with T as his entity type</typeparam>
+        /// <typeparam name="TU">An entity object that implements the IEntity interface</typeparam>
+        /// <param name="key">The name of the dao</param>
+        /// <returns>The found dao object or null when not found</returns>
         public T FindDao<T, TU>(string key) 
             where T : Dao<TU> 
             where TU : IEntity
@@ -79,6 +95,9 @@ namespace ProjectC.Database.Core
             }
         }
 
+        /// <summary>
+        /// Initialize all the daos
+        /// </summary>
         private void RegisterDaos()
         {
             AddressDao = new AddressDao(_context);
