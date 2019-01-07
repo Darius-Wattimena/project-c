@@ -76,6 +76,7 @@ function addProduct(product) {
         // If user is logged in, add the item to their online basket as well
         if (user) {
             dispatch(request(item));
+            dispatch(alertActions.success(item.product.name + ' was added to the basket.'));
 
             shoppingCartService.add(item)
                 .then(
@@ -84,8 +85,6 @@ function addProduct(product) {
                         // Product was added to the basket.
                         dispatch(success(newItem));
                         console.log("Added product to basket");
-                        dispatch(alertActions.success('Item was added to the basket.'));
-                        dispatch(alertActions.success(newItem.product.name + ' was added to the basket.'));
                     },
                     error => {
                         // Something went wrong

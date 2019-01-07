@@ -13,7 +13,7 @@ import { history } from '../_helpers';
 import { FilterColumn } from '../ProductPage';
 import { formatCurrency } from '../_helpers/currency-format';
 
-import { AddToCartConfirmModal } from '../ShoppingCart/AddToCartConfirmModal'
+import { AddToCartConfirmModal } from '../ShoppingCart/AddToCartConfirmModal';
 
 var vertical = false;
 
