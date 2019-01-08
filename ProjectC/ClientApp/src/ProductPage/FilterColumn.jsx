@@ -18,7 +18,12 @@ function RenderCheckbox(props) {
         <div className="col-sm-1">
             <input className="filterCheckBox" type="checkbox" onChange={window.filterComponent.handleFilter} name={props.name} spec={props.spec} />
         </div>
-        <div className="col-sm-10">{props.name}</div>
+        <div className="col-sm-10">{
+            props.name === "1" ? `Ja` :
+                props.name === "0" ? `Nee` :
+                    props.name
+        }
+        </div>
     </div>
     );
 }
