@@ -32,10 +32,10 @@ class AddProduct extends React.Component {
                 { id: 0, name: "gewicht", value: "" },
                 { id: 0, name: "processor", value: "" },
                 { id: 0, name: "accu", value: "" },
-                { id: 0, name: "simlockVrij", value: "" },
-                { id: 0, name: "microSD", value: "" },
-                { id: 0, name: "internetType", value: "" },
-                { id: 0, name: "dualSim", value: "" }
+                { id: 0, name: "simlockVrij", value: "0" },
+                { id: 0, name: "microSD", value: "0" },
+                { id: 0, name: "internetType", value: "5G" },
+                { id: 0, name: "dualSim", value: "0" }
             ],
             submitted: false
         }
