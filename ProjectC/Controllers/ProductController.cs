@@ -41,7 +41,7 @@ namespace ProjectC.Controllers
                 var products = daoManager.ProductDao.SearchProduct(value);
 
                 // Filter out inactive products!
-                products.RemoveAll(p => p.ActiveYn == 0);
+                products.RemoveAll(p => p.Active == 0);
 
                 var allSpecifications = GetDaoManager().SpecificationDao.FindAll();
 
@@ -78,7 +78,7 @@ namespace ProjectC.Controllers
         public IActionResult GetAllWithoutSpecifications()
         {
             var products = GetDao().FindAll();
-            products.RemoveAll(p => p.ActiveYn == 0);
+            products.RemoveAll(p => p.Active == 0);
             return Ok(products);
         }
 
@@ -92,7 +92,7 @@ namespace ProjectC.Controllers
                 var products = dao.FindAllWithSpecifications();
 
                 // Filter out inactive products!
-                products.RemoveAll(p => p.ActiveYn == 0);
+                products.RemoveAll(p => p.Active == 0);
 
                 return Ok(products);
             }
@@ -113,7 +113,7 @@ namespace ProjectC.Controllers
         {
             var products = GetDao().Search(f, i);
 
-            products.RemoveAll(p => p.ActiveYn == 0);
+            products.RemoveAll(p => p.Active == 0);
 
             return Ok(products);
         }
@@ -190,7 +190,7 @@ namespace ProjectC.Controllers
         [HttpPost]
         public override IActionResult Create([FromBody] Product input)
         {
-            input.ActiveYn = 1;
+            input.Active = 1;
             return InnerSave(input);
         }
 
@@ -198,7 +198,7 @@ namespace ProjectC.Controllers
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] Product input)
         {
-            input.ActiveYn = 1;
+            input.Active = 1;
             return InnerSave(input, id);
         }
 

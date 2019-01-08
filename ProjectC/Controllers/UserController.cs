@@ -38,7 +38,6 @@ namespace ProjectC.Controllers
         public override IActionResult Get()
         {
             var users = GetDao().FindAll();
-            users.RemoveAll(u => u.ActiveYn == 0);
             return Ok(users);
         }
 
@@ -55,8 +54,6 @@ namespace ProjectC.Controllers
         public override IActionResult Search(string f, string i)
         {
             var users = GetDao().Search(f, i);
-            users.RemoveAll(u => u.ActiveYn == 0);
-
             return Ok(users);
         }
 
