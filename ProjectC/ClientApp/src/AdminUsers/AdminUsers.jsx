@@ -45,6 +45,7 @@ class AdminUsers extends React.Component {
         return (
             <div className="panel col-md-6">
                 <h3>User Management</h3>
+                <hr />
                 {users.loading &&
                     <div className="progress">
                         <div className="indeterminate"></div>

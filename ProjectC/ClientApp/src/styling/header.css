@@ -1,4 +1,7 @@
-﻿
+﻿.alert {
+    margin-bottom: 0 !important;
+    text-align: center;
+}
 
 nav.fixed-top {
     padding: 10px 0 !important;

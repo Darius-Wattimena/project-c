@@ -2,6 +2,7 @@
 import { authentication } from '../_reducers/authentication.reducer';
 
 export const reviewService = {
+    getAll,
     getAllForProduct,
     add,
     remove,
@@ -25,6 +26,15 @@ function getAllForProduct(productId) {
     };
 
     return fetch(config.apiUrl + '/review/GetAllForProduct/' + productId, requestOptions).then(handleResponse, handleError);
+}
+
+function getAll() {
+    const requestOptions = {
+        method: 'GET',
+        headers: { ...authHeader() }
+    };
+
+    return fetch(config.apiUrl + '/review/Get/', requestOptions).then(handleResponse, handleError);
 }
 
 function add(review) {

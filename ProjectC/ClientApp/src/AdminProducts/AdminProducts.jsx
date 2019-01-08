@@ -25,6 +25,7 @@ class AdminProducts extends React.Component {
         return (
             <div className="panel col-md-8">
                 <h3>Product Management</h3>
+                <hr />
                 {products.loading &&
                     <div className="progress">
                         <div className="indeterminate"></div>

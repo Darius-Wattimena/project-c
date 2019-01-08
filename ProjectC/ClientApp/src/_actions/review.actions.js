@@ -4,11 +4,31 @@ import { alertActions } from './';
 import { history } from '../_helpers';
 
 export const reviewActions = {
+    getAll,
     getAllForProduct,
     add,
     remove,
     update
 };
+
+function getAll() {
+    return dispatch => {
+        dispatch(request());
+        reviewService.getAll()
+            .then(
+                reviews => {
+                    dispatch(success(reviews));
+                },
+                error => {
+                    dispatch(failure(error));
+                }
+            );
+    };
+
+    function request() { return { type: reviewConstants.GET_REQUEST } }
+    function success(reviews) { return { type: reviewConstants.GET_SUCCESS, reviews } }
+    function failure(error) { return { type: reviewConstants.GET_FAILURE, error } }
+}
 
 function getAllForProduct(productId) {
     return dispatch => {
