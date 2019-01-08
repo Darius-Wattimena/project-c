@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ProjectC.Database.Core;
 using ProjectC.Helper;
+using ProjectC.Model;
 
 namespace ProjectC.Controllers
 {
@@ -35,10 +36,13 @@ namespace ProjectC.Controllers
         }
 
         [HttpGet]
-        public IActionResult GetTotalProductsSold()
+        public IActionResult GetTotalProductsSold([FromQuery] DateTime s, [FromQuery] DateTime e)
         {
-            var data = GetDaoManager().OrderProductsDao.GetTotalProductsSold();
-            return Ok(data);
+            e = e.AddDays(1);
+
+            var data = GetDaoManager().OrderProductsDao.GetTotalSoldProductsForMinMaxDays(s, e);
+            var resultData = FillMissingEmptyDaysForProductsSold(data, s, e);
+            return Ok(resultData);
         }
 
         [HttpGet]
@@ -82,6 +86,66 @@ namespace ProjectC.Controllers
             }
 
             return Ok(resultData);
+        }
+
+        //TODO ~NEEDS REWORK OR CLEANUP~
+        public Dictionary<DateTime, Dictionary<string, int>> FillMissingEmptyDaysForProductsSold(List<ProductStatisticsModel> currentData, DateTime minDate, DateTime maxDate)
+        {
+            var totalDays = (maxDate - minDate).TotalDays;
+
+            // Create a dictionary with all the different products we have in the statistics model and split the models
+            var usedProductsDictionary = new Dictionary<int, List<ProductStatisticsModel>>();
+            var usedProducts = new List<string>();
+            foreach (var dataItem in currentData)
+            {
+                if (!usedProductsDictionary.ContainsKey(dataItem.ProductId))
+                {
+                    usedProductsDictionary.Add(dataItem.ProductId, new List<ProductStatisticsModel>());
+                    usedProducts.Add(dataItem.ProductName);
+                }
+                usedProductsDictionary[dataItem.ProductId].Add(dataItem);
+            }
+            
+            var resultData = new Dictionary<DateTime, Dictionary<string, int>>();
+
+            //Check of we een statistics hebben voor elke dag voor elk product
+
+            //Nodig voor de product naam
+            var checkedProductI = 0;
+
+            //Voor elk product
+            foreach (var product in usedProductsDictionary)
+            {
+                //Voor elke dag zet empty items
+                for (var i = 0; i < totalDays; i++)
+                {
+                    //Insert lege values voor elk item
+                    var insertDay = minDate.AddDays(i);
+
+                    //Check of onze resultData nog niet deze datum heeft
+                    if (!resultData.ContainsKey(insertDay))
+                    {
+                        //Voeg een lege dictionary toe voor de producten
+                        resultData.Add(insertDay, new Dictionary<string, int>());
+                    }
+
+                    //Voeg een lege item toe voor elke dag voor het gecheckde product
+                    resultData[insertDay].Add(usedProducts[checkedProductI], 0);
+                }
+
+                //Verhoog zodat we de naam van de volgende product in de lijst kunnen krijgen
+                checkedProductI++;
+
+                //Vervang de amount van de bestaande waardes in de dictionary
+                foreach (var productItems in product.Value)
+                {
+                    var usedDate = Convert.ToDateTime(productItems.name);
+                    resultData[usedDate].Remove(productItems.ProductName);
+                    resultData[usedDate].Add(productItems.ProductName, productItems.Amount);
+                }
+            }
+
+            return resultData;
         }
 
         public List<Statistics> FillMissingEmptyDays(List<Statistics> currentData, DateTime minDate, DateTime maxDate)

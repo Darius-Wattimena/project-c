@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using MySql.Data.MySqlClient;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
 using ProjectC.Helper;
+using ProjectC.Model;
 
 namespace ProjectC.Database.Daos
 {
@@ -56,6 +58,33 @@ namespace ProjectC.Database.Daos
             return result;
         }
 
+        public List<ProductStatisticsModel> GetTotalSoldProductsForMinMaxDays(DateTime minDate, DateTime maxDate)
+        {
+            var sqlQuery = "SELECT p.ProductId AS pid, " +
+                           "p.Name, \n" +
+                           "o.OrderDate AS date, \n" +
+                           "IFNULL(op.Amount, 0) as amount \n" +
+                           "FROM `order` as o \n" +
+                           "LEFT JOIN `orderproducts` as op ON o.OrderId = op.OrderId \n" +
+                           "LEFT JOIN `product` as p ON p.ProductId = op.ProductId \n" +
+                           "WHERE OrderDate >= \'" + minDate.ToString("yyyy-MM-dd") + "\' \n" +
+                           "AND OrderDate < \'" + maxDate.ToString("yyyy-MM-dd") + "\' \n" +
+                           "AND (OrderState = \'0\' OR OrderState = \'1\') \n" +
+                           "GROUP BY pid, DAY(date)";
+            return ExecuteCustom<ProductStatisticsModel>(sqlQuery, (reader, list) =>
+            {
+                var date = reader.GetDateTime(2);
+                var amount = reader.GetInt32(3);
+
+                var item = new ProductStatisticsModel(date.ToString("yyyy-MM-dd"), amount);
+                item.ProductId = reader.GetInt32(0);
+                item.ProductName = reader.GetString(1);
+                item.Date = date;
+                item.Amount = amount;
+                list.Add(item);
+            });
+        }
+
         public List<Statistics> GetTotalProductsSold()
         {
             var sqlQuery = "SELECT \n" +
@@ -65,27 +94,12 @@ namespace ProjectC.Database.Daos
                       "FROM `orderproducts` \n" +
                       "GROUP BY ProductId";
 
-            using (var connection = new MySqlConnection(Database.Context.ConnectionString))
+            return ExecuteCustom<Statistics>(sqlQuery, (reader, list) =>
             {
-                connection.Open();
-                using (var command = new MySqlCommand(sqlQuery, connection))
-                {
-                    using (var reader = command.ExecuteReader())
-                    {
-                        var results = new List<Statistics>();
-
-                        while (reader.Read())
-                        {
-                            var productName = reader.GetString(1);
-                            var totalSold = reader.GetInt32(2);
-                            results.Add(new Statistics(productName, totalSold));
-                        }
-
-                        connection.Close();
-                        return results;
-                    }
-                }
-            }
+                var productName = reader.GetString(1);
+                var totalSold = reader.GetInt32(2);
+                list.Add(new Statistics(productName, totalSold));
+            });
         }
 
         public class OrderProductModel
