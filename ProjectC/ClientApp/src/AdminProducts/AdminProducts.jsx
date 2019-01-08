@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 
 import { Link } from 'react-router-dom';
 import { productActions } from '../_actions';
+import { history } from '../_helpers';
 
 //base class
 class AdminProducts extends React.Component {
@@ -11,8 +12,12 @@ class AdminProducts extends React.Component {
         this.props.dispatch(productActions.getAll());
     }
 
+    handleEditProduct(id) {
+        history.push("/admin/product/edit/" + id);
+    }
+
     handleDeleteProduct(id) {
-        return (e) => this.props.dispatch(productActions._delete(id));
+        this.props.dispatch(productActions._delete(id));
     }
 
     render() {
@@ -36,18 +41,27 @@ class AdminProducts extends React.Component {
                             </thead>
                             <tbody>
                             {products.items.map((product, index) =>
-                                <tr>
+                                <tr key={index}>
                                     <td scope="row">{product.id}</td>
                                     <td>{product.name}</td>
                                     <td>{product.stock}</td>
                                     <td>{product.price}</td>
-                                    <td></td>
+                                    <td>
+                                        <Link disabled={product.deleting} className="btn btn-primary" to={`/admin/editproduct/${product.id}`}>
+                                            <span className="far fa-edit"></span>&nbsp;
+                                            Edit
+                                        </Link>
+                                        <button disabled={product.deleting} className="btn btn-danger" onClick={this.handleDeleteProduct.bind(this,product.id)}>
+                                            <span className="fas fa-trash"></span>&nbsp;
+                                            Delete
+                                        </button>
+                                    </td>
                                 </tr>
                                     
                                 )}
                             </tbody>
                         </table>
-                        <Link to="/adminpanel/addproduct" className="btn btn-primary">Add a product</Link>
+                        <Link to="/admin/addproduct" className="btn btn-primary">Add a product</Link>
                     </div>
                 }
             </div>

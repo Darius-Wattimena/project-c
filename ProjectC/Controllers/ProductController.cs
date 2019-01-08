@@ -38,6 +38,9 @@ namespace ProjectC.Controllers
                 var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
                 var products = daoManager.ProductDao.SearchProduct(value);
 
+                // Filter out inactive products!
+                products.RemoveAll(p => p.ActiveYn == 0);
+
                 foreach (var item in products)
                 {
                     item.Specifications = GetDaoManager().SpecificationDao.FindSpecificationsByProductId(item.Id);
@@ -70,7 +73,9 @@ namespace ProjectC.Controllers
         [HttpGet]
         public IActionResult GetAllWithoutSpecifications()
         {
-            return Ok(GetDao().FindAll());
+            var products = GetDao().FindAll();
+            products.RemoveAll(p => p.ActiveYn == 0);
+            return Ok(products);
         }
 
         [HttpGet]
@@ -79,9 +84,13 @@ namespace ProjectC.Controllers
             try
             {
                 var dao = GetDao();
-                return dao == null
-                    ? LogErrorNoDaoFound()
-                    : Ok(dao.FindAllWithSpecifications());
+
+                var products = dao.FindAllWithSpecifications();
+
+                // Filter out inactive products!
+                products.RemoveAll(p => p.ActiveYn == 0);
+
+                return Ok(products);
             }
             catch (MySqlException ex)
             {
@@ -98,7 +107,11 @@ namespace ProjectC.Controllers
         [HttpGet]
         public override IActionResult Search(string f, string i)
         {
-            return InnerSearch(f, i);
+            var products = GetDao().Search(f, i);
+
+            products.RemoveAll(p => p.ActiveYn == 0);
+
+            return Ok(products);
         }
 
         [Authorize(Roles = "Admin")]
@@ -122,6 +135,19 @@ namespace ProjectC.Controllers
             {
                 return LogError(ex);
             }
+        }
+
+        [Authorize(Roles = "Admin")]
+        [HttpPut]
+        public IActionResult UpdateWithSpecifications([FromBody] ProductSpecificationsModel model) {
+            var dao = GetDao();
+            var specificationDao = GetDaoManager().SpecificationDao;
+            var databaseProduct = dao.Save(model.Product);
+
+            foreach (var specification in model.Specifications) {
+                specificationDao.Save(specification);
+            }
+            return Ok();
         }
 
         [Authorize(Roles = "Admin")]
@@ -160,6 +186,7 @@ namespace ProjectC.Controllers
         [HttpPost]
         public override IActionResult Create([FromBody] Product input)
         {
+            input.ActiveYn = 1;
             return InnerSave(input);
         }
 
@@ -167,6 +194,7 @@ namespace ProjectC.Controllers
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] Product input)
         {
+            input.ActiveYn = 1;
             return InnerSave(input, id);
         }
 
@@ -175,24 +203,30 @@ namespace ProjectC.Controllers
         [HttpDelete("{id}")]
         public override IActionResult Delete(int id)
         {
-            try
-            {
-                var specDao = GetDaoManager().SpecificationDao;
-                var specs = specDao.FindSpecificationsByProductId(id);
-                specDao.Delete(specs);
-
-                //TODO delete orders related to the product
-
-                GetDao().Delete(id);
-
-                return Ok();
-
-                //return InnerDelete(id);
+            if (GetDao().SetActive(false, id)) {
+                return Ok("Product deleted.");
             }
-            catch (MySqlException ex)
-            {
-                return LogError(ex);
-            }
+
+            return BadRequest("Could not delete product");
+
+            //try
+            //{
+            //    var specDao = GetDaoManager().SpecificationDao;
+            //    var specs = specDao.FindSpecificationsByProductId(id);
+            //    specDao.Delete(specs);
+            //
+            //    //TODO delete orders related to the product
+            //
+            //    GetDao().Delete(id);
+            //
+            //    return Ok();
+            //
+            //    //return InnerDelete(id);
+            //}
+            //catch (MySqlException ex)
+            //{
+            //    return LogError(ex);
+            //}
         }
     }
 }

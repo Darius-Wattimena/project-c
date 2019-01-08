@@ -30,6 +30,7 @@ namespace ProjectC.Database.Entities
         [Field] public double Price;
         [Field(CanBeZero = true)] public int Stock;
         [Field] public string ImageUrl;
+        [Field] public int ActiveYn;
 
         public List<Specification> Specifications;
 

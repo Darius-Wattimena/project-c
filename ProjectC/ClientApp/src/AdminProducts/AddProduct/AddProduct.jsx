@@ -16,7 +16,7 @@ class AddProduct extends React.Component {
                 name: "",
                 stock: 0,
                 price: 0,
-                imageurl: "",
+                imageUrl: "",
                 description: ""
             },
             specifications: [
@@ -107,7 +107,7 @@ class AddProduct extends React.Component {
                     </div>
                     <div className="form-group">
                         <label for='image'>Image URL</label>
-                        <input type="text" className="form-control" name="imageurl" id="imageurl" placeholder="Link to an image" />
+                        <input type="text" className="form-control" name="imageUrl" id="imageUrl" placeholder="Link to an image" />
                     </div>
                     <div className="form-group">
                         <label for='description'>Description</label>
@@ -251,7 +251,7 @@ class AddProduct extends React.Component {
                     </fieldset>
 
                     <button type="submit" className="btn btn-primary">Add</button>
-                    <a href="/adminpanel/product" className="btn btn-danger">Back</a>
+                    <a href="/admin/product" className="btn btn-danger">Back</a>
                 </form>
                 </div>
             </div>

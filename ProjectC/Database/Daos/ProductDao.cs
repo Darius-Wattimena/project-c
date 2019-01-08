@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using MySql.Data.MySqlClient;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
 
@@ -17,6 +18,20 @@ namespace ProjectC.Database.Daos
             var specifications = DaoManager.SpecificationDao.FindSpecificationsByProductId(product.Id);
             product.Specifications = specifications;
             return product;
+        }
+
+        public bool SetActive(bool active, int id) {
+            var sqlQuery = $@"UPDATE product
+                                SET `ActiveYn` = { (active ? 1 : 0) } WHERE `ProductId` = {id}";
+
+            using (var connection = new MySqlConnection(Database.Context.ConnectionString)) {
+                connection.Open();
+                using (var command = new MySqlCommand(sqlQuery, connection)) {
+                    int affectedRows = command.ExecuteNonQuery();
+                    connection.Close();
+                    return affectedRows == 1;
+                }
+            }
         }
 
         public List<Product> FindAllWithSpecifications()
