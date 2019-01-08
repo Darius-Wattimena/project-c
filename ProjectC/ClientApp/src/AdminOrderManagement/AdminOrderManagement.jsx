@@ -25,6 +25,7 @@ class AdminOrderManagement extends React.Component {
                             <th></th>
                             <th scope="col">Order Date</th>
                             <th scope="col">Order State</th>
+                            <th scope="col">View Action</th>
                             <th scope="col">Confirm Action</th>
                             <th scope="col">Send Action</th>
                         </tr>

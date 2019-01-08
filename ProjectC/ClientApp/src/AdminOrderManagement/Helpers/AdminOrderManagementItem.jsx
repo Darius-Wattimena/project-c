@@ -1,12 +1,13 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
 
-import { orderActions } from '../../_actions';
+import { orderActions, orderProductsActions } from '../../_actions';
+import { AdminOrderManagementModal } from './index';
 
 function NoStockIcon(props) {
     if (!props.onStock) {
         return (
-            <div className="admin-stock-icon">
+            <div className="admin-order-management-icon">
                 Not enough stock! <i className="fas fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Low Stock" style={{ color: 'red' }} />
             </div>
         );
@@ -38,7 +39,8 @@ class AdminOrderManagementItem extends React.Component {
             orderState: this.props.orderState,
             index: this.props.index,
             confirmButtonActive: confirmButtonActive,
-            sendButtonActive: sendButtonActive
+            sendButtonActive: sendButtonActive,
+            modalActive: false
         }
     }
 
@@ -98,6 +100,8 @@ class AdminOrderManagementItem extends React.Component {
 
     onSelectRow(orderId) {
         console.log(orderId);
+        this.props.dispatch(orderProductsActions.getById(orderId));
+        document.getElementById("adminOrderManagementModalShowButton" + this.props.index).click();
     }
 
     getParsedDate(date) {
@@ -109,13 +113,19 @@ class AdminOrderManagementItem extends React.Component {
 
     render() {
         const { order, orderState, confirmButtonActive, sendButtonActive } = this.state;
+        const { index } = this.props;
 
         return (
             <tr className="admin-order-mangement-item">
-                <th scope="row" onClick={this.onSelectRow.bind(this, order.orderId)}>{order.orderId}</th>
-                <td onClick={this.onSelectRow.bind(this, order.orderId)}><NoStockIcon onStock={order.onStock} /></td>
-                <td onClick={this.onSelectRow.bind(this, order.orderId)}>{this.getParsedDate(order.date)}</td>
-                <td onClick={this.onSelectRow.bind(this, order.orderId)}>{this.orderStateToText(orderState)}</td>
+                <th scope="row">{order.orderId}</th>
+                <td>
+                    <NoStockIcon onStock={order.onStock} />
+                    <AdminOrderManagementModal order={order} index={index} base={this} />
+                    <button id={`adminOrderManagementModalShowButton${index}`} data-toggle="modal" data-target={`#Modal${index}`} style={{ display: `none` }} />
+                </td>
+                <td>{this.getParsedDate(order.date)}</td>
+                <td>{this.orderStateToText(orderState)}</td>
+                <td><button className="btn btn-info" onClick={this.onSelectRow.bind(this, order.orderId)}>View Details</button></td>
                 <td><button className="btn btn-info" disabled={!confirmButtonActive} onClick={this.confirmPayment.bind(this)}>Confirm Payment</button></td>
                 <td><button className="btn btn-info" disabled={!sendButtonActive} onClick={this.confirmSend.bind(this)}>Send Order</button></td>
             </tr>
