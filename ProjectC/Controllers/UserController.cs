@@ -36,7 +36,9 @@ namespace ProjectC.Controllers
         [HttpGet]
         public override IActionResult Get()
         {
-            return InnerGet();
+            var users = GetDao().FindAll();
+            users.RemoveAll(u => u.ActiveYn == 0);
+            return Ok(users);
         }
 
         /// <summary>
@@ -51,7 +53,10 @@ namespace ProjectC.Controllers
         [HttpGet, Authorize(Roles = "Admin")]
         public override IActionResult Search(string f, string i)
         {
-            return InnerSearch(f, i);
+            var users = GetDao().Search(f, i);
+            users.RemoveAll(u => u.ActiveYn == 0);
+
+            return Ok(users);
         }
 
         [HttpPost, Authorize(Roles = "Admin")]

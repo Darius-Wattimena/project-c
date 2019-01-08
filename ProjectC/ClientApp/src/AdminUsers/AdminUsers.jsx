@@ -10,7 +10,7 @@ class AdminUsers extends React.Component {
     }
 
     handleDeleteUser(id) {
-        return (e) => this.props.dispatch(userActions.delete(id));
+        this.props.dispatch(userActions.delete(id));
     }
 
     render() {
@@ -41,7 +41,7 @@ class AdminUsers extends React.Component {
                                     <td>{
                                         user.deleting ? <em> - Deleting...</em>
                                             : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
-                                            : <span> <Link to={`users/edit/${user.id}`}>Edit</Link> - <a href="#" onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
+                                            : <span> <Link to={`users/edit/${user.id}`}>Edit</Link> - <button className="btn btn-link" onClick={this.handleDeleteUser.bind(this,user.id)}>Delete</button></span>
                                     }</td>
                                 </tr>
                             )}
