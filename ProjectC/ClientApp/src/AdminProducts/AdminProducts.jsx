@@ -9,7 +9,7 @@ import { history } from '../_helpers';
 //base class
 class AdminProducts extends React.Component {
     componentDidMount() {
-        this.props.dispatch(productActions.getAll());
+        this.props.dispatch(productActions.getAllAdmin());
     }
 
     handleEditProduct(id) {
@@ -18,6 +18,10 @@ class AdminProducts extends React.Component {
 
     handleDeleteProduct(id) {
         this.props.dispatch(productActions._delete(id));
+    }
+
+    handleRecoverProduct(id) {
+        this.props.dispatch(productActions.recover(id));
     }
 
     render() {
@@ -40,24 +44,33 @@ class AdminProducts extends React.Component {
                                 </tr>
                             </thead>
                             <tbody>
-                            {products.items.map((product, index) =>
-                                <tr key={index}>
-                                    <td scope="row">{product.id}</td>
-                                    <td>{product.name}</td>
-                                    <td>{product.stock}</td>
-                                    <td>{product.price}</td>
-                                    <td>
-                                        <Link disabled={product.deleting} className="btn btn-primary" to={`/admin/editproduct/${product.id}`}>
-                                            <span className="far fa-edit"></span>&nbsp;
-                                            Edit
+                                {products.items.map((product, index) =>
+                                    <tr key={index}>
+                                        <td style={{ textDecoration: (!product.active ? `line-through` : `none`) }} scope="row">{product.id}</td>
+                                        <td style={{ textDecoration: (!product.active ? `line-through` : `none`) }} > {product.name}</td>
+                                        <td style={{ textDecoration: (!product.active ? `line-through` : `none`) }} > {product.stock}</td>
+                                        <td style={{ textDecoration: (!product.active ? `line-through` : `none`) }} > {product.price}</td>
+                                        <td>
+                                            <Link disabled={product.deleting} className="btn btn-primary" to={`/admin/editproduct/${product.id}`}>
+                                                <span className="far fa-edit"></span>&nbsp;
+                                                Edit
                                         </Link>
-                                        <button disabled={product.deleting} className="btn btn-danger" onClick={this.handleDeleteProduct.bind(this,product.id)}>
-                                            <span className="fas fa-trash"></span>&nbsp;
-                                            Delete
-                                        </button>
-                                    </td>
-                                </tr>
-                                    
+                                            {
+                                                product.active
+                                                &&
+                                                <button disabled={product.deleting} className="btn btn-danger" onClick={this.handleDeleteProduct.bind(this, product.id)}>
+                                                    <span className="fas fa-trash"></span>&nbsp;
+                                                    Delete
+                                                </button>
+                                                ||
+                                                <button disabled={product.deleting} className="btn btn-success" onClick={this.handleRecoverProduct.bind(this, product.id)}>
+                                                    <span className="fas fa-undo"></span>&nbsp;
+                                                    Recover
+                                                </button>
+                                            }
+                                        </td>
+                                    </tr>
+
                                 )}
                             </tbody>
                         </table>

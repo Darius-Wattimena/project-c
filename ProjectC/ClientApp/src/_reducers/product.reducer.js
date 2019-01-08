@@ -39,9 +39,9 @@ export function products(state = {}, action) {
             };
         case productConstants.DELETE_SUCCESS:
             // remove deleted user from state
-            return {
-                items: state.items.filter(product => product.id !== action.id)
-            };
+            //return {
+            //    items: state.items.filter(product => product.id !== action.id)
+            //};
         case productConstants.DELETE_FAILURE:
             // remove 'deleting:true' property and add 'deleteError:[error]' property to user 
             return {
@@ -49,6 +49,7 @@ export function products(state = {}, action) {
                 items: state.items.map(product => {
                     if (product.id === action.id) {
                         // make copy of user without 'deleting:true' property
+                        product.active = !product.active;
                         const { deleting, ...productCopy } = product;
                         // return copy of user with 'deleteError:[error]' property
                         return { ...productCopy, deleteError: action.error };
