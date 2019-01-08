@@ -7,14 +7,14 @@ function NoStockIcon(props) {
     if (props.stock < props.amount) {
         return (
             <td className="admin-order-management-icon">
-                Not enough stock! <i className="fas fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" title="Low Stock" style={{ color: 'red' }} />
+                Not enough stock! <i className="fas fa-exclamation-triangle" data-toggle="tooltip" data-placement="top" style={{ color: 'red' }} />
             </td>
         );
     }
 
     return (
         <td className="admin-order-management-icon">
-            Enough stock <i className="fas fa-check" data-toggle="tooltip" data-placement="top" title="Low Stock" style={{ color: 'green' }} />
+            Enough stock <i className="fas fa-check" data-toggle="tooltip" data-placement="top" style={{ color: 'green' }} />
         </td>
     );
 }

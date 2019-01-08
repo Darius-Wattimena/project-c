@@ -17,7 +17,9 @@ class AdminStatistics extends React.Component {
             <div className="container panel col-10" style={{ width: "100vw" }}>
                 <h3>Statistics</h3>
                 {!statistics.data &&
-                    <p>Loading statistics</p>
+                    <div className="progress">
+                        <div className="indeterminate"></div>
+                    </div>
                 }
                 <AdminStatisticsTopPanel />
                 <AdminStatisticsOrderPanel baseDate={baseDate} />
