@@ -38,7 +38,9 @@ class AdminOrderManagementModal extends React.Component {
                         </div>
                         <div className="modal-body">
                             {orderProducts.loading &&
-                                <p>Loading order details</p>
+                                <div className="progress">
+                                    <div className="indeterminate"></div>
+                                </div>
                             }
                             {orderProducts.items &&
                             <table className="table">
