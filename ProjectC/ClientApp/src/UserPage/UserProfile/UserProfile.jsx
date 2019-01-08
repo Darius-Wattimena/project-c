@@ -18,10 +18,23 @@ class UserProfile extends React.Component {
                     <h5>User</h5>
                     {user &&
                         <div>
-                            <p>{user.firstname}</p>
-                            <p>{user.lastname}</p>
-                        <p>{user.mailAddress}</p>
-                        <Link to="changename">Change Name</Link>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Firstname</td>
+                                    <td>{user.firstname}</td>
+                                </tr>
+                                <tr>
+                                    <td>lastname</td>
+                                    <td>{user.lastname}</td>
+                                </tr>
+                                <tr>
+                                    <td>Email</td>
+                                    <td>{user.mailAddress}</td>
+                                </tr>
+                            </tbody>
+                            <Link to="changename"><button class="btn btn-info">Change Account</button></Link>
+                        </table>
                         </div>
                     }
                 </div>
@@ -30,13 +43,35 @@ class UserProfile extends React.Component {
                     <h5>Address</h5>
                     {address.items &&
                         <div>
-                            <p>{address.items.country}</p>
-                            <p>{address.items.county}</p>
-                            <p>{address.items.city}</p>
-                            <p>{address.items.street}</p>
-                            <p>{address.items.streetNumber}{address.streetSupplement}</p>
-                            <p>{address.items.zipcode}</p>
-                            <Link to="changeaddress">Change Address</Link>
+                        <table class="table">
+                            <tbody>
+                                <tr>
+                                    <td>Country</td>
+                                    <td>{address.items.country}</td>
+                                </tr>
+                                <tr>
+                                    <td>County</td>
+                                    <td>{address.items.county}</td>
+                                </tr>
+                                <tr>
+                                    <td>City</td>
+                                    <td>{address.items.city}</td>
+                                </tr>
+                                <tr>
+                                    <td>Street</td>
+                                    <td>{address.items.street}</td>
+                                </tr>
+                                <tr>
+                                    <td>Number</td>
+                                    <td>{address.items.streetNumber}{address.streetSupplement}</td>
+                                </tr>
+                                <tr>
+                                    <td>Zipcode</td>
+                                    <td>{address.items.zipcode}</td>
+                                </tr>
+                            </tbody>
+                            <Link to="changeaddress"><button class="btn btn-info">Change Address</button></Link>
+                        </table>
                         </div>
                     }
                 </div>

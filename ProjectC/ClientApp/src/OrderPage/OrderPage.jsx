@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { orderActions } from '../_actions/order.actions';
+import { addressActions } from '../_actions';
 
 import '../styling/OrderStyling.css';
 import { history } from '../_helpers';
@@ -16,6 +17,9 @@ function onChange(e) {
 }
 
 class OrderPage extends React.Component {
+    componentDidMount() {
+        this.props.AddressByUser()
+    }
 
     handleOrder(shoppingCartItems) {
         this.props.createOrder(shoppingCartItems);
@@ -39,20 +43,20 @@ class OrderPage extends React.Component {
     }
 
     render() {
-        const { user, order } = this.props;
+        const { authentication, order, address } = this.props;
         const items = this.props.items;
         var total = 0;
         for (var i = 0; i < items.length; i++) {
             total += items[i].product.price * items[i].amount;
         }
 
-        if (user == null) {
+        if (authentication.user == null) {
             history.push("/login");
             return (null);
         } else {
             return (
                 <div>
-                {!order.loading &&
+                {!order.loading && address.items &&
                         <div className="container">
                         <div className="row">
                             <div className="col-sm-7">
@@ -78,8 +82,6 @@ class OrderPage extends React.Component {
                                     )}
                                 </div>
                                 <div className="section pricebox">
-                                    <label>Coupon Code:</label>
-                                    <input type="text" />
                                     <div className="price">
                                         <p>total price: <span>{total}</span></p>
                                     </div>
@@ -88,7 +90,10 @@ class OrderPage extends React.Component {
 
                             <div className="col-sm-5">
                                 <div className="section userbox">
-                                    <div className="row"><i className="fas fa-user-circle user"></i><h5>{user.firstname} {user.lastname}</h5></div>
+                                    <div className="row"><i className="fas fa-user-circle user"></i><h5>{authentication.user.firstName} {authentication.user.lastName}</h5></div>
+                                    <div className="row"><h6>{address.items.country}</h6></div>
+                                    <div className="row"><h6>{address.items.county} </h6></div>
+                                    <div className="row"><h6>{address.items.street} {address.items.streetNumber}{address.items.streetSupplement} {address.items.city}</h6></div>
                                 </div>
                                 <div className="section paymentbox">
                                     <form>
@@ -156,19 +161,21 @@ function mapStateToProps(state) {
     const { authentication } = state;
     const { shoppingCart } = state;
     const { order } = state;
-    const { user } = authentication;
     const { items } = shoppingCart;
+    const { address } = state;
     return {
-        user,
+        authentication,
         items,
-        order
+        order,
+        address
     };
 }
 
 // Map actions to props
 const mapDispatchToProps = (dispatch) => {
     return {
-        createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems))
+        createOrder: shoppingCartItems => dispatch(orderActions.create(shoppingCartItems)),
+        AddressByUser: () => dispatch(addressActions.getByUser())
     }
 };
 
