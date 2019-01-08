@@ -14,31 +14,41 @@ export function users(state = {}, action) {
         return { 
             error: action.error
         };
-    case userConstants.DELETE_REQUEST:
-        // add 'deleting:true' property to user being deleted
+    case userConstants.DEACTIVATE_REQUEST:
+        // add 'deactivating:true' property to user being deactivated
         return {
             ...state,
+            deactivating: true,
             items: state.items.map(user =>
                 user.id === action.id
-                ? { ...user, deleting: true }
+                ? { ...user, deactivating: true }
                 : user
             )
         };
-    case userConstants.DELETE_SUCCESS:
-        // remove deleted user from state
-        return {
-            items: state.items.filter(user => user.id !== action.id)
-        };
-    case userConstants.DELETE_FAILURE:
-        // remove 'deleting:true' property and add 'deleteError:[error]' property to user 
+    case userConstants.DEACTIVATE_SUCCESS:
+        // remove deactivated user from state
         return {
             ...state,
+            deactivating: false,
             items: state.items.map(user => {
                 if (user.id === action.id) {
-                    // make copy of user without 'deleting:true' property
-                    const { deleting, ...userCopy } = user;
-                    // return copy of user with 'deleteError:[error]' property
-                    return { ...userCopy, deleteError: action.error };
+                    user.active = !user.active;
+                    return { ...user, deactivating: false }
+                }
+                return user;
+            })
+        };
+    case userConstants.DEACTIVATE_FAILURE:
+        // remove 'deleting:true' property and add 'deactivateError:[error]' property to user 
+        return {
+            ...state,
+            deactivating: false,
+            items: state.items.map(user => {
+                if (user.id === action.id) {
+                    // make copy of user without 'deactivating:true' property
+                    const { deactivating, ...userCopy } = user;
+                    // return copy of user with 'deactivateError:[error]' property
+                    return { ...userCopy, deactivateError: action.error };
                 }
 
                 return user;

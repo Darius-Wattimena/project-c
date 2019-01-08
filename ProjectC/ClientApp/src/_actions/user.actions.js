@@ -11,7 +11,7 @@ export const userActions = {
     getEditUser,
     getAll,
     update,
-    delete: _delete,
+    deactivate,
     ChangeUserName,
     getUserByToken
 };
@@ -167,15 +167,14 @@ function ChangeUserName(user) {
     function failure(error) { return { type: userConstants.REGISTER_FAILURE, error } }
 }
 
-// prefixed function name with underscore because delete is a reserved word in javascript
-function _delete(id) {
+function deactivate(id) {
     return dispatch => {
         dispatch(request(id));
 
-        userService.delete(id)
+        userService.deactivate(id)
             .then(
-                () => {
-                    dispatch(success(id));
+                user => {
+                    dispatch(success(id, user));
                 },
                 error => {
                     dispatch(failure(id, error));
@@ -183,7 +182,7 @@ function _delete(id) {
             );
     };
 
-    function request(id) { return { type: userConstants.DELETE_REQUEST, id } }
-    function success(id) { return { type: userConstants.DELETE_SUCCESS, id } }
-    function failure(id, error) { return { type: userConstants.DELETE_FAILURE, id, error } }
+    function request(id) { return { type: userConstants.DEACTIVATE_REQUEST, id } }
+    function success(id) { return { type: userConstants.DEACTIVATE_SUCCESS, id } }
+    function failure(id, error) { return { type: userConstants.DEACTIVATE_FAILURE, id, error } }
 }

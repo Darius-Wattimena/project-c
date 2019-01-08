@@ -4,13 +4,40 @@ import { connect } from 'react-redux';
 
 import { userActions } from '../_actions';
 
+function ActivateTogggleButton(props) {
+    if (props.user.deactivating) {
+        return (<td>Loading...</td>);
+    }
+
+    if (props.user.active) {
+        return (<td><button className="btn btn-danger" disabled={props.disabled} onClick={(e) => window.component.deactivateUser(e, props.user.id)}>Deactivate</button></td>);
+    } else {
+        return (<td><button className="btn btn-success" disabled={props.disabled} onClick={(e) => window.component.deactivateUser(e, props.user.id)}>Activate</button></td>);
+    }
+}
+
+function EditButton(props) {
+    if (props.disabled) {
+        return (<td><Link className="btn btn-info disabled" to={`users/edit/${props.user.id}`}>Edit</Link></td>);
+    } else {
+        return (<td><Link className="btn btn-info" to={`users/edit/${props.user.id}`}>Edit</Link></td>);
+    }
+}
+
 class AdminUsers extends React.Component {
     componentDidMount() {
         this.props.dispatch(userActions.getAll());
+
+        window.component = this;
     }
 
-    handleDeleteUser(id) {
-        return (e) => this.props.dispatch(userActions.delete(id));
+    handleDeactivateUser(id) {
+        return (e) => this.props.dispatch(userActions.deactivate(id));
+    }
+
+    deactivateUser(e, id) {
+        e.preventDefault();
+        this.props.dispatch(userActions.deactivate(id));
     }
 
     render() {
@@ -23,26 +50,24 @@ class AdminUsers extends React.Component {
                 {users.items &&
                     <table className="table table-hover">
                         <thead className="thead-dark">
-                            <tr>
-                                <th scope="col">ID</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Firstname</th>
-                                <th scope="col">Lastname</th>
-                                <th scope="col">Actions</th>
-                            </tr>
+                        <tr>
+                            <th scope="col">ID</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Firstname</th>
+                            <th scope="col">Lastname</th>
+                            <th scope="col">Edit Action</th>
+                            <th scope="col">Deactivate Action</th>
+                        </tr>
                         </thead>
                         <tbody>
-                            {users.items.map((user, index) =>
+                        {users.items.map((user, index) =>
                                 <tr>
                                     <td scope="row">{user.id}</td>
                                     <td>{user.mailAddress}</td>
                                     <td>{user.firstname}</td>
                                     <td>{user.lastname}</td>
-                                    <td>{
-                                        user.deleting ? <em> - Deleting...</em>
-                                            : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
-                                            : <span> <Link to={`users/edit/${user.id}`}>Edit</Link> - <a href="#" onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
-                                    }</td>
+                                    <EditButton user={user} disabled={users.deactivating} />
+                                    <ActivateTogggleButton user={user} disabled={users.deactivating} />
                                 </tr>
                             )}
                         </tbody>

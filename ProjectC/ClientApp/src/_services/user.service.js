@@ -7,7 +7,7 @@ export const userService = {
     update,
     login,
     logout,
-    delete: _delete,
+    deactivate,
     getUserByToken,
     ChangeUserName
 };
@@ -92,14 +92,13 @@ function ChangeUserName(user) {
     return fetch(config.apiUrl + '/user/ChangeUserName', requestOptions).then(handleResponse, handleError);
 }
 
-// prefixed function name with underscore because delete is a reserved word in javascript
-function _delete(id) {
+function deactivate(id) {
     const requestOptions = {
-        method: 'DELETE',
+        method: 'PUT',
         headers: authHeader()
     };
 
-    return fetch(config.apiUrl + '/user/delete/' + id, requestOptions).then(handleResponse, handleError);
+    return fetch(config.apiUrl + '/user/toggleActivateUser/' + id, requestOptions).then(handleResponse, handleError);
 }
 
 function handleResponse(response) {

@@ -87,6 +87,11 @@ namespace ProjectC.Controllers
                     return BadRequest("Username or password is incorrect");
                 }
 
+                if (databaseUser.Active == 0)
+                {
+                    return BadRequest("The account you are trying to login into seems to be deactivated. Please contact the webshop administrator to resolve this problem.");
+                }
+
                 JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
                 byte[] key = Encoding.ASCII.GetBytes(_appSettings.Secret);
 
@@ -200,15 +205,17 @@ namespace ProjectC.Controllers
                 return LogError(ex);
             }
         }
+
         [HttpGet]
         public IActionResult GetUser()
         {
             if (!(HttpContext.User.Identity is ClaimsIdentity identity)) return BadRequest("User not found");
 
             var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
-            var user = GetDaoManager().UserDao.Find(userId);
+            var user = GetDao().Find(userId);
             return Ok(user);
         }
+
         [HttpPut]
         public IActionResult ChangeUserName([FromBody] User input)
         {
@@ -216,6 +223,57 @@ namespace ProjectC.Controllers
 
             var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
             return InnerSave(input, userId);
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult ActivateUser(int id)
+        {
+            try
+            {
+                // Find the user with the given id
+                var databaseUser = GetDao().Find(id);
+
+                if (databaseUser == null)
+                {
+                    return BadRequest("User not found");
+                }
+
+                // Activate the user and save the change to the database
+                databaseUser.Active = 1;
+                GetDao().Save(databaseUser);
+
+                return Ok();
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
+        }
+
+        [HttpPut("{id}")]
+        public IActionResult ToggleActivateUser(int id)
+        {
+            try
+            {
+                // Find the user with the given id
+                var databaseUser = GetDao().Find(id);
+
+                if (databaseUser == null)
+                {
+                    return BadRequest("User not found");
+                }
+
+                // toggle the user activation of the user and save the change to the database
+                databaseUser.Active = databaseUser.Active == 1 ? 0 : 1;
+
+                databaseUser = GetDao().Save(databaseUser);
+
+                return Ok(databaseUser);
+            }
+            catch (MySqlException ex)
+            {
+                return LogError(ex);
+            }
         }
     }
 }
