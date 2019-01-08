@@ -7,6 +7,8 @@ using ProjectC.Database.Core;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
 using ProjectC.Model;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace ProjectC.Controllers
 {
@@ -41,9 +43,11 @@ namespace ProjectC.Controllers
                 // Filter out inactive products!
                 products.RemoveAll(p => p.ActiveYn == 0);
 
+                var allSpecifications = GetDaoManager().SpecificationDao.FindAll();
+
                 foreach (var item in products)
                 {
-                    item.Specifications = GetDaoManager().SpecificationDao.FindSpecificationsByProductId(item.Id);
+                    item.Specifications = allSpecifications.Where(s => s.ProductId.Equals(item.Id)).ToList();
                 }
 
                 return Ok(products);

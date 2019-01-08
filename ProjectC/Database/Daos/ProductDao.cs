@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using MySql.Data.MySqlClient;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
@@ -38,9 +39,11 @@ namespace ProjectC.Database.Daos
         {
             var products = FindAll();
 
+            var allSpecifications = DaoManager.SpecificationDao.FindAll();
+
             foreach (var product in products)
             {
-                var specifications = DaoManager.SpecificationDao.FindSpecificationsByProductId(product.Id);
+                var specifications = allSpecifications.Where(s => s.ProductId == product.Id).ToList();
                 product.Specifications = specifications;
             }
 
