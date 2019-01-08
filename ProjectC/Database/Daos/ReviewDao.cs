@@ -27,6 +27,21 @@ namespace ProjectC.Database.Daos
             return reviewDisplay;
         }
 
+        public List<ReviewDisplayModel> GetAllForAdmin() {
+
+            List<Review> reviews = FindAll();
+
+            var reviewDisplay = new List<ReviewDisplayModel>();
+
+            foreach (Review r in reviews) {
+                ReviewDisplayModel rdm = DisplayModelFromReview(r);
+                rdm.ProductName = DaoManager.ProductDao.FindById(r.ProductId).Name;
+                reviewDisplay.Add(rdm);
+            }
+
+            return reviewDisplay;
+        }
+
         /// <summary>
         /// Turns review into displayable model
         /// </summary>

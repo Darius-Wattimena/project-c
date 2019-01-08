@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
@@ -51,9 +52,9 @@ namespace ProjectC.Controllers
             );
         }
 
-        [HttpGet]
+        [HttpGet, Authorize(Roles = "Admin")]
         public override IActionResult Get() {
-            return InnerGet();
+            return Ok(GetDao().GetAllForAdmin());
         }
 
         [HttpGet("{id}")]
