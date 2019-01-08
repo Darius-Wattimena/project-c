@@ -26,7 +26,8 @@ class AdminReviews extends React.Component {
 
         return (
             <div className="panel col-md-8">
-                <h1>User posted reviews</h1>
+                <h3>Review Management</h3>
+                <hr/>
                 {
                     reviewState.loading &&
                     <div className="progress">

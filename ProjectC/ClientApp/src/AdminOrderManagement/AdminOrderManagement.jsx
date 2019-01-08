@@ -17,6 +17,7 @@ class AdminOrderManagement extends React.Component {
         return (
             <div className="panel col-md-8 admin-stock">
                 <h3>Order Management</h3>
+                <hr />
                 {order.loading &&
                     <div className="progress">
                         <div className="indeterminate"></div>

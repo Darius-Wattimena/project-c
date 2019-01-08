@@ -70,6 +70,16 @@ class AdminPanel extends React.Component {
                             </div>
                         </Link>
                     </li>
+                    <li>
+                        <Link to="/admin/reviews" className="row">
+                            <div className="col-1">
+                                <i class="far fa-comment-alt" />
+                            </div>
+                            <div className="col">
+                                Reviews
+                            </div>
+                        </Link>
+                    </li>
                 </ul>
             </div>
         );
