@@ -44,8 +44,12 @@ class AdminUsers extends React.Component {
         const { users } = this.props;
         return (
             <div className="panel col-md-6">
-                <h3>All registered users:</h3>
-                {users.loading && <em>Loading users...</em>}
+                <h3>User Management</h3>
+                {users.loading &&
+                    <div className="progress">
+                        <div className="indeterminate"></div>
+                    </div>
+                }
                 {users.error && <span className="text-danger">ERROR: {users.error}</span>}
                 {users.items &&
                     <table className="table table-hover">

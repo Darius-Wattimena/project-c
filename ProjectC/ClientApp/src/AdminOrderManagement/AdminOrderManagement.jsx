@@ -17,7 +17,13 @@ class AdminOrderManagement extends React.Component {
         return (
             <div className="panel col-md-8 admin-stock">
                 <h3>Order Management</h3>
-
+                {order.loading &&
+                    <div className="progress">
+                        <div className="indeterminate"></div>
+                    </div>
+                }
+                {order.error && <span className="text-danger">ERROR: {order.error}</span>}
+                {order.items &&
                 <table className="table table-hover">
                     <thead className="thead-dark">
                         <tr>
@@ -30,16 +36,13 @@ class AdminOrderManagement extends React.Component {
                             <th scope="col">Send Action</th>
                         </tr>
                     </thead>
-                    {order.loading && <em>Loading orders...</em>}
-                    {order.error && <span className="text-danger">ERROR: {order.error}</span>}
-                    {order.items &&
                     <tbody>
                         {order.items.map((order, index) =>
                             <AdminOrderManagementItem order={order} orderState={order.state} index={index} />
                         )}
                     </tbody>
-                    }
                 </table>
+                }
             </div>
         );
     }
