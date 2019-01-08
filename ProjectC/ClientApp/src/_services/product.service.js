@@ -9,7 +9,8 @@ export const productService = {
     _delete,
     add,
     search,
-    changeStock
+    changeStock,
+    update
 };
 
 // Returns a collection of all products
@@ -72,7 +73,7 @@ function add(product, specifications) {
 
     const requestOptions = {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify(body)
     };
 
@@ -87,6 +88,20 @@ function _delete(id) {
     };
 
     return fetch(config.apiUrl + '/product/delete/' + id, requestOptions).then(handleResponse, handleError);
+}
+
+function update(product, specifications) {
+    var body = {}
+    body.product = product;
+    body.specifications = specifications
+
+    const requestOptions = {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
+        body: JSON.stringify(body)
+    };
+
+    return fetch(config.apiUrl + '/product/updateWithSpecifications', requestOptions).then(handleResponse, handleError);
 }
 
 function changeStock(product, newStock) {

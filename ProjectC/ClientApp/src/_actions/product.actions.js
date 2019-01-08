@@ -6,23 +6,25 @@ import { history } from '../_helpers';
 export const productActions = {
     getAll,
     getById,
+    loadById,
     add,
     _delete,
     search,
+    update,
     changeStock
 };
 
 function getAll() {
     return dispatch => {
-        
+
         dispatch(request());
 
         productService.getAll()
             .then(
-            products => dispatch(success(products)),
+                products => dispatch(success(products)),
                 error => dispatch(failure(error))
             );
-            
+
     };
 
     function request() { return { type: productConstants.GETALL_REQUEST } }
@@ -43,6 +45,22 @@ function getById(id) {
     function request() { return { type: productConstants.GET_REQUEST } }
     function success(product) { return { type: productConstants.GET_SUCCESS, product } }
     function failure(error) { return { type: productConstants.GET_FAILURE, error } }
+}
+
+function loadById(id) {
+    return new Promise(
+        (resolve, reject) => {
+            productService.getWithSpecifications(id)
+                .then(
+                    products => {
+                        console.log(products);
+                        resolve(products);
+                    },
+                    error => {
+                        reject(error);
+                    }
+                );
+        });
 }
 
 function search(searchValue) {
@@ -71,7 +89,7 @@ function add(product, specifications) {
             .then(
                 () => {
                     dispatch(success());
-                    history.push('/adminpanel/products');
+                    history.push('/admin/product');
                     dispatch(alertActions.success('Added ' + product.name + ' to the inventory.'));
                 },
                 error => {
@@ -84,6 +102,29 @@ function add(product, specifications) {
     function request(product, specifications) { return { type: productConstants.ADD_REQUEST, product, specifications } }
     function success(product, specifications) { return { type: productConstants.ADD_SUCCESS, product, specifications } }
     function failure(error) { return { type: productConstants.ADD_FAILURE, error } }
+}
+
+function update(product, specifications) {
+    return dispatch => {
+        dispatch(request(product, specifications));
+
+        productService.update(product, specifications)
+            .then(
+                () => {
+                    dispatch(success());
+                    history.push('/admin/product');
+                    dispatch(alertActions.success(product.name + ' was succesfully updated.'));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request(product, specifications) { return { type: productConstants.UPDATE_REQUEST, product, specifications } }
+    function success(product, specifications) { return { type: productConstants.UPDATE_SUCCESS, product, specifications } }
+    function failure(error) { return { type: productConstants.UPDATE_FAILURE, error } }
 }
 
 // prefixed function name with underscore because delete is a reserved word in javascript

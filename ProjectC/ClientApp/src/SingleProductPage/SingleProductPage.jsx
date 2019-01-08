@@ -222,7 +222,7 @@ class SingleProductPage extends React.Component {
                                                 {review.body}
                                             </p>
                                             {
-                                                (review.canEdit || user.role == "Admin")
+                                                (review.canEdit || (user && user.role == "Admin"))
                                                 &&
                                                 <button disabled={reviewState.deleting} className="btn btn-danger" onClick={() => { this.removeReview(review) }}>
                                                     <i className="fas fa-trash" />

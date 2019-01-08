@@ -18,7 +18,11 @@ function RenderCheckbox(props) {
         <div className="col-sm-1">
             <input className="filterCheckBox" type="checkbox" onChange={window.filterComponent.handleFilter} name={props.name} spec={props.spec} />
         </div>
-        <div className="col-sm-10">{props.name}</div>
+        <div className="col-sm-10">{
+            props.name === "1" ? `Beschikbaar` :
+                props.name
+        }
+        </div>
     </div>
     );
 }
@@ -35,7 +39,7 @@ function RenderCheckboxes(props) {
         result.push(<h5><b>{type.charAt(0).toUpperCase() + type.slice(1)}</b></h5>);
 
         for (var name in comp.state[type]) {
-            if (!comp.state[type].hasOwnProperty(name)) continue;
+            if (!comp.state[type].hasOwnProperty(name) || name == '0') continue;
             result.push(
                 <RenderCheckbox spec={type} name={name} />
             );

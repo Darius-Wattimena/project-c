@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using MySql.Data.MySqlClient;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
 
@@ -19,13 +21,29 @@ namespace ProjectC.Database.Daos
             return product;
         }
 
+        public bool SetActive(bool active, int id) {
+            var sqlQuery = $@"UPDATE product
+                                SET `ActiveYn` = { (active ? 1 : 0) } WHERE `ProductId` = {id}";
+
+            using (var connection = new MySqlConnection(Database.Context.ConnectionString)) {
+                connection.Open();
+                using (var command = new MySqlCommand(sqlQuery, connection)) {
+                    int affectedRows = command.ExecuteNonQuery();
+                    connection.Close();
+                    return affectedRows == 1;
+                }
+            }
+        }
+
         public List<Product> FindAllWithSpecifications()
         {
             var products = FindAll();
 
+            var allSpecifications = DaoManager.SpecificationDao.FindAll();
+
             foreach (var product in products)
             {
-                var specifications = DaoManager.SpecificationDao.FindSpecificationsByProductId(product.Id);
+                var specifications = allSpecifications.Where(s => s.ProductId == product.Id).ToList();
                 product.Specifications = specifications;
             }
 

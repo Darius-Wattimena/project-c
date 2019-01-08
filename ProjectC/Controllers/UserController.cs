@@ -2,6 +2,7 @@ using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using DevOne.Security.Cryptography.BCrypt;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -36,7 +37,9 @@ namespace ProjectC.Controllers
         [HttpGet]
         public override IActionResult Get()
         {
-            return InnerGet();
+            var users = GetDao().FindAll();
+            users.RemoveAll(u => u.ActiveYn == 0);
+            return Ok(users);
         }
 
         /// <summary>
@@ -51,7 +54,10 @@ namespace ProjectC.Controllers
         [HttpGet, Authorize(Roles = "Admin")]
         public override IActionResult Search(string f, string i)
         {
-            return InnerSearch(f, i);
+            var users = GetDao().Search(f, i);
+            users.RemoveAll(u => u.ActiveYn == 0);
+
+            return Ok(users);
         }
 
         [HttpPost, Authorize(Roles = "Admin")]
@@ -63,13 +69,21 @@ namespace ProjectC.Controllers
         [HttpPut("{id}")]
         public override IActionResult Update(int id, [FromBody] User input)
         {
+            if (UserSession.GetUserId(HttpContext) != id && !UserSession.GetUserRole(HttpContext).Equals("Admin")) {
+                return BadRequest("Sender is not allowed to update this user.");
+            }
+
             return InnerSave(input, id);
         }
 
         [HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public override IActionResult Delete(int id)
         {
-            return InnerDelete(id);
+            if (GetDao().SetActive(false, id)) {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         // TODO ~needs rework/cleanup
@@ -150,6 +164,10 @@ namespace ProjectC.Controllers
                     return BadRequest("Mail address already been used");
                 }
 
+                if (!Regex.IsMatch(input.MailAddress, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")) {
+                    return BadRequest("Email address not fucking valid");
+                }
+
                 var user = input.SetupUser(input);
                 var address = input.Address;
 
@@ -195,6 +213,10 @@ namespace ProjectC.Controllers
                 databaseUser.Firstname = input.Firstname;
                 databaseUser.Lastname = input.Lastname;
                 databaseUser.MailAddress = input.MailAddress;
+
+                if (!Regex.IsMatch(input.MailAddress, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")) {
+                    return BadRequest("Email address not fucking valid");
+                }
 
                 daoManager.UserDao.Save(databaseUser);
 

@@ -16,7 +16,7 @@ class AddProduct extends React.Component {
                 name: "",
                 stock: 0,
                 price: 0,
-                imageurl: "",
+                imageUrl: "",
                 description: ""
             },
             specifications: [
@@ -32,10 +32,10 @@ class AddProduct extends React.Component {
                 { id: 0, name: "gewicht", value: "" },
                 { id: 0, name: "processor", value: "" },
                 { id: 0, name: "accu", value: "" },
-                { id: 0, name: "simlockVrij", value: "" },
-                { id: 0, name: "microSD", value: "" },
-                { id: 0, name: "internetType", value: "" },
-                { id: 0, name: "dualSim", value: "" }
+                { id: 0, name: "simlockVrij", value: "0" },
+                { id: 0, name: "microSD", value: "0" },
+                { id: 0, name: "internetType", value: "5G" },
+                { id: 0, name: "dualSim", value: "0" }
             ],
             submitted: false
         }
@@ -107,7 +107,7 @@ class AddProduct extends React.Component {
                     </div>
                     <div className="form-group">
                         <label for='image'>Image URL</label>
-                        <input type="text" className="form-control" name="imageurl" id="imageurl" placeholder="Link to an image" />
+                        <input type="text" className="form-control" name="imageUrl" id="imageUrl" placeholder="Link to an image" />
                     </div>
                     <div className="form-group">
                         <label for='description'>Description</label>
@@ -251,7 +251,7 @@ class AddProduct extends React.Component {
                     </fieldset>
 
                     <button type="submit" className="btn btn-primary">Add</button>
-                    <a href="/adminpanel/product" className="btn btn-danger">Back</a>
+                    <a href="/admin/product" className="btn btn-danger">Back</a>
                 </form>
                 </div>
             </div>
