@@ -58,6 +58,9 @@ class App extends Component {
                     <div>
                         <Route path="/" render={(props) => (!props.location.pathname.startsWith("/admin")) && <Header />} />
                         <Route path="/" render={(props) => (props.location.pathname.startsWith("/admin")) && <AdminPanelHeader />} />
+                        {alert.message &&
+                            <div className={`alert ${alert.type}`}>{alert.message}</div>
+                        }
                         <Route path="/admin" component={AdminPanel} />
                         <Route path="/admin/statistics" component={AdminStatistics} />
                         <Route path="/admin/stock" component={AdminStock} />
@@ -73,11 +76,6 @@ class App extends Component {
                         <Route path="/admin/coupons" component={AdminCoupons} />
                         <Route path="/admin/reviews" component={AdminReviews} />
                         <div className="container">
-                            <div className="col-sm-8 col-sm-offset-2">
-                                {alert.message &&
-                                    <div className={`alert ${alert.type}`}>{alert.message}</div>
-                                }
-                            </div>
                             <PrivateRoute exact path="/" component={HomePage} />
                             <Route path="/home" component={HomePage} />
                             <Route path="/register" component={RegisterPage} />
