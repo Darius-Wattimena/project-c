@@ -32,6 +32,7 @@ namespace ProjectC.Database.Entities
         [Field] public int AddressId;
         [Field] public int ShippingAddressId;
         [Field] public int RoleId;
+        [Field] public int ActiveYn;
 
         public Address Address;
 

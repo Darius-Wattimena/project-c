@@ -69,7 +69,11 @@ namespace ProjectC.Controllers
         [HttpDelete("{id}"), Authorize(Roles = "Admin")]
         public override IActionResult Delete(int id)
         {
-            return InnerDelete(id);
+            if (GetDao().SetActive(false, id)) {
+                return Ok();
+            }
+
+            return BadRequest();
         }
 
         // TODO ~needs rework/cleanup
