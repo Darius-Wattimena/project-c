@@ -17,8 +17,8 @@ function UserLoggedIn(props) {
 function StartButtons(props) {
     return (
         <div className="btn-group">
-            <a href="/login" className="btn btn-info">Login</a>
-            <a href="/register" className="btn btn-info">Register</a>
+            <Link to={`login`} className="btn btn-info">Login</Link>
+            <Link to={`register`} className="btn btn-info">Register</Link>
         </div>
     );
 }

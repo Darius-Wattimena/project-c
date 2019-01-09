@@ -7,14 +7,6 @@ import { statisticsActions } from '../../_actions';
 
 import { AdminStatisticsDateRange } from "./index";
 
-class CustomDatePickerButton extends React.Component {
-    render() {
-        return (
-            <button className="btn btn-outline-primary" onClick={this.props.onClick}>{this.props.value}</button>
-        );
-    }
-}
-
 function CustomPanel(props) {
     const { base, loading, data, selectedOption } = props;
     if (loading && !data) {

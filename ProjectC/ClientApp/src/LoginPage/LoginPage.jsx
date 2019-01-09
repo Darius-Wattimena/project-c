@@ -59,12 +59,7 @@ class LoginPage extends React.Component {
                         <label for="exampleInputPassword1">Password</label>
                         <input type="password" className="form-control" id="exampleInputPassword1" placeholder="Password" name="password" value={user.password} onChange={this.handleChange} />
                         </div>
-                        <div className="form-check">
-                            <input type="checkbox" className="form-check-input" id="exampleCheck1" />
-                            <label className="form-check-label" for="exampleCheck1">Check me out</label>
-                        </div>
                         <button type="submit" className="btn btn-primary">Login</button>
-
                         <Link to="/register" className="btn btn-link">Register</Link>
                     </form>
             </div>
