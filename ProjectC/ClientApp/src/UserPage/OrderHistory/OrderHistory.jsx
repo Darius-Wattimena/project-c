@@ -42,8 +42,8 @@ class OrderHistory extends React.Component {
         var selectedId = (orderProducts.items && orderProducts.items.length > 0 ? orderProducts.items[0].orderProducts.orderId : -1);
 
         return (
-            <div className="row xohf">
-                <div className="col-md-5 sec">
+            <div className="row user-page-order-history">
+                <div className="col user-page-panel">
                     <h4>Orders</h4>
                     <div className="xorders">
                         <table className="table table-striped orderTable">
@@ -72,14 +72,13 @@ class OrderHistory extends React.Component {
                         </table>
                     </div>
                 </div>
-                <div className="col-md-6 sec">
+                <div className="col user-page-panel">
                     <h4>Order Info</h4>
-                    {
-                        this.state && this.state.o &&
+                    {this.state && this.state.o &&
                         <h5>Order number: {this.state.o.orderNumber}</h5>
                     }
-                    <div className="orderStatus">
-                        {this.state && <ul className="progressbar">
+                    <div className="row orderStatus user-page-product-panel">
+                        {this.state && <ul className="col progressbar">
                             {this.state.os > 0 && <li className="active">Refilling stock</li>}
                             {this.state.os <= 0 && <li >Refilling stock</li>}
                             {this.state.os > 1 && <li className="active">Order confirmed</li>}
@@ -97,11 +96,11 @@ class OrderHistory extends React.Component {
                         }
                         {orderProducts.items == 0 && <p>This order doesn't contain any products.</p>}
                         {orderProducts.items && orderProducts.items.map((order, index) =>
-                            <div className="orderProduct row">
-                                <img src={order.product.imageUrl} width="70" height="70"></img>
-                                <h5>{order.product.name}</h5>
-                                <h6>Price: {formatCurrency(order.product.price)}</h6>
-                                <h6>Amount: {order.orderProducts.amount}</h6>
+                            <div className="row user-page-product-panel">
+                                <img className="col-3" src={order.product.imageUrl} width="70" height="70"></img>
+                                <h5 className="col-3">{order.product.name}</h5>
+                                <h6 className="col-3">Price: {formatCurrency(order.product.price)}</h6>
+                                <h6 className="col-3">Amount: {order.orderProducts.amount}</h6>
                             </div>
                         )}
                     </div>

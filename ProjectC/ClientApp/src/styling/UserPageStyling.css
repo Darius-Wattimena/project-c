@@ -11,3 +11,32 @@
 .Link:hover{
     color: dodgerblue !important;
 }
+
+.user-page-profile .user-page-panel {
+    border: 1px solid rgba(0, 0, 0, .25);
+    margin: 15px;
+    padding: 15px;
+}
+
+.user-page-order-history .user-page-panel {
+    border: 1px solid rgba(0, 0, 0, .25);
+    margin: 15px;
+    padding: 15px;
+}
+
+.user-page-order-history .user-page-panel table td {
+    border: 1px solid rgba(0, 0, 0, 0.125);
+}
+
+.user-page-order-history .user-page-product-panel {
+    border: 1px solid rgba(0, 0, 0, .125);
+    border-radius: inherit;
+    margin: 0;
+    margin-top: 2px;
+    margin-bottom: 2px;
+    padding: 5px;
+}
+
+.user-page-order-history .user-page-product-panel .col {
+    margin: 10px 0;
+}

@@ -13,8 +13,8 @@ class UserProfile extends React.Component {
         const { address } = this.props;
         const user = this.props.editUser;
         return (
-            <div class="row ohf">
-                <div className="col-md-5">
+            <div class="row user-page-profile">
+                <div className="col user-page-panel">
                     <h5>User</h5>
                     {user &&
                         <div>
@@ -39,7 +39,7 @@ class UserProfile extends React.Component {
                     }
                 </div>
 
-                <div className="col-md-5">
+                <div className="col user-page-panel">
                     <h5>Address</h5>
                     {address.items &&
                         <div>
