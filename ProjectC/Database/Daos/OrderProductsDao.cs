@@ -35,7 +35,7 @@ namespace ProjectC.Database.Daos
         }
 
         public bool UserHasBoughtProduct(int userId, int productId) {
-            var sqlQuery = $@"SELECT Count(OrderId) FROM orderproducts
+            var sqlQuery = $@"SELECT OrderId FROM orderproducts
                                 WHERE ProductId = {productId} AND
                                 OrderId in (SELECT o.OrderId from `order` as o WHERE o.UserId = {userId})";
 
