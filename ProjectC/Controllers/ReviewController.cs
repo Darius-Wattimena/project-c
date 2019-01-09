@@ -86,8 +86,8 @@ namespace ProjectC.Controllers
             }
 
             // Input rating ranges between 1-5, otherwise its a 5 star rating (in our favor ☺)
-                if (input.Rating < 1 || input.Rating > 5)
-                    input.Rating = 5;
+            if (input.Rating < 1 || input.Rating > 5)
+                input.Rating = 5;
 
             input.SetId(0);
 
@@ -106,6 +106,10 @@ namespace ProjectC.Controllers
                     return BadRequest("You are not allowed to edit this review. ☻");
                 }
             }
+
+            // Input rating ranges between 1-5, otherwise its a 5 star rating (in our favor ☺)
+            if (input.Rating < 1 || input.Rating > 5)
+                input.Rating = 5;
 
             input.ReviewDate = DateTime.Now; // Set date to now
 

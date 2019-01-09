@@ -73,7 +73,7 @@ namespace ProjectC.Controllers
                 GetDaoManager().OrderProductsDao.Save(op);
             }
 
-            return Ok($"Succesfully created a new order for {shoppingBasketItems.Count} products.");
+            return Ok(createdOrder);
         }
 
         public override IActionResult Create(Order input)
@@ -132,7 +132,11 @@ namespace ProjectC.Controllers
 
                 var userId = int.Parse(identity.FindFirst(ClaimTypes.Sid).Value);
                 var ui = userId.ToString();
-                return InnerSearch("UserId", ui);
+
+                var orders = GetDao().Search("UserId", ui);
+                IEnumerable<Order> sortedOrders = orders.OrderByDescending(o => o.OrderDate);
+
+                return Ok(sortedOrders);
             }
             catch (MySqlException ex)
             {
