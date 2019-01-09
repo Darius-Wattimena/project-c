@@ -119,6 +119,16 @@ namespace ProjectC.Controllers
         public IActionResult SetOrderAsSend(int id)
         {
             var dao = GetDao();
+            var orderProductsDao = GetDaoManager().OrderProductsDao;
+            var orderProducts = orderProductsDao.GetOrderWithProductsById(id);
+
+            foreach (var orderProduct in orderProducts)
+            {
+                var product = orderProduct.Product;
+                product.Stock = product.Stock - orderProduct.OrderProducts.Amount;
+                GetDaoManager().ProductDao.Save(product);
+            }
+
             dao.SetOrderStateAndSave(id, Order.OrderStatusSend);
             return Ok();
         }
