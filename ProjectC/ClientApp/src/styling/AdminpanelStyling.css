@@ -40,3 +40,17 @@
     padding: 1.25rem;
     margin: 5px;
 }
+
+.admin-statistics-top-row {
+    margin: 5px;
+}
+
+    .admin-statistics-top-row .admin-statistics-top-panel {
+        margin: 0;
+        margin-right: 5px;
+    }
+
+    .admin-statistics-top-row .admin-statistics-top-panel:last-child {
+        margin: 0;
+        margin-right: 0;
+    }
