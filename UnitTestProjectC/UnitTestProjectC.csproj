@@ -17,8 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Database\Core\" />
+    <Folder Include="Database\Sql\" />
   </ItemGroup>
 
 </Project>
