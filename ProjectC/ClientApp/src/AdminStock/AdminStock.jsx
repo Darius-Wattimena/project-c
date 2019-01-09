@@ -20,8 +20,13 @@ class AdminStock extends React.Component {
         const { products } = this.props;
         return (
             <div className="panel col-md-8 admin-stock">
-                <h3>Products Stock</h3>
-                {products.loading && <em>Loading products...</em>}
+                <h3>Stock Management</h3>
+                <hr />
+                {products.loading &&
+                    <div className="progress">
+                        <div className="indeterminate"></div>
+                    </div>
+                }
                 {products.error && <span className="text-danger">ERROR: {products.error}</span>}
                 {products.items &&
                     <div>

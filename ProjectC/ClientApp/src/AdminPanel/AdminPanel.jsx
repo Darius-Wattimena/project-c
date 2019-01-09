@@ -21,31 +21,64 @@ class AdminPanel extends React.Component {
             <div className="sidebar" style={{ float: "left" }}>
                 <ul>
                     <li>
-                        <Link to="/admin/statistics">Statistics</Link>
+                        <Link to="/admin/statistics" className="row">
+                            <div className="col-1">
+                                <i class="fas fa-chart-line" />
+                            </div>
+                            <div className="col">
+                                Statistics
+                            </div>
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/admin/product">Products</Link>
+                        <Link to="/admin/product" className="row">
+                            <div className="col-1">
+                                <i class="fas fa-boxes" />
+                            </div>
+                            <div className="col">
+                                Products
+                            </div>
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/admin/stock">Stock</Link>
+                        <Link to="/admin/stock" className="row">
+                            <div className="col-1">
+                                <i class="fas fa-clipboard-list" />
+                            </div>
+                            <div className="col">
+                                Stock
+                            </div>
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/admin/users">Users</Link>
+                        <Link to="/admin/users" className="row">
+                            <div className="col-1">
+                                <i class="fas fa-users" />
+                            </div>
+                            <div className="col">
+                                Users
+                            </div>
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/admin/orders">Orders</Link>
+                        <Link to="/admin/ordermanagement" className="row">
+                            <div className="col-1">
+                                <i class="fas fa-hand-holding-usd" />
+                            </div>
+                            <div className="col">
+                                Orders
+                            </div>
+                        </Link>
                     </li>
                     <li>
-                        <Link to="/admin/ordermanagement">Order Mangement</Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/sales">Sale Management</Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/coupons">Coupons</Link>
-                    </li>
-                    <li>
-                        <Link to="/admin/reviews">Reviews</Link>
+                        <Link to="/admin/reviews" className="row">
+                            <div className="col-1">
+                                <i class="far fa-comment-alt" />
+                            </div>
+                            <div className="col">
+                                Reviews
+                            </div>
+                        </Link>
                     </li>
                 </ul>
             </div>

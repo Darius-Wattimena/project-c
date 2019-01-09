@@ -36,5 +36,7 @@ namespace ProjectC.Model
         public string Date { get; set; }
 
         public bool CanEdit { get; set; }
+
+        public string ProductName { get; set; }
     }
 }
