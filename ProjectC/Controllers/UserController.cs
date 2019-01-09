@@ -162,8 +162,10 @@ namespace ProjectC.Controllers
                 }
 
                 if (!Regex.IsMatch(input.MailAddress, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")) {
-                    return BadRequest("Email address not fucking valid");
+                    return BadRequest("Mail address is not valid");
                 }
+
+                input.Active = 1;
 
                 var user = input.SetupUser(input);
                 var address = input.Address;

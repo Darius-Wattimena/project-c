@@ -16,4 +16,9 @@
     <ProjectReference Include="..\ProjectC\ProjectC.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Controllers\" />
+    <Folder Include="Database\Core\" />
+  </ItemGroup>
+
 </Project>
