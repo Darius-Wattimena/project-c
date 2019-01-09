@@ -19,7 +19,7 @@ class AdminStock extends React.Component {
     render() {
         const { products } = this.props;
         return (
-            <div className="panel col-md-8 admin-stock">
+            <div className="admin-panel panel col-10 admin-stock">
                 <h3>Stock Management</h3>
                 <hr />
                 {products.loading &&

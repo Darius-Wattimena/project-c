@@ -30,7 +30,7 @@ class AdminReviews extends React.Component {
         const reviewState = this.props.review;
 
         return (
-            <div className="panel col-md-8">
+            <div className="admin-panel panel col-10">
                 <h3>Review Management</h3>
                 <hr/>
                 {

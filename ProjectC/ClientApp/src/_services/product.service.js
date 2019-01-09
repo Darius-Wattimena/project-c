@@ -131,7 +131,7 @@ function changeStock(product, newStock) {
 
     const requestOptions = {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 'Content-Type': 'application/json', ...authHeader() },
         body: JSON.stringify(body)
     };
 

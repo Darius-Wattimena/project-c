@@ -35,6 +35,17 @@
     float: left;
 }
 
+.admin-container {
+    background-color: #212529;
+    margin: 0;
+}
+
+.admin-panel {
+    background-color: #ffffff;
+    margin: 0;
+    padding: 20px 20px 0 20px;
+}
+
 .admin-statistics-panel {
     border: 1px solid rgba(0, 0, 0, .125);
     padding: 1.25rem;

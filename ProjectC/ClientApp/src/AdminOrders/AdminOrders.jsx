@@ -14,7 +14,7 @@ class AdminOrders extends React.Component {
     render() {
         const { order } = this.props;
         return (
-            <div className="panel col-md-8"> 
+            <div className="admin-panel panel col-10"> 
                 <table className="table table-hover">
                     <thead className="thead-dark">
                     <tr>

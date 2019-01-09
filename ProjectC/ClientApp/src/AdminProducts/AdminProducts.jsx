@@ -27,7 +27,7 @@ class AdminProducts extends React.Component {
     render() {
         const { products } = this.props;
         return (
-            <div className="panel col-md-8">
+            <div className="admin-panel panel col-10">
                 <h3>Product Management</h3>
                 <hr />
                 {products.loading &&

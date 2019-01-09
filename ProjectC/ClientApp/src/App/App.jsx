@@ -61,20 +61,22 @@ class App extends Component {
                         {alert.message &&
                             <div className={`alert ${alert.type}`}>{alert.message}</div>
                         }
-                        <Route path="/admin" component={AdminPanel} />
-                        <Route path="/admin/statistics" component={AdminStatistics} />
-                        <Route path="/admin/stock" component={AdminStock} />
-                        <Route path="/admin/product" component={AdminProducts} />
-                        <Route path="/admin/editproduct/:id" component={EditProduct} />
-                        <Route path="/admin/addproduct" component={AddProduct} />
-                        <Route exact path="/admin/users" component={AdminUsers} />
-                        <Route path="/admin/users/edit/:id" component={AdminEditUser} />
-                        <Route exact path="/admin/ordermanagement" component={AdminOrderManagement} />
-                        <Route path="/admin/orders" component={AdminOrders} />
-                        <Route path="/admin/order/:orderid" component={AdminOrder} />
-                        <Route path="/admin/sales" component={AdminSales} />
-                        <Route path="/admin/coupons" component={AdminCoupons} />
-                        <Route path="/admin/reviews" component={AdminReviews} />
+                        <div className="row admin-container">
+                            <Route path="/admin" component={AdminPanel} />
+                            <Route path="/admin/statistics" component={AdminStatistics} />
+                            <Route path="/admin/stock" component={AdminStock} />
+                            <Route path="/admin/product" component={AdminProducts} />
+                            <Route path="/admin/editproduct/:id" component={EditProduct} />
+                            <Route path="/admin/addproduct" component={AddProduct} />
+                            <Route exact path="/admin/users" component={AdminUsers} />
+                            <Route path="/admin/users/edit/:id" component={AdminEditUser} />
+                            <Route exact path="/admin/ordermanagement" component={AdminOrderManagement} />
+                            <Route path="/admin/orders" component={AdminOrders} />
+                            <Route path="/admin/order/:orderid" component={AdminOrder} />
+                            <Route path="/admin/sales" component={AdminSales} />
+                            <Route path="/admin/coupons" component={AdminCoupons} />
+                            <Route path="/admin/reviews" component={AdminReviews} />
+                        </div>
                         <div className="container">
                             <PrivateRoute exact path="/" component={HomePage} />
                             <Route path="/home" component={HomePage} />

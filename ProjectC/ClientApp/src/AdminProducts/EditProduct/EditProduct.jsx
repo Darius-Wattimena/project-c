@@ -118,7 +118,7 @@ class EditProduct extends React.Component {
 
         // Render the view
         return (
-            <div className="panel col-md-8">
+            <div className="admin-panel panel col-10">
                 <div className='adminPanel' className="container">
                     {
                         this.loading === true

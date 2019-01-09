@@ -14,7 +14,7 @@ class AdminStatistics extends React.Component {
     render() {
         const { statistics } = this.props;
         return (
-            <div className="container panel col-10" style={{ width: "100vw" }}>
+            <div className="container admin-panel panel col-10" style={{ width: "100vw" }}>
                 <h3>Statistics</h3>
                 <hr />
                 {!statistics.data &&

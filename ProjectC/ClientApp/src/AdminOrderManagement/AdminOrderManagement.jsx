@@ -15,7 +15,7 @@ class AdminOrderManagement extends React.Component {
     render() {
         const { order } = this.props;
         return (
-            <div className="panel col-md-8 admin-stock">
+            <div className="admin-panel panel col-10">
                 <h3>Order Management</h3>
                 <hr />
                 {order.loading &&
