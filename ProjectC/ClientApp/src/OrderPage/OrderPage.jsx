@@ -149,7 +149,10 @@ class OrderPage extends React.Component {
                             </div>
                         </div>
                     </div>
-                    || <p>Processing order...</p>}
+                        ||
+                        <div className="progress">
+                            <div className="indeterminate"></div>
+                        </div>}
                 </div>
             
             );
