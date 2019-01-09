@@ -1,19 +1,11 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip } from 'recharts';
+import { Tooltip, CartesianGrid, XAxis, YAxis, Legend, Area, AreaChart } from 'recharts';
 
 import { dateHelper } from "../../_helpers";
 import { statisticsActions } from '../../_actions';
 
 import { AdminStatisticsDateRange } from "./index";
-
-class CustomDatePickerButton extends React.Component {
-    render() {
-        return (
-            <button className="btn btn-outline-primary" onClick={this.props.onClick}>{this.props.value}</button>
-        );
-    }
-}
 
 function CustomPanel(props) {
     const { base, loading, data, selectedOption } = props;
@@ -22,24 +14,34 @@ function CustomPanel(props) {
                     <div className="indeterminate"></div>
                 </div>);
     } else {
+        const products = Object.keys(data[0]).reduce((result, currentKey) => {
+            if (currentKey !== "date") {
+                result.push(currentKey);
+            }
+            return result;
+        }, []);
+        const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
         return (
             <div className="row">
                 <div className="col-10">
-                    <h4>Total Income</h4>
+                    <h4>Total Products Sold</h4>
                     <AreaChart width={1100} height={300} data={data} animated={true}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="name" />
+                        <CartesianGrid strokeDasharray={products.length + ` ` + products.length} />
+                        <XAxis dataKey="date" />
                         <YAxis />
                         <Tooltip />
-                        <Area type="monotone" dataKey="income" stroke="#82ca9d" fill="#82ca9d" />
+                        <Legend />
+                        {products.map((product, index) =>
+                            <Area type="monotone" dataKey={product} stroke={colors[index % colors.length]} fill={colors[index % colors.length]} />
+                        )}
                     </AreaChart>
                 </div>
-                <AdminStatisticsDateRange base={base} loading={loading} selectedOption={selectedOption} name="totalIncome" />
+                <AdminStatisticsDateRange base={base} loading={loading} selectedOption={selectedOption} name="totalProducts" />
             </div>);
     }
 }
 
-class AdminStatisticsIncomePanel extends React.Component {
+class AdminStatisticsProductsPanel extends React.Component {
     constructor(props) {
         super(props);
 
@@ -72,7 +74,7 @@ class AdminStatisticsIncomePanel extends React.Component {
     }
 
     getData() {
-        this.props.dispatch(statisticsActions.getIncome(this.state.startDate, this.state.endDate));
+        this.props.dispatch(statisticsActions.getTotalProductsSold(this.state.startDate, this.state.endDate));
     }
 
     handleChange(name, date) {
@@ -82,13 +84,14 @@ class AdminStatisticsIncomePanel extends React.Component {
     render() {
         const { statistics } = this.props;
         const { selectedOption } = this.state;
+
         return (
             <div>
                 {statistics.data &&
                     <div className="admin-statistics-panel">
-                        <CustomPanel loading={statistics.data.incomeLoading}
-                                data={statistics.data.income} base={this}
-                                selectedOption={selectedOption} />
+                    <CustomPanel loading={statistics.data.totalProductsLoading}
+                        data={statistics.data.totalProducts} base={this}
+                        selectedOption={selectedOption} />
                     </div>
                 }
             </div>
@@ -103,5 +106,5 @@ function mapStateToProps(state) {
     };
 }
 
-const connectedPage = connect(mapStateToProps)(AdminStatisticsIncomePanel);
-export { connectedPage as AdminStatisticsIncomePanel };
+const connectedPage = connect(mapStateToProps)(AdminStatisticsProductsPanel);
+export { connectedPage as AdminStatisticsProductsPanel };

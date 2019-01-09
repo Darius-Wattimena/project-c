@@ -89,7 +89,7 @@ namespace ProjectC.Controllers
         }
 
         //TODO ~NEEDS REWORK OR CLEANUP~
-        public Dictionary<DateTime, Dictionary<string, int>> FillMissingEmptyDaysForProductsSold(List<ProductStatisticsModel> currentData, DateTime minDate, DateTime maxDate)
+        private List<Dictionary<string, string>> FillMissingEmptyDaysForProductsSold(List<ProductStatisticsModel> currentData, DateTime minDate, DateTime maxDate)
         {
             var totalDays = (maxDate - minDate).TotalDays;
 
@@ -106,7 +106,7 @@ namespace ProjectC.Controllers
                 usedProductsDictionary[dataItem.ProductId].Add(dataItem);
             }
             
-            var resultData = new Dictionary<DateTime, Dictionary<string, int>>();
+            var resultData = new Dictionary<DateTime, Dictionary<string, string>>();
 
             //Check of we een statistics hebben voor elke dag voor elk product
 
@@ -126,11 +126,12 @@ namespace ProjectC.Controllers
                     if (!resultData.ContainsKey(insertDay))
                     {
                         //Voeg een lege dictionary toe voor de producten
-                        resultData.Add(insertDay, new Dictionary<string, int>());
+                        resultData.Add(insertDay, new Dictionary<string, string>());
+                        resultData[insertDay].Add("date", insertDay.ToString(DateTimeStringFormat));
                     }
 
                     //Voeg een lege item toe voor elke dag voor het gecheckde product
-                    resultData[insertDay].Add(usedProducts[checkedProductI], 0);
+                    resultData[insertDay].Add(usedProducts[checkedProductI], "0");
                 }
 
                 //Verhoog zodat we de naam van de volgende product in de lijst kunnen krijgen
@@ -141,14 +142,22 @@ namespace ProjectC.Controllers
                 {
                     var usedDate = Convert.ToDateTime(productItems.name);
                     resultData[usedDate].Remove(productItems.ProductName);
-                    resultData[usedDate].Add(productItems.ProductName, productItems.Amount);
+                    resultData[usedDate].Add(productItems.ProductName, productItems.Amount.ToString());
                 }
             }
 
-            return resultData;
+            //Convert de dataset zodat hij gebruikt kan worden door rechart
+            var convertedResultData = new List<Dictionary<string, string>>();
+            for (var i = 0; i < totalDays; i++)
+            {
+                var insertDay = minDate.AddDays(i);
+                convertedResultData.Add(resultData[insertDay]);
+            }
+
+            return convertedResultData;
         }
 
-        public List<Statistics> FillMissingEmptyDays(List<Statistics> currentData, DateTime minDate, DateTime maxDate)
+        private List<Statistics> FillMissingEmptyDays(List<Statistics> currentData, DateTime minDate, DateTime maxDate)
         {
             var totalDays = (maxDate - minDate).TotalDays;
             var resultData = new List<Statistics>();

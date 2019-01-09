@@ -5,7 +5,8 @@ import { alertActions } from './';
 export const statisticsActions = {
     getOrders,
     getIncome,
-    getTotalUsers
+    getTotalUsers,
+    getTotalProductsSold
 };
 
 function getOrders(start, end) {
@@ -48,6 +49,27 @@ function getIncome(start, end) {
     function request() { return { type: statisticsConstants.GETINCOME_REQUEST } }
     function success(income) { return { type: statisticsConstants.GETINCOME_SUCCESS, income } }
     function failure(error) { return { type: statisticsConstants.GETINCOME_FAILURE, error } }
+}
+
+function getTotalProductsSold(start, end) {
+    return dispatch => {
+        dispatch(request());
+
+        statisticsService.getTotalProductsSold(start.toLocaleDateString("en-US"), end.toLocaleDateString("en-US"))
+            .then(
+                totalProducts => {
+                    dispatch(success(totalProducts));
+                },
+                error => {
+                    dispatch(failure(error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request() { return { type: statisticsConstants.GET_TOTALPRODUCTS_REQUEST } }
+    function success(totalProducts) { return { type: statisticsConstants.GET_TOTALPRODUCTS_SUCCESS, totalProducts } }
+    function failure(error) { return { type: statisticsConstants.GET_TOTALPRODUCTS_FAILURE, error } }
 }
 
 function getTotalUsers() {

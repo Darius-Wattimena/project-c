@@ -3,7 +3,8 @@
 export const statisticsService = {
     getOrders,
     getIncome,
-    getTotalUsers
+    getTotalUsers,
+    getTotalProductsSold
 };
 
 function getOrders(start, end) {
@@ -22,6 +23,15 @@ function getIncome(start, end) {
     };
 
     return fetch(config.apiUrl + '/statistics/getIncome?s=' + start + "&e=" + end, requestOptions).then(handleResponse, handleError);
+}
+
+function getTotalProductsSold(start, end) {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+
+    return fetch(config.apiUrl + '/statistics/getTotalProductsSold?s=' + start + "&e=" + end, requestOptions).then(handleResponse, handleError);
 }
 
 function getTotalUsers() {

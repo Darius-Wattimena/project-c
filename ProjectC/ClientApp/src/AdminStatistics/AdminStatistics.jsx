@@ -1,6 +1,6 @@
 ﻿import React from 'react';
 import { connect } from 'react-redux';
-import { AdminStatisticsOrderPanel, AdminStatisticsIncomePanel, AdminStatisticsTopPanel } from './Helpers'
+import { AdminStatisticsOrderPanel, AdminStatisticsIncomePanel, AdminStatisticsTopPanel, AdminStatisticsProductsPanel } from './Helpers'
 
 import 'react-datepicker/dist/react-datepicker-cssmodules.css';
 
@@ -23,6 +23,7 @@ class AdminStatistics extends React.Component {
                     </div>
                 }
                 <AdminStatisticsTopPanel />
+                <AdminStatisticsProductsPanel baseDate={baseDate} />
                 <AdminStatisticsOrderPanel baseDate={baseDate} />
                 <AdminStatisticsIncomePanel baseDate={baseDate} />
             </div>
