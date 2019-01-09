@@ -12,7 +12,8 @@ import { formatCurrency } from '../_helpers/currency-format';
 import { wishlistActions } from '../_actions/wishlist.actions';
 import { reviewActions } from '../_actions/review.actions';
 
-import { AddToCartConfirmModal } from '../ShoppingCart/AddToCartConfirmModal'
+import { AddToCartConfirmModal } from '../ShoppingCart/AddToCartConfirmModal';
+import { EditReviewModal } from '../SingleProductPage/Helpers/EditReviewModal';
 
 function Rating(props) {
 
@@ -79,8 +80,6 @@ class SingleProductPage extends React.Component {
                                 -1;
 
         var reviewText = document.getElementById("reviewBody").value;
-
-        var submitButton = document.getElementById("reviewSubmitBtn");
 
         var review = {
             'rating': rating,
@@ -204,12 +203,14 @@ class SingleProductPage extends React.Component {
                             <h3>Reviews</h3>
                             <hr />
                             {
+                                // Loading
                                 reviewState.loading
                                 &&
                                 <div className="progress">
                                     <div className="indeterminate"></div>
                                 </div>
                                 ||
+                                // Show posted reviews
                                 reviewState.reviews && reviewState.reviews.map(
                                     (review, index) =>
                                         <div className="review" key={index}>
@@ -218,15 +219,28 @@ class SingleProductPage extends React.Component {
                                             <small>
                                                 <Rating amount={review.rating} />
                                             </small>
-                                            <p>
+                                            <p style={{ color: (reviewState.updating && review.canEdit ? `gray` : `inherit`) }}>
                                                 {review.body}
                                             </p>
                                             {
+                                                // Edit button
+                                                review.canEdit
+                                                &&
+                                                <div>
+                                                    <button disabled={reviewState.deleting || reviewState.updating} className="btn btn-primary" data-toggle="modal" data-target={`#editReviewModal${review.id}`}>
+                                                        <i className="fas fa-edit" />&nbsp;
+                                                            Edit your review
+                                                    </button>
+                                                    <EditReviewModal base={this} review={review} />
+                                                </div>
+                                            }
+                                            {
+                                                // Delete button for reviews posted by self or all admins
                                                 (review.canEdit || (user && user.role == "Admin"))
                                                 &&
-                                                <button disabled={reviewState.deleting} className="btn btn-danger" onClick={() => { this.removeReview(review) }}>
-                                                    <i className="fas fa-trash" />
-                                                    &nbsp;Delete this review
+                                                <button disabled={reviewState.deleting || reviewState.updating} className="btn btn-danger" onClick={() => { this.removeReview(review) }}>
+                                                    <i className="fas fa-trash" />&nbsp;
+                                                    Delete this review
                                                 </button>
                                             }
                                             <hr />
@@ -234,6 +248,7 @@ class SingleProductPage extends React.Component {
                                 )
                             }
                             {
+                                // No reviews yet
                                 (reviewState.reviews && !reviewState.loading)
                                 &&
                                 reviewState.reviews.length == 0
@@ -241,6 +256,7 @@ class SingleProductPage extends React.Component {
                                 <small>No reviews have been placed on this product yet. {reviewState.canPost ? ` Be the first!` : ``}<br /></small>
                             }
                             {
+                                // Loading bar while sending review
                                 reviewState.sending
                                 &&
                                 <div className="progress">
@@ -248,6 +264,7 @@ class SingleProductPage extends React.Component {
                                 </div>
                             }
                             {
+                                // Rating and a review form
                                 (reviewState.canPost && !reviewState.sent)
                                 &&
                                 <div className="row">

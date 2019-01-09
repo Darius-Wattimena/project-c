@@ -116,6 +116,9 @@ function update(review) {
             .then(
                 review => {
                     dispatch(success(review));
+
+                    // Reload reviews! because, y'know... we did an update
+                    dispatch(getAllForProduct(review.productId));
                 },
                 error => {
                     dispatch(failure(error));
