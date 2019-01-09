@@ -10,16 +10,18 @@ class OrderHistory extends React.Component {
     componentDidMount() {
         this.props.OrderByUser();
         this.setState({
-            os: 0
+            os: 0,
+            o: null
         });
 
         this.initialized = false;
     }
 
-    onClick(orderid, s) {
+    onClick(orderid, s, order) {
         this.props.ProductsByOrder(orderid);
         this.setState({
-            os: s
+            os: s,
+            o: order
         });
     }
 
@@ -33,7 +35,7 @@ class OrderHistory extends React.Component {
         if (this.initialized == false && order.items && order.items.length > 0) {
             console.log("SELECT FIRST ITEM");
             var firstOrderId = order.items[0].id;
-            this.onClick(firstOrderId, order.items[0].orderState);
+            this.onClick(firstOrderId, order.items[0].orderState, order.items[0]);
             this.initialized = true;
         }
 
@@ -48,7 +50,7 @@ class OrderHistory extends React.Component {
                             <tbody>
                                 {order.items && order.items.map((order, index) =>
                                     <tr className={selectedId === order.id ? 'selected' : 'notselected'}>
-                                        <td style={{ cursor: 'pointer' }} onClick={this.onClick.bind(this, order.id, order.orderState)}>
+                                        <td style={{ cursor: 'pointer' }} onClick={this.onClick.bind(this, order.id, order.orderState, order)}>
                                             <a>
                                                 <div className="xorderh">
                                                     <p><span style={{ color: '#2b91af' }}>Order number: </span> {order.orderNumber}</p>
@@ -72,6 +74,10 @@ class OrderHistory extends React.Component {
                 </div>
                 <div className="col-md-6 sec">
                     <h4>Order Info</h4>
+                    {
+                        this.state && this.state.o &&
+                        <h5>Order number: {this.state.o.orderNumber}</h5>
+                    }
                     <div className="orderStatus">
                         {this.state && <ul className="progressbar">
                             {this.state.os > 0 && <li className="active">Refilling stock</li>}

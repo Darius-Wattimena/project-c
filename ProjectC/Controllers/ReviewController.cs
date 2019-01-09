@@ -5,6 +5,7 @@ using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
 using ProjectC.Helper;
 using System;
+using System.Collections.Generic;
 
 namespace ProjectC.Controllers
 {
@@ -25,7 +26,10 @@ namespace ProjectC.Controllers
                 int userId = UserSession.GetUserId(HttpContext);
 
                 var hasOrderedProduct = GetDaoManager().OrderProductsDao.UserHasBoughtProduct(userId, productId);
-                var hasPlacedReview = GetDaoManager().ReviewDao.Count("UserId", userId.ToString()) > 0;
+                var hasPlacedReview = GetDaoManager().ReviewDao.Find(
+                    new Dictionary<string, string> {
+                        { "UserId", userId.ToString() },
+                        { "ProductId", productId.ToString() } }).Count > 0;
 
                 canPost = (hasOrderedProduct && !hasPlacedReview);
             }

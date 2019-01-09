@@ -154,11 +154,13 @@ function _delete(id) {
 
         productService._delete(id)
             .then(
-                () => {
+                response => {
                     dispatch(success(id));
+                    dispatch(alertActions.success(response));
                 },
                 error => {
                     dispatch(failure(id, error));
+                    dispatch(alertActions.error(error));
                 }
             );
     };
@@ -175,11 +177,13 @@ function recover(id) {
 
         productService.recover(id)
             .then(
-                () => {
+                response => {
                     dispatch(success(id));
+                    dispatch(alertActions.success(response));
                 },
                 error => {
                     dispatch(failure(id, error));
+                    dispatch(alertActions.error(error));
                 }
             );
     };

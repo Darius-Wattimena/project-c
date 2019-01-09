@@ -213,7 +213,7 @@ namespace ProjectC.Controllers
 
         // Recover deleted product
         [Authorize(Roles = "Admin")]
-        [HttpDelete("{id}")]
+        [HttpPut("{id}")]
         public IActionResult Recover(int id) {
             if (GetDao().SetActive(true, id)) {
                 return Ok("Product recovered.");

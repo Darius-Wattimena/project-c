@@ -96,7 +96,15 @@ function remove(review) {
                     dispatch(success());
 
                     // Reload reviews! because deleted
-                    dispatch(getAllForProduct(review.productId));
+
+                    // If the review contains a product name, an admin deleted this review, so call the other function
+                    if (review.productName) {
+                        dispatch(getAll());
+                    }
+                    else {
+                        // Called on single product page
+                        dispatch(getAllForProduct(review.productId));
+                    }
                 },
                 error => {
                     dispatch(failure(error));

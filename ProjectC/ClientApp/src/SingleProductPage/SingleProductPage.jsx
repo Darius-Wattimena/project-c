@@ -285,7 +285,7 @@ class SingleProductPage extends React.Component {
                                             <label className="star star-1" for="star-1" disabled={reviewState.sending}></label>
                                         </div>
                                         <br />
-                                        <textarea id="reviewBody" className="form-control" rows="5" disabled={reviewState.sending} />
+                                        <textarea maxLength="200" id="reviewBody" className="form-control" rows="5" disabled={reviewState.sending} />
                                         <br />
                                         <button id="reviewSubmitBtn" className="btn btn-primary" onClick={this.submitReview} disabled={reviewState.sending}>Submit</button>
                                     </div>

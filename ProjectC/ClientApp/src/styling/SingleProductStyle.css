@@ -39,6 +39,7 @@
     }
 
 .review {
+    word-wrap:break-word;
 }
 
 div.stars {

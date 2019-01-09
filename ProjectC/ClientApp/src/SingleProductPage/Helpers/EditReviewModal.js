@@ -83,7 +83,7 @@ class EditReviewModal extends React.Component {
                                 </tr>
                                 <tr>
                                     <td><h5>Review</h5></td>
-                                    <td><textarea id={`reviewBody${review.id}`} className="input" onChange={this.handleChange}>{this.state.review.body}</textarea></td>
+                                    <td><textarea maxLength="200" id={`reviewBody${review.id}`} className="input" onChange={this.handleChange}>{this.state.review.body}</textarea></td>
                                 </tr>
                             </table>
                         </div>
