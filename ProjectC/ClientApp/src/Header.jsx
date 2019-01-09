@@ -17,15 +17,15 @@ function UserLoggedIn(props) {
 function StartButtons(props) {
     return (
         <div className="btn-group">
-            <Link to={`login`} className="btn btn-info">Login</Link>
-            <Link to={`register`} className="btn btn-info">Register</Link>
+            <Link to={`/login`} className="btn btn-info">Login</Link>
+            <Link to={`/register`} className="btn btn-info">Register</Link>
         </div>
     );
 }
 
 function AdminButtons(props) {
     if (props.role === "Admin") {
-        return <Link to={`admin/statistics`} className="btn btn-warning">Admin <i className="fas fa-user-shield"></i></Link>;
+        return <Link to={`/admin/statistics`} className="btn btn-warning">Admin <i className="fas fa-user-shield"></i></Link>;
     } else {
         return "";
     }
@@ -35,7 +35,7 @@ function UserButtons(props) {
     return (
         <div>
             <div className="btn-group" role="group" aria-label="Basic example">
-                <Link to={`profile`} className="btn btn-info">
+                <Link to={`/profile`} className="btn btn-info">
                     {props.user.firstName} <i className="fas fa-user"></i>
                 </Link>
                 <AdminButtons role={props.user.role} />
