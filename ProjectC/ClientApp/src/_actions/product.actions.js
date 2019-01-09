@@ -5,10 +5,12 @@ import { history } from '../_helpers';
 
 export const productActions = {
     getAll,
+    getAllAdmin,
     getById,
     loadById,
     add,
     _delete,
+    recover,
     search,
     update,
     changeStock
@@ -20,6 +22,24 @@ function getAll() {
         dispatch(request());
 
         productService.getAll()
+            .then(
+                products => dispatch(success(products)),
+                error => dispatch(failure(error))
+            );
+
+    };
+
+    function request() { return { type: productConstants.GETALL_REQUEST } }
+    function success(products) { return { type: productConstants.GETALL_SUCCESS, products } }
+    function failure(error) { return { type: productConstants.GETALL_FAILURE, error } }
+}
+
+function getAllAdmin() {
+    return dispatch => {
+
+        dispatch(request());
+
+        productService.getAllAdmin()
             .then(
                 products => dispatch(success(products)),
                 error => dispatch(failure(error))
@@ -134,11 +154,36 @@ function _delete(id) {
 
         productService._delete(id)
             .then(
-                () => {
+                response => {
                     dispatch(success(id));
+                    dispatch(alertActions.success(response));
                 },
                 error => {
                     dispatch(failure(id, error));
+                    dispatch(alertActions.error(error));
+                }
+            );
+    };
+
+    function request(id) { return { type: productConstants.DELETE_REQUEST, id } }
+    function success(id) { return { type: productConstants.DELETE_SUCCESS, id } }
+    function failure(id, error) { return { type: productConstants.DELETE_FAILURE, id, error } }
+}
+
+// prefixed function name with underscore because delete is a reserved word in javascript
+function recover(id) {
+    return dispatch => {
+        dispatch(request(id));
+
+        productService.recover(id)
+            .then(
+                response => {
+                    dispatch(success(id));
+                    dispatch(alertActions.success(response));
+                },
+                error => {
+                    dispatch(failure(id, error));
+                    dispatch(alertActions.error(error));
                 }
             );
     };

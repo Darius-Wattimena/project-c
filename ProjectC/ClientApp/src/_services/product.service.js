@@ -2,11 +2,13 @@
 
 export const productService = {
     getAll,
+    getAllAdmin,
     getById,
     getWithSpecifications,
     getAllWithSpecifications,
     getAllWithoutSpecifications,
     _delete,
+    recover,
     add,
     search,
     changeStock,
@@ -20,6 +22,15 @@ function getAll() {
         headers: authHeader()
     };
     return fetch(config.apiUrl + '/product/get', requestOptions).then(handleResponse, handleError);
+}
+
+// Returns a collection of all products for admins
+function getAllAdmin() {
+    const requestOptions = {
+        method: 'GET',
+        headers: authHeader()
+    };
+    return fetch(config.apiUrl + '/product/getadmin', requestOptions).then(handleResponse, handleError);
 }
 
 function getAllWithoutSpecifications() {
@@ -88,6 +99,15 @@ function _delete(id) {
     };
 
     return fetch(config.apiUrl + '/product/delete/' + id, requestOptions).then(handleResponse, handleError);
+}
+
+function recover(id) {
+    const requestOptions = {
+        method: 'PUT',
+        headers: authHeader()
+    };
+
+    return fetch(config.apiUrl + '/product/recover/' + id, requestOptions).then(handleResponse, handleError);
 }
 
 function update(product, specifications) {

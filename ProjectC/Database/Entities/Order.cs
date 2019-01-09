@@ -11,6 +11,8 @@ namespace ProjectC.Database.Entities
         public static readonly int OrderStatusConfirmed = 1;
         public static readonly int OrderStatusSend = 2;
 
+        const int ORDERNUMBER_START = 100000;
+
         public Order()
         {
 
@@ -24,6 +26,19 @@ namespace ProjectC.Database.Entities
         [Field] public DateTime? OrderDate;
         [Field] public int UserId;
         [Field] public int? CouponCodeId;
+
+        public string DateFormat =>
+            OrderDate.HasValue
+            ?
+            string.Format("{0:dddd, MMMM d, yyyy HH:mm}", OrderDate)
+            :
+            string.Empty;
+
+        public int OrderNumber => (Id + ORDERNUMBER_START);
+
+        public static int OrderNumberToId(int orderNumber) {
+            return orderNumber - ORDERNUMBER_START;
+        }
 
         public int GetId()
         {

@@ -27,6 +27,15 @@ namespace ProjectC.Controllers
             return GetAllWithSpecifications();
         }
 
+        /// <summary>
+        /// Get All products for admins (also inactive products)
+        /// </summary>
+        [HttpGet, Authorize(Roles = "Admin")]
+        public IActionResult GetAdmin() {
+            var products = GetDao().FindAllWithSpecifications();
+            return Ok(products);
+        }
+
         [HttpGet("{value}")]
         public IActionResult CustomSearch(string value)
         {
@@ -200,6 +209,16 @@ namespace ProjectC.Controllers
         {
             input.Active = 1;
             return InnerSave(input, id);
+        }
+
+        // Recover deleted product
+        [Authorize(Roles = "Admin")]
+        [HttpPut("{id}")]
+        public IActionResult Recover(int id) {
+            if (GetDao().SetActive(true, id)) {
+                return Ok("Product recovered.");
+            }
+            return BadRequest("Could not recover product");
         }
 
         // TODO ~needs rework

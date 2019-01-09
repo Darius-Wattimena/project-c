@@ -2,6 +2,7 @@
 import { orderService } from '../_services';
 import { shoppingCartActions } from './shoppingCart.actions';
 import { alertActions } from './';
+import { history } from '../_helpers/history';
 
 export const orderActions = {
     create,
@@ -19,10 +20,11 @@ function create(shoppingCartItems) {
 
         orderService.create(shoppingCartItems)
             .then(
-            response => { 
-                dispatch(success(response));
-                dispatch(alertActions.success(response));
+            order => { 
+                dispatch(success(order));
+                dispatch(alertActions.success("Succesfully created an order."));
                 dispatch(shoppingCartActions.clear()); // Clear the shopping cart
+                dispatch(history.push("/orderhistory")); // Redirect to my orders
             },
             error => {
                 dispatch(failure(error));

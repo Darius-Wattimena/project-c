@@ -20,6 +20,11 @@ class AdminReviews extends React.Component {
         this.props.getAllReviews();
     }
 
+    removeReview(review) {
+        // DELETE review
+        this.props.removeReview(review);
+    }
+
     render() {
 
         const reviewState = this.props.review;
@@ -70,6 +75,7 @@ function mapStateToProps(state) {
 const mapDispatchToProps = (dispatch) => {
     return {
         getAllReviews: () => dispatch(reviewActions.getAll()),
+        removeReview: review => { dispatch(reviewActions.remove(review)) }
     }
 };
 

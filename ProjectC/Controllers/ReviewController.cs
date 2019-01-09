@@ -5,6 +5,7 @@ using ProjectC.Database.Daos;
 using ProjectC.Database.Entities;
 using ProjectC.Helper;
 using System;
+using System.Collections.Generic;
 
 namespace ProjectC.Controllers
 {
@@ -25,7 +26,10 @@ namespace ProjectC.Controllers
                 int userId = UserSession.GetUserId(HttpContext);
 
                 var hasOrderedProduct = GetDaoManager().OrderProductsDao.UserHasBoughtProduct(userId, productId);
-                var hasPlacedReview = GetDaoManager().ReviewDao.Count("UserId", userId.ToString()) > 0;
+                var hasPlacedReview = GetDaoManager().ReviewDao.Find(
+                    new Dictionary<string, string> {
+                        { "UserId", userId.ToString() },
+                        { "ProductId", productId.ToString() } }).Count > 0;
 
                 canPost = (hasOrderedProduct && !hasPlacedReview);
             }
@@ -67,10 +71,25 @@ namespace ProjectC.Controllers
             return InnerSearch(f, i);
         }
 
-        [HttpPost]
+        [HttpPost, Authorize(Roles = "Admin, User")]
         public override IActionResult Create([FromBody] Review input) {
 
-            // Input rating ranges between 1-5, otherwise its a 5 star rating ☺
+            if (!UserSession.GetUserRole(HttpContext).Equals("Admin")) {
+                int userId = UserSession.GetUserId(HttpContext);
+                var opDao = GetDaoManager().OrderProductsDao;
+                bool hasBoughtProduct = opDao.UserHasBoughtProduct(userId, input.ProductId);
+
+                // Check if user is allowed to post a review (must have bought the product before)
+                if (!hasBoughtProduct) {
+                    return BadRequest("You may not post a review for a product not yet bought.");
+                }
+                // Users may not post multiple reviews in order to prevent spamming
+                if (GetDao().Count("ProductId", input.ProductId.ToString()) > 0) {
+                    return BadRequest("You may only place a single review on this product.");
+                }
+            }
+
+            // Input rating ranges between 1-5, otherwise its a 5 star rating (in our favor ☺)
             if (input.Rating < 1 || input.Rating > 5)
                 input.Rating = 5;
 
@@ -82,8 +101,22 @@ namespace ProjectC.Controllers
             return InnerSave(input);
         }
 
-        [HttpPut("{id}")]
+        [HttpPut("{id}"), Authorize(Roles = "Admin, User")]
         public override IActionResult Update(int id, [FromBody] Review input) {
+
+            if (input.UserId != UserSession.GetUserId(HttpContext)) {
+                // We will not allow users changing other users' reviews (except admins)
+                if (!UserSession.GetUserRole(HttpContext).Equals("Admin")) {
+                    return BadRequest("You are not allowed to edit this review. ☻");
+                }
+            }
+
+            // Input rating ranges between 1-5, otherwise its a 5 star rating (in our favor ☺)
+            if (input.Rating < 1 || input.Rating > 5)
+                input.Rating = 5;
+
+            input.ReviewDate = DateTime.Now; // Set date to now
+
             return InnerSave(input, id);
         }
 

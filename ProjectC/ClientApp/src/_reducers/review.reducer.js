@@ -60,6 +60,20 @@ export function review(state = initialState, action) {
                 canPost: true
             }
 
+        // UPDATE
+        case reviewConstants.UPDATE_REQUEST:
+            return {
+                ...state,
+                updating: true
+            }
+
+        case reviewConstants.UPDATE_SUCCESS:
+        case reviewConstants.UPDATE_FAILURE:
+            return {
+                ...state,
+                updating: false
+            }
+
         // DELETE
         case reviewConstants.DELETE_REQUEST:
             return {

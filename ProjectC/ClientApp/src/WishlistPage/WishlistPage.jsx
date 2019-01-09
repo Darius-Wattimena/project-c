@@ -87,7 +87,7 @@ class WishlistPage extends React.Component {
                 <AddToCartConfirmModal product={this.addedProduct} />
                 <div className="row">
                     <div className="col-md-3">
-                        <h4>My wishlists</h4>
+                        <h3>My wishlists</h3>
                         <hr />
                         {
                             wishlistState.loading
@@ -202,7 +202,6 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
     return {
-        // accessible via this.props.getAllProducts
         createEmptyWishlist: () => dispatch(wishlistActions.createWishlist({})),
         getMyWishlists: () => dispatch(wishlistActions.getMyWishlists()),
         getWishlistItems: wishlistId => { dispatch(wishlistActions.getWishlistItems(wishlistId)); },
