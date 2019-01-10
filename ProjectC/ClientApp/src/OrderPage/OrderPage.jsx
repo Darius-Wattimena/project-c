@@ -9,6 +9,7 @@ import { addressActions } from '../_actions';
 import '../styling/OrderStyling.css';
 import { history } from '../_helpers';
 import { shoppingCartActions } from '../_actions';
+import { alertActions } from '../_actions';
 
 var string = "none";
 
@@ -29,16 +30,16 @@ class OrderPage extends React.Component {
 
     checkout(string, items) {
         if (string == "Ideal") {
-            alert("Your Payment with Ideal was succesfull");
+            alertActions.success("Your Payment with Ideal was succesful");
             this.handleOrder(items);
         } else if (string == "Paypal") {
-            alert("Your Payment with Paypal was succesfull");
+            alertActions.success("Your Payment with Paypal was succesful");
             this.handleOrder(items);
         } else if (string == "Visa") {
-            alert("Your Payment with Visa was succesfull");
+            alertActions.success("Your Payment with Visa was succesful");
             this.handleOrder(items);
         } else {
-            alert("Sorry you need to select a payment option");
+            alertActions.error("Sorry, you need to select a payment option.");
         }
     }
 
@@ -108,7 +109,7 @@ class OrderPage extends React.Component {
                                                     <select>
                                                         <option value="Ing">Ing</option>
                                                         <option value="Rabobank">Rabobank</option>
-                                                        <option value="Abn">ABN Ambro</option>
+                                                        <option value="Abn">ABN Amro</option>
                                                     </select>
                                                 </div>
                                             </div>
@@ -120,8 +121,8 @@ class OrderPage extends React.Component {
                                             </div>
                                             <div className="col-md-10">
                                                 <div className="row">
-                                                    <img alt="" src="https://pbs.twimg.com/profile_images/1014219302495375360/dIgZhxTm_400x400.jpg" width="40px" height="40px" />
-                                                    <p>Paypal</p>
+                                                    <img alt="" src="https://upload.wikimedia.org/wikipedia/fr/thumb/4/46/Paypal_2014_%28logo%29.png/912px-Paypal_2014_%28logo%29.png" width="40px" height="40px" />
+                                                    <p>PayPal</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -149,7 +150,10 @@ class OrderPage extends React.Component {
                             </div>
                         </div>
                     </div>
-                    || <p>Processing order...</p>}
+                        ||
+                        <div className="progress">
+                            <div className="indeterminate"></div>
+                        </div>}
                 </div>
             
             );

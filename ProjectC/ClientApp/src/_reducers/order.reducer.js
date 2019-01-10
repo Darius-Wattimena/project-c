@@ -42,6 +42,10 @@ export function order(state = initialState, action) {
             return {
                 error: action.error
             };
+        case orderConstants.CREATE_ORDER_REQUEST:
+            return {
+                loading: true
+            }
         case orderConstants.CREATE_ORDER_SUCCESS:
             return {
                 response: action.response
