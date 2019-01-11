@@ -149,12 +149,12 @@ namespace ProjectC.Controllers
         {
             try
             {
-                var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
-
                 if (!input.Password.Equals(input.ConfirmPassword))
                 {
                     return BadRequest("Passwords are not the same");
                 }
+
+                var daoManager = HttpContext.RequestServices.GetService<DaoManager>();
 
                 if (daoManager.UserDao.FindUserByMailAddress(input.MailAddress) != null)
                 {
@@ -166,6 +166,7 @@ namespace ProjectC.Controllers
                 }
 
                 input.Active = 1;
+                input.RoleId = 1;
 
                 var user = input.SetupUser(input);
                 var address = input.Address;
