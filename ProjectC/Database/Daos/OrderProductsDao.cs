@@ -46,9 +46,7 @@ namespace ProjectC.Database.Daos
                 using (var command = new MySqlCommand(sqlQuery, connection)) {
                     using (var reader = command.ExecuteReader()) {
 
-                        if (reader.FieldCount > 0) {
-                            result = true;
-                        }
+                        result = reader.HasRows;
 
                         connection.Close();
                     }
