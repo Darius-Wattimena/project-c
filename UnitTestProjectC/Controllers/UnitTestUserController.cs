@@ -9,7 +9,10 @@ using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
 using System.Collections.Generic;
 using System.Security.Claims;
+using Microsoft.Extensions.Options;
+using ProjectC.Helper;
 using UnitTestProjectC.Database;
+using UnitTestProjectC.Helper;
 
 namespace UnitTestProjectC.Controllers
 {
@@ -30,7 +33,8 @@ namespace UnitTestProjectC.Controllers
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var factory = serviceProvider.GetService<ILoggerFactory>();
             var logger = factory.CreateLogger<UserController>();
-            Controller = new UserController(logger)
+            var appSettings = UnitTestAppSettings.Get();
+            Controller = new UserController(new OptionsWrapper<AppSettings>(appSettings), logger)
             {
                 ControllerContext = new ControllerContext
                 {
