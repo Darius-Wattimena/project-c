@@ -24,7 +24,7 @@ function create(shoppingCartItems) {
                 dispatch(success(order));
                 dispatch(alertActions.success("Succesfully created an order."));
                 dispatch(shoppingCartActions.clear()); // Clear the shopping cart
-                dispatch(history.push("/orderhistory")); // Redirect to my orders
+                history.push("/orderhistory"); // Redirect to my orders
             },
             error => {
                 dispatch(failure(error));

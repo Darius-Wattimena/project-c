@@ -52,7 +52,6 @@ class UserPage extends React.Component {
                         </nav>
                         <a className="Link" onClick={this.onClick.bind(this,"Profile")}>Profile</a><br />
                         <a className="Link" onClick={this.onClick.bind(this,"Order History")}>Order History</a><br/>
-                        <a className="Link" onClick={this.onClick.bind(this,"Logout")}>Logout</a><br/>
                     </div>
                     <div className="products-container col-sm-9">
                         <nav className="navbar navbar-dark bg-info">

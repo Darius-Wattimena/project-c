@@ -46,6 +46,7 @@ function logout() {
 
     return dispatch => {
         dispatch(shoppingCartActions.clearState());
+        history.push('/home');
         dispatch({ type: userConstants.LOGOUT });
     }
 }
