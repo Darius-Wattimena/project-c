@@ -63,7 +63,7 @@ namespace UnitTestProjectC.Controllers
         }
 
         [TestMethod]
-        public void GetItems_WithId_ReturnsOKObjectResult() {
+        public void GetItems_WithNonOwnedId_ReturnsBadRequestObjectResult() {
             int wishlistId = 2;
             IActionResult result = Controller.GetItems(wishlistId);
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
