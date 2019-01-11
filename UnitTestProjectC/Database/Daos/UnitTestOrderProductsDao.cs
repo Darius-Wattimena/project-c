@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjectC.Database.Core;
+using ProjectC.Database.Daos;
 using ProjectC.Helper;
 using ProjectC.Model;
 
@@ -9,14 +11,13 @@ namespace UnitTestProjectC.Database.Daos
     [TestClass]
     public class UnitTestOrderProductsDao
     {
-        DaoManager daoManager = DaoManager.Get(UnitTestDatabaseContext.Get());
+        private static readonly DaoManager DaoManager = DaoManager.Get(UnitTestDatabaseContext.Get());
+        private static readonly OrderProductsDao OrderProductsDao = DaoManager.OrderProductsDao;
 
         [TestMethod]
         public void GetOrderWithProductsByIdTest()
         {
             //Arrange
-            var OrderProductsDao = daoManager.OrderProductsDao;
-
             var Order_Id = 71;
             var OrderProduct_Id = 107;
 
@@ -33,8 +34,6 @@ namespace UnitTestProjectC.Database.Daos
         public void UserHasBoughtProductTest_True()
         {
             //Arrange
-            var OrderProductsDao = daoManager.OrderProductsDao;
-
             var Product_Id = 4;
             var User_Id = 37;
 
@@ -51,8 +50,6 @@ namespace UnitTestProjectC.Database.Daos
         public void UserHasBoughtProductTest_False()
         {
             //Arrange
-            var OrderProductsDao = daoManager.OrderProductsDao;
-
             var Product_Id = 11;
             var User_Id = 37;
 
@@ -65,23 +62,43 @@ namespace UnitTestProjectC.Database.Daos
         }
 
         [TestMethod]
-        public void GetTotalSoldProductsForMinMaxDaysTest()
+        public void GetTotalSoldProductsForMinMaxDays_GivenAMinAndMaxDate_ReturningAListOfProductStatisticsModel()
         {
-            //Arrange
-            var OrderProductsDao = daoManager.OrderProductsDao;
-            var result = OrderProductsDao.GetTotalSoldProductsForMinMaxDays(new System.DateTime(2019, 1, 9, 12, 0, 0), new System.DateTime(2019, 1, 7, 0, 0, 0));
-            Assert.IsInstanceOfType(result, typeof(List<ProductStatisticsModel>));
+            var startDate = new DateTime(2018, 12, 7);
+            var endDate = new DateTime(2018, 12, 14);
 
+            var result = OrderProductsDao.GetTotalSoldProductsForMinMaxDays(startDate, endDate);
+            Assert.IsInstanceOfType(result, typeof(List<ProductStatisticsModel>));
+        }
+
+        [TestMethod]
+        public void GetTotalSoldProductsForMinMaxDays_GivenAMinAndMaxDate_ReturningAListWhereCountIsBiggerThen0()
+        {
+            var startDate = new DateTime(2018, 12, 7);
+            var endDate = new DateTime(2018, 12, 14);
+
+            var statistics = OrderProductsDao.GetTotalSoldProductsForMinMaxDays(startDate, endDate);
+            bool isBiggerThen0 = statistics.Count > 0;
+            Assert.IsTrue(isBiggerThen0);
+        }
+
+        [TestMethod]
+        public void GetTotalSoldProductsForMinMaxDays_GivenANotExistingMinAndMaxDate_ReturningAListWhereCountIs()
+        {
+            var startDate = DateTime.MinValue;
+            var endDate = DateTime.MinValue;
+
+            var statistics = OrderProductsDao.GetTotalSoldProductsForMinMaxDays(startDate, endDate);
+            bool isEmpty = statistics.Count == 0;
+            Assert.IsTrue(isEmpty);
         }
 
         [TestMethod]
         public void GetTotalProductsSoldTest()
         {
             //Arrange
-            var OrderProductsDao = daoManager.OrderProductsDao;
             var result = OrderProductsDao.GetTotalProductsSold();
             Assert.IsInstanceOfType(result, typeof(List<Statistics>));
-
         }
     }
 }
