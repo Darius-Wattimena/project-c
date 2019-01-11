@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Reflection;
+using System.Security.Claims;
 using System.Security.Principal;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Http.Authentication.Internal;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
@@ -42,12 +44,13 @@ namespace UnitTestProjectC.Controllers
             {
                 ControllerContext = new ControllerContext
                 {
-                    HttpContext = new DefaultHttpContext
-                    {
-                        RequestServices = serviceProvider
-                    }
+                    HttpContext = new DefaultHttpContext {RequestServices = serviceProvider}
                 }
             };
+            var identity = new ClaimsIdentity();
+            identity.AddClaim(new Claim(ClaimTypes.Sid, "3"));
+            identity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+            Controller.ControllerContext.HttpContext.User = new ClaimsPrincipal(identity);
         }
 
         [TestMethod]
