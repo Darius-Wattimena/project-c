@@ -1,20 +1,41 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjectC.Database.Core;
+using ProjectC.Database.Daos;
 
 namespace UnitTestProjectC.Database.Daos
 {
     [TestClass]
     public class UnitTestWishlistDao
     {
-        readonly DaoManager daoManager = DaoManager.Get(UnitTestDatabaseContext.Get());
+        private static readonly DaoManager DaoManager = DaoManager.Get(UnitTestDatabaseContext.Get());
+        private static readonly WishlistDao WishlistDao = DaoManager.WishlistDao;
 
         [TestMethod]
-        public void UserWithId5_OwnsWishlistWithId1() {
-
-            bool result = daoManager.WishlistDao.IsOwnedByUser(userId:5, wishlistId:1);
-
-            Assert.IsTrue(result);
+        public void IsOwnedByUser_GivenAnUserIdAndWishlistId_ReturningABoolean()
+        {
+            var ownedByUser = WishlistDao.IsOwnedByUser(5, 1);
+            Assert.IsInstanceOfType(ownedByUser, typeof(bool));
         }
 
+        [TestMethod]
+        public void IsOwnedByUser_GivenAnUserIdAndWishlistId_ReturningTrue()
+        {
+            var ownedByUser = WishlistDao.IsOwnedByUser(5, 1);
+            Assert.IsTrue(ownedByUser);
+        }
+
+        [TestMethod]
+        public void IsOwnedByUser_GivenANotExistingUserIdAndWishlistId_ReturningFalse()
+        {
+            var ownedByUser = WishlistDao.IsOwnedByUser(0, 1);
+            Assert.IsFalse(ownedByUser);
+        }
+
+        [TestMethod]
+        public void IsOwnedByUser_GivenAnUserIdAndNotExistingWishlistId_ReturningFalse()
+        {
+            var ownedByUser = WishlistDao.IsOwnedByUser(5, 0);
+            Assert.IsFalse(ownedByUser);
+        }
     }
 }
