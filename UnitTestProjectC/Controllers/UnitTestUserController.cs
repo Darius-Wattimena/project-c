@@ -13,6 +13,7 @@ using Microsoft.Extensions.Options;
 using ProjectC.Helper;
 using UnitTestProjectC.Database;
 using UnitTestProjectC.Helper;
+using ProjectC.Model;
 
 namespace UnitTestProjectC.Controllers
 {
@@ -51,9 +52,42 @@ namespace UnitTestProjectC.Controllers
         }
 
         [TestMethod]
-        public void GetByOrderIdTest()
+        public void Get_IsTypeOfListUser()
         {
+            OkObjectResult result = (OkObjectResult)Controller.Get();
+            List<User> resultItem = (List<User>)result.Value;
 
+            Assert.IsInstanceOfType(resultItem, typeof(List<User>));
         }
+
+        [TestMethod]
+        public void Update_UserOfId()
+        {
+            OkObjectResult result1 = (OkObjectResult)Controller.Get(21);
+            User resultItem1 = (User)result1.Value;
+            OkObjectResult result = (OkObjectResult)Controller.Update(resultItem1.Id, resultItem1);
+
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
+        }
+
+        [TestMethod]
+        public void EditUser_UserOfId()
+        {
+            UserUpdateModel model = new UserUpdateModel();
+            
+            OkObjectResult result1 = (OkObjectResult)Controller.Get(21);
+            User resultItem1 = (User)result1.Value;
+
+            model.Firstname = resultItem1.Firstname;
+            model.Lastname = resultItem1.Lastname;
+            model.MailAddress = resultItem1.MailAddress;
+            model.Password = "admin";
+
+            OkResult result = (OkResult)Controller.EditUser(21, model);
+
+            Assert.IsInstanceOfType(result, typeof(OkResult));
+        }
+
+
     }
 }
