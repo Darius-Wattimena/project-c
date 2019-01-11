@@ -4,7 +4,7 @@ using ProjectC.Helper;
 namespace UnitTestProjectC.Helper
 {
     [TestClass]
-    class UnitTestAppSettings
+    public class UnitTestAppSettings
     {
         private static AppSettings _instance;
 
