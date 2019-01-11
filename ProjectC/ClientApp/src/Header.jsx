@@ -4,6 +4,8 @@ import './styling/header.css';
 import { connect } from 'react-redux';
 import { userActions, productActions } from './_actions';
 
+import { history } from "./_helpers/index";
+
 import logo from './styling/cmobile.jpg';
 
 function UserLoggedIn(props) {

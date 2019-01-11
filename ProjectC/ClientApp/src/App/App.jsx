@@ -78,8 +78,8 @@ class App extends Component {
                             <Route path="/admin/reviews" component={AdminReviews} />
                         </div>
                         <div className="container">
-                            <PrivateRoute exact path="/" component={HomePage} />
-                            <Route path="/home" component={HomePage} />
+                            <PrivateRoute exact path="/" component={ProductPage} />
+                            <Route path="/home" component={ProductPage} />
                             <Route path="/register" component={RegisterPage} />
                             <Route exact path="/products" component={ProductPage} />
                             <Route path="/products/:nr" component={ProductPage} />
