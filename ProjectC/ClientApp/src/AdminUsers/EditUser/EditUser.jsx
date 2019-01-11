@@ -52,10 +52,16 @@ class AdminEditUser extends React.Component {
 
     render() {
         const { user, submitted } = this.state;
+        const { loading } = this.props;
         return (
             <div className="admin-panel panel col-10">
                 <h3>Edit User</h3>
                 <hr />
+                {loading &&
+                    <div className="progress">
+                        <div className="indeterminate"></div>
+                    </div>
+                }
                 {user &&
                     <form id="form" onSubmit={this.handleSubmit}>
                         <div className={'form-group' + (submitted && !user.firstname ? ' has-error' : '')}>
@@ -86,10 +92,10 @@ class AdminEditUser extends React.Component {
                                 <div className="help-block">Password is required</div>
                             }
                         </div>
+                        <button type="submit" form="form" className="btn btn-primary" style={{ margin: `5px` }}>Save</button>
+                        <Link to="/admin/users" className="btn btn-danger" style={{ margin: `5px` }}>Cancel</Link>
                     </form>
                 }
-                <button type="submit" form="form" className="btn btn-primary" disabled={submitted}>Save</button>
-                <Link to="/admin/users" className="btn btn-danger">Cancel</Link>
             </div>
         );
     }

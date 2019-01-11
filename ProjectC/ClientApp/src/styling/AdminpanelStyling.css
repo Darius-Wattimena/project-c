@@ -65,3 +65,7 @@
         margin: 0;
         margin-right: 0;
     }
+
+.admin-stock-progress-bar {
+    background-color: #e9ecef;
+}
