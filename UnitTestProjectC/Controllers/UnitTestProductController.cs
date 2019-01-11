@@ -130,13 +130,23 @@ namespace UnitTestProjectC.Controllers
         }
 
         [TestMethod]
-        public void UpdateProduct()
+        public void UpdateTest()
         {
             ProductChangeStockModel mock = new ProductChangeStockModel();
             OkObjectResult result = (OkObjectResult)Controller.GetWithSpecifications(4);
             Product resultItems = (Product)result.Value;
 
             OkObjectResult resulttest = (OkObjectResult)Controller.Update(resultItems.Id, resultItems);
+
+            Assert.IsInstanceOfType(resulttest, typeof(OkObjectResult));
+        }
+
+        [TestMethod]
+        public void RecoverTest()
+        {
+            ProductChangeStockModel mock = new ProductChangeStockModel();
+
+            OkObjectResult resulttest = (OkObjectResult)Controller.Recover(4);
 
             Assert.IsInstanceOfType(resulttest, typeof(OkObjectResult));
         }
