@@ -215,7 +215,7 @@ namespace ProjectC.Controllers
                 databaseUser.MailAddress = input.MailAddress;
 
                 if (!Regex.IsMatch(input.MailAddress, @"^([\w\.\-]+)@([\w\-]+)((\.(\w){2,3})+)$")) {
-                    return BadRequest("Email address not fucking valid");
+                    return BadRequest("Email address not valid");
                 }
 
                 daoManager.UserDao.Save(databaseUser);
