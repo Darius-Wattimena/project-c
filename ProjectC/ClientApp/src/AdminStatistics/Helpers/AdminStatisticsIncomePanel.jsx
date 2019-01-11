@@ -35,13 +35,13 @@ class AdminStatisticsIncomePanel extends React.Component {
     constructor(props) {
         super(props);
 
-        var week = dateHelper.getLastWeek();
+        var week = dateHelper.getCurrentWeek();
 
         this.state = {
             updated: false,
             startDate: week.monday,
             endDate: week.sunday,
-            selectedOption: "lastWeek"
+            selectedOption: "thisWeek"
         };
     }
 

@@ -6,14 +6,27 @@ import { orderActions } from '../_actions';
 import { AdminOrderManagementItem } from './Helpers'
 
 class AdminOrderManagement extends React.Component {
+    constructor(props) {
+        super(props);
+
+        this.state = {
+            firstRender: true
+        }
+    }
+
     componentDidMount() {
         this.props.dispatch(orderActions.getPendingOrders());
+
+        this.setState({
+            firstRender: false
+        });
 
         window.component = this;
     }
 
     render() {
         const { order } = this.props;
+        const { firstRender } = this.state;
         return (
             <div className="admin-panel panel col-10">
                 <h3>Order Management</h3>
@@ -24,7 +37,7 @@ class AdminOrderManagement extends React.Component {
                     </div>
                 }
                 {order.error && <span className="text-danger">ERROR: {order.error}</span>}
-                {order.items &&
+                {order.items && !firstRender && 
                 <table className="table table-hover">
                     <thead className="thead-dark">
                         <tr>

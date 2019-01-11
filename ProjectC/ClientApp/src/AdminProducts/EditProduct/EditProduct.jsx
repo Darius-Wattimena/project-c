@@ -123,7 +123,9 @@ class EditProduct extends React.Component {
                     {
                         this.loading === true
                         &&
-                        <small>Loading, please wait... 😫</small>
+                        <div className="progress">
+                            <div className="indeterminate"></div>
+                        </div>
                         ||
                         <form id="product" onSubmit={this.handleSubmit} onChange={this.handleChange}>
                             <h3>Editing {this.state.product.name}</h3>
@@ -284,8 +286,8 @@ class EditProduct extends React.Component {
                                 </div>
                             </fieldset>
 
-                            <button type="submit" className="btn btn-primary">Save</button>
-                            <a href="/admin/product" className="btn btn-danger">Back</a>
+                            <button type="submit" className="btn btn-primary" style={{ margin: `5px`}}>Save</button>
+                            <Link to="/admin/product" className="btn btn-danger" style={{ margin: `5px` }}>Cancel</Link>
                         </form>
                     }
                 </div>

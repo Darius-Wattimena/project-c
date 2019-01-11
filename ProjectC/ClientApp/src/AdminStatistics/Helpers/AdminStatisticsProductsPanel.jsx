@@ -20,7 +20,7 @@ function CustomPanel(props) {
             }
             return result;
         }, []);
-        const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
+        const colors = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#66FF66', '#FF66FF', '#FFCC66', '#33CCFF'];
         return (
             <div className="row">
                 <div className="col-10">
@@ -45,13 +45,13 @@ class AdminStatisticsProductsPanel extends React.Component {
     constructor(props) {
         super(props);
 
-        var week = dateHelper.getLastWeek();
+        var week = dateHelper.getCurrentWeek();
 
         this.state = {
             updated: false,
             startDate: week.monday,
             endDate: week.sunday,
-            selectedOption: "lastWeek"
+            selectedOption: "thisWeek"
         };
     }
 
