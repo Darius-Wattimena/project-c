@@ -19,5 +19,21 @@ namespace UnitTestProjectC.Database.Daos
             var specifications = SpecificationDao.FindSpecificationsByProductId(4);
             Assert.IsInstanceOfType(specifications, typeof(List<Specification>));
         }
+
+        [TestMethod]
+        public void FindSpecificationsByProductId_GivenAProductId_ReturningAListWhereCountIsBiggerThen0()
+        {
+            var specifications = SpecificationDao.FindSpecificationsByProductId(4);
+            bool isBiggerThen0 = specifications.Count > 0;
+            Assert.IsTrue(isBiggerThen0);
+        }
+
+        [TestMethod]
+        public void FindSpecificationsByProductId_GivenANotExistingProductId_ReturningAListWhereCountIs0()
+        {
+            var specifications = SpecificationDao.FindSpecificationsByProductId(0);
+            bool isEmpty = specifications.Count == 0;
+            Assert.IsTrue(isEmpty);
+        }
     }
 }
