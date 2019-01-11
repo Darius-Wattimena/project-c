@@ -22,7 +22,9 @@
 
 .product-item img{
     height: 13em;
-    width: 100%;
+    width: auto;
+    margin: 0 auto;
+    display: block;
 }
 
 .product-item h3{
@@ -50,10 +52,10 @@
 }
 
 .product-itemv img {
-   height: auto;
-   width: 100%;
-   float: left;
-   margin-left: -15px;
+   height: 90%;
+   width: auto;
+   margin: auto;
+   display: block;
 }
 .product-itemv h3 {
     float: right;
