@@ -18,6 +18,7 @@ class AddToCartConfirmModal extends React.Component {
     render() {
 
         const product = this.props.product;
+        const isDisabled = this.props.disabled;
 
         return (
             <div className="modal show" id={`AddToCartConfirmModal`} tabIndex="-1" role="dialog" aria-hidden="true">
@@ -37,7 +38,7 @@ class AddToCartConfirmModal extends React.Component {
                                 </div>
                                 <div className="col-md-6">
                                     {product && <p>{product.name} has been added to your shopping cart.</p>}
-                                    <button className="btn btn-primary" data-dismiss="modal" onClick={this.redirect}>
+                                    <button disabled={isDisabled} className="btn btn-primary" data-dismiss="modal" onClick={this.redirect}>
                                         View shopping cart
                                     </button>
                                 </div>

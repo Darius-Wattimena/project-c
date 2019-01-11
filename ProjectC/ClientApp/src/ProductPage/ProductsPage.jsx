@@ -248,7 +248,7 @@ class ProductPage extends React.Component {
                     </div>
                 </div>
 
-                <AddToCartConfirmModal product={this.addedProduct} />
+                <AddToCartConfirmModal disabled={this.props.shoppingCart.adding} product={this.addedProduct} />
 
             </div>
         );
