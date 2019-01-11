@@ -87,7 +87,5 @@ namespace UnitTestProjectC.Controllers
 
             Assert.IsInstanceOfType(result, typeof(OkResult));
         }
-
-
     }
 }

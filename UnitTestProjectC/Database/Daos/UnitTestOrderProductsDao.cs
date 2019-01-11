@@ -50,7 +50,7 @@ namespace UnitTestProjectC.Database.Daos
         public void UserHasBoughtProductTest_False()
         {
             //Arrange
-            var Product_Id = 11;
+            var Product_Id = 7;
             var User_Id = 37;
 
             //Act

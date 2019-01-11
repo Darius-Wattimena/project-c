@@ -6,7 +6,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjectC.Controllers;
 using ProjectC.Database;
 using ProjectC.Database.Core;
-using ProjectC.Database.Entities;
 using System.Collections.Generic;
 using System.Security.Claims;
 using UnitTestProjectC.Database;

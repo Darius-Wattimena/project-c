@@ -6,13 +6,8 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjectC.Controllers;
 using ProjectC.Database;
 using ProjectC.Database.Core;
-using ProjectC.Database.Entities;
-using System.Collections.Generic;
 using System.Security.Claims;
-using Microsoft.Extensions.Options;
-using ProjectC.Helper;
 using UnitTestProjectC.Database;
-using UnitTestProjectC.Helper;
 
 namespace UnitTestProjectC.Controllers
 {
@@ -32,7 +27,6 @@ namespace UnitTestProjectC.Controllers
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var factory = serviceProvider.GetService<ILoggerFactory>();
             var logger = factory.CreateLogger<ShoppingBasketController>();
-            var appSettings = UnitTestAppSettings.Get();
             Controller = new ShoppingBasketController(logger) {
                 ControllerContext = new ControllerContext {
                     HttpContext = new DefaultHttpContext {

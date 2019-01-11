@@ -1,23 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.IO;
-using System.Reflection;
-using System.Security.Claims;
-using System.Security.Principal;
+﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Moq;
 using ProjectC.Controllers;
 using ProjectC.Database;
 using ProjectC.Database.Core;
-using ProjectC.Database.Entities;
-using ProjectC.Model;
 using UnitTestProjectC.Database;
 
 namespace UnitTestProjectC.Controllers
