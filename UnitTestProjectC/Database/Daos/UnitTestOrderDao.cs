@@ -2,9 +2,7 @@
 using ProjectC.Database.Core;
 using ProjectC.Database.Daos;
 using ProjectC.Model;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace UnitTestProjectC.Database.Daos
 {

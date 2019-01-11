@@ -1,12 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using ProjectC.Database;
+﻿using System.Collections.Generic;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using ProjectC.Database.Core;
 using ProjectC.Database.Entities;
-using ProjectC.Helper;
-using ProjectC.Model;
-using System.Collections.Generic;
 
-namespace UnitTestProjectC.Database
+namespace UnitTestProjectC.Database.Daos
 {
     [TestClass]
     public class UnitTestProductDao
