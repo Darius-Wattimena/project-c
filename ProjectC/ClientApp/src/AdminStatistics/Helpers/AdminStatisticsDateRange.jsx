@@ -109,13 +109,13 @@ export class AdminStatisticsDateRange extends React.Component {
                         <h6>Start</h6>
                         <DatePicker
                             selected={base.state.startDate}
-                            onChange={base.onChange.startDate}
+                            onChange={this.onChange.startDate}
                             maxDate={base.state.endDate}
                             customInput={<CustomDatePickerButton />}/>
                         <h6>End</h6>
                         <DatePicker
                             selected={base.state.endDate}
-                            onChange={base.onChange.endDate}
+                            onChange={this.onChange.endDate}
                             minDate={base.state.startDate}
                             customInput={<CustomDatePickerButton />}/>
                     </div>

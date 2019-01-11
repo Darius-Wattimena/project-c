@@ -43,7 +43,7 @@ class AdminUsers extends React.Component {
     render() {
         const { users } = this.props;
         return (
-            <div className="panel col-md-6">
+            <div className="admin-panel panel col-10">
                 <h3>User Management</h3>
                 <hr />
                 {users.loading &&
