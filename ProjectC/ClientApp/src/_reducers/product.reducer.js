@@ -77,6 +77,15 @@ export function product(state = {}, action) {
             return {
                 error: action.error
             };
+        case productConstants.UPDATE_REQUEST:
+            return {
+                updating: true
+            };
+        case productConstants.UPDATE_SUCCESS:
+        case productConstants.UPDATE_FAILURE:
+            return {
+                updating: true
+            };
         case productConstants.CHANGE_STOCK_SUCCESS:
             return {
                 item: action.product,

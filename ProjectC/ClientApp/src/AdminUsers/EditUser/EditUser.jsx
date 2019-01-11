@@ -1,5 +1,6 @@
 ﻿//node imports
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { userActions } from '../../_actions';
@@ -52,8 +53,9 @@ class AdminEditUser extends React.Component {
     render() {
         const { user, submitted } = this.state;
         return (
-            <div className="panel col-md-6 col-md-offset-3">
-                <h2>Edit User</h2>
+            <div className="admin-panel panel col-10">
+                <h3>Edit User</h3>
+                <hr />
                 {user &&
                     <form id="form" onSubmit={this.handleSubmit}>
                         <div className={'form-group' + (submitted && !user.firstname ? ' has-error' : '')}>
@@ -71,8 +73,8 @@ class AdminEditUser extends React.Component {
                             }
                         </div>
                         <div className={'form-group' + (submitted && !user.mailAddress ? ' has-error' : '')}>
-                            <label htmlFor="mailaddress">Email</label>
-                            <input type="email" className="form-control" name="mailaddress" value={user.mailAddress} onChange={this.handleChange} />
+                            <label htmlFor="mailAddress">Email</label>
+                            <input type="email" className="form-control" name="mailAddress" value={user.mailAddress} onChange={this.handleChange} />
                             {submitted && !user.mailAddress &&
                                 <div className="help-block">Email is required</div>
                             }
@@ -86,8 +88,8 @@ class AdminEditUser extends React.Component {
                         </div>
                     </form>
                 }
-                <button type="submit" form="form" className="btn btn-primary">Save</button>
-                <a href="admin/users" className="btn btn-danger">Cancel</a>
+                <button type="submit" form="form" className="btn btn-primary" disabled={submitted}>Save</button>
+                <Link to="/admin/users" className="btn btn-danger">Cancel</Link>
             </div>
         );
     }
