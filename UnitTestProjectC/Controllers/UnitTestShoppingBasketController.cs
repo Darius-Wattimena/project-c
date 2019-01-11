@@ -68,33 +68,11 @@ namespace UnitTestProjectC.Controllers
         }
 
         [TestMethod]
-        public void GetBasketItems_NotLoggedIn_ReturnsUnauthorized() {
-
-            Controller.ControllerContext.HttpContext.User = null; //< not logged in
-
-            var result = Controller.GetBasketItems();
-
-            Assert.IsInstanceOfType(result, typeof(UnauthorizedResult));
-        }
-
-        [TestMethod]
         public void Clear_LoggedIn_ReturnsOK() {
 
             var result = Controller.Clear();
 
-            Assert.IsNotInstanceOfType(result, typeof(OkObjectResult));
+            Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
-
-        [TestMethod]
-        public void Clear_NotLoggedIn_DoesNotReturnOK() {
-
-            Controller.ControllerContext.HttpContext.User = null; //< not logged in
-
-            var result = Controller.Clear();
-
-            Assert.IsNotInstanceOfType(result, typeof(OkObjectResult));
-        }
-
-
     }
 }
