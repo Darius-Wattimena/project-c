@@ -84,7 +84,7 @@ class WishlistPage extends React.Component {
 
         return (
             <div className="wishlistContent">
-                <AddToCartConfirmModal product={this.addedProduct} />
+                <AddToCartConfirmModal disabled={this.props.shoppingCart.adding} product={this.addedProduct} />
                 <div className="row">
                     <div className="col-md-3">
                         <h3>My wishlists</h3>
@@ -194,9 +194,10 @@ class WishlistPage extends React.Component {
 }
 
 function mapStateToProps(state) {
-    const { wishlist } = state;
+    const { wishlist, shoppingCart } = state;
     return {
-        wishlist: wishlist
+        wishlist: wishlist,
+        shoppingCart
     };
 }
 

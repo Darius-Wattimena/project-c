@@ -302,7 +302,7 @@ class SingleProductPage extends React.Component {
                     </div>
                 }
 
-                <AddToCartConfirmModal product={product.item} />
+                <AddToCartConfirmModal disabled={this.props.shoppingCart.adding} product={product.item} />
 
             </div>
         );
