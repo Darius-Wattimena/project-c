@@ -10,14 +10,13 @@ using ProjectC.Database.Entities;
 using System.Collections.Generic;
 using System.Security.Claims;
 using UnitTestProjectC.Database;
-using static ProjectC.Database.Daos.OrderProductsDao;
 
 namespace UnitTestProjectC.Controllers
 {
     [TestClass]
-    public class UnitTestOrderproductsController
+    public class UnitTestUserController
     {
-        public OrderProductsController Controller;
+        public UserController Controller;
 
         [TestInitialize]
         public void TestInitialize()
@@ -30,8 +29,8 @@ namespace UnitTestProjectC.Controllers
                 DaoManager.Get(UnitTestDatabaseContext.Get())));
             var serviceProvider = serviceCollection.BuildServiceProvider();
             var factory = serviceProvider.GetService<ILoggerFactory>();
-            var logger = factory.CreateLogger<OrderProductsController>();
-            Controller = new OrderProductsController(logger)
+            var logger = factory.CreateLogger<UserController>();
+            Controller = new UserController(logger)
             {
                 ControllerContext = new ControllerContext
                 {
@@ -50,10 +49,6 @@ namespace UnitTestProjectC.Controllers
         [TestMethod]
         public void GetByOrderIdTest()
         {
-            OkObjectResult result = (OkObjectResult) Controller.GetByOrderId(80);
-            List<OrderProductModel> resultItem = (List<OrderProductModel>)result.Value;
-
-            Assert.IsInstanceOfType(resultItem, typeof(List<OrderProductModel>));
 
         }
     }
