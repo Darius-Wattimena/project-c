@@ -53,7 +53,6 @@ namespace UnitTestProjectC.Controllers
             List<OrderProductModel> resultItem = (List<OrderProductModel>)result.Value;
 
             Assert.IsInstanceOfType(resultItem, typeof(List<OrderProductModel>));
-
         }
     }
 }

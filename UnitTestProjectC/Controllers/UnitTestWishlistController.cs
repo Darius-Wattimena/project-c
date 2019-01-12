@@ -69,8 +69,6 @@ namespace UnitTestProjectC.Controllers
         public void GetSingle_AsAdmin_WithNotOwnedId_ReturnsOKObjectResult() {
             int wishlistId = 1;
             IActionResult result = Controller.Get(wishlistId);
-
-            // Should return OK because we are logged in as an admin so we have access to the item
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
 
@@ -81,13 +79,10 @@ namespace UnitTestProjectC.Controllers
             identity.AddClaim(new Claim(ClaimTypes.Sid, "5"));
             identity.AddClaim(new Claim(ClaimTypes.Role, "User"));
             Controller.ControllerContext.HttpContext.User = new ClaimsPrincipal(identity);
-
-
+            
             int wishlistId = 2;
-
             IActionResult result = Controller.Get(wishlistId);
-
-            // Should return Bad Request because we are logged in as a user and do not own this wishlist
+            
             Assert.IsInstanceOfType(result, typeof(BadRequestObjectResult));
         }
 

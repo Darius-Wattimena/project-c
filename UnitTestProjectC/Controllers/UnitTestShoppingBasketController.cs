@@ -42,9 +42,7 @@ namespace UnitTestProjectC.Controllers
 
         [TestMethod]
         public void GetBasketItems_AsAdmin_ReturnsOkObjectResult() {
-
             var result = Controller.GetBasketItems();
-
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
 
@@ -63,9 +61,7 @@ namespace UnitTestProjectC.Controllers
 
         [TestMethod]
         public void Clear_LoggedIn_ReturnsOK() {
-
             var result = Controller.Clear();
-
             Assert.IsInstanceOfType(result, typeof(OkObjectResult));
         }
     }
